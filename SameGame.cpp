@@ -1,0 +1,239 @@
+#include "SameGame.h"
+
+#include <limits.h>
+#include <algorithm>
+#include <chrono>
+#include <cstring>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <queue>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
+
+namespace SameGame
+{
+// constexpr int EMPTY = -1;
+// constexpr unsigned int MIN_W{4};
+// constexpr unsigned int MIN_H{4};
+// constexpr unsigned int MIN_C{3};
+// constexpr unsigned int MAX_W{50};
+// constexpr unsigned int MAX_H{50};
+// constexpr unsigned int MAX_C{20};
+
+constexpr int cols[]{-1, 0, 0, 1};
+constexpr int rows[]{0, -1, 1, 0};
+
+// struct Point
+//{
+//    int column{EMPTY};
+//    int row{EMPTY};
+//};
+
+bool operator==(const Point& left, const Point& right)
+{
+    return left.column == right.column && left.row == right.row;
+}
+
+bool operator<(const Point& left, const Point& right)
+{
+    if (left.column < right.column)
+        return false;
+    return left.row < right.row;
+}
+
+// Point emptyPoint{EMPTY, EMPTY};
+
+void impactGravity(std::vector<std::vector<int>>& board,
+                   int (&impactedColumns)[MAX_W])
+{
+    for (unsigned int i = 0; i < board.size(); ++i)
+    {
+        if (impactedColumns[i] == EMPTY)
+            continue;
+
+        auto& column{board[i]};
+        int emptyStartIndex = {EMPTY};
+        unsigned int emptyCount{0};
+        for (int row = impactedColumns[i]; row >= 0; --row)
+        {
+            if (column[row] == EMPTY)
+            {
+                if (emptyStartIndex == EMPTY)
+                    emptyStartIndex = row;
+                emptyCount++;
+            }
+            else
+            {
+                if (emptyStartIndex != EMPTY)
+                {
+                    for (size_t currentRow = emptyStartIndex;
+                         currentRow >= emptyCount; --currentRow)
+                    {
+                        column[currentRow] = column[currentRow - emptyCount];
+                        column[currentRow - emptyCount] = EMPTY;
+                    }
+                    emptyStartIndex = EMPTY;
+                    row += emptyCount;
+                    emptyCount = 0;
+                }
+            }
+        }
+        impactedColumns[i] = EMPTY;
+    }
+}
+
+bool isFieldValid(const std::vector<std::vector<int>>& board,
+                  unsigned int column, unsigned int row, int color,
+                  unsigned int w, unsigned int h)
+{
+    return column >= 0 && column < w && row >= 0 && row < h &&
+           board[column][row] == color;
+}
+
+unsigned int getClusterSize(const std::vector<std::vector<int>>& board,
+                            Point startPoint, bool (&checked)[MAX_W][MAX_H],
+                            unsigned int w, unsigned int h)
+{
+    int color{board[startPoint.column][startPoint.row]};
+    if (color == EMPTY)
+        return 0;
+
+    unsigned int clusterSize{0};
+    static std::queue<Point> toCheck;
+    toCheck.push(startPoint);
+    while (!toCheck.empty())
+    {
+        const auto point{toCheck.front()};
+        toCheck.pop();
+        if (board[point.column][point.row] != color)
+            continue;
+
+        if (!checked[point.column][point.row])
+        {
+            clusterSize++;
+            checked[point.column][point.row] = true;
+        }
+
+        for (int k = 0; k < 4; ++k)
+        {
+            int col{point.column + cols[k]};
+            int row{point.row + rows[k]};
+            if (!checked[col][row] &&
+                isFieldValid(board, col, row, color, w, h))
+            {
+                checked[col][row] = true;
+                clusterSize++;
+                toCheck.push({col, row});
+            }
+        }
+    }
+    return clusterSize;
+}
+
+// Following
+// https://stackoverflow.com/questions/1640258/need-a-fast-random-generator-for-c
+inline unsigned int fastRandInt()
+{
+    static unsigned int g_seed{static_cast<unsigned int>(rand())};
+    g_seed = (214013 * g_seed + 2531011);
+    return (g_seed >> 16) & 0x7FFF;
+}
+
+Point getNextMove(const std::vector<std::vector<int>>& board,
+                  bool (&checked)[MAX_W][MAX_H], unsigned int w, unsigned int h)
+{
+    std::memset(checked, false, sizeof(checked));
+    const unsigned int randomTries{static_cast<unsigned int>(w * h * .6)};
+    // const int maxSuccessfullTries{50};
+    // unsigned int successfullTries{0};
+    unsigned int currentBestScore{0};
+    Point currentBestPoint{emptyPoint};
+    // Try 40% random hits.
+    for (unsigned int tryNumber = 0; tryNumber < randomTries; ++tryNumber)
+    {
+        Point point{static_cast<int>(fastRandInt() % w),
+                    static_cast<int>(fastRandInt() % h)};
+        unsigned int score = getClusterSize(board, point, checked, w, h);
+        if (score > 1 && score > currentBestScore)
+        {
+            currentBestScore = score;
+            currentBestPoint = point;
+        }
+    }
+
+    if (currentBestScore > 0)
+        return currentBestPoint;
+
+    // If not found iterate one by one searching for cluster.
+    for (int row = 0; row < h; ++row)
+    {
+        for (int column = 0; column < w; ++column)
+        {
+            Point point{column, row};
+            if (getClusterSize(board, point, checked, w, h) > 1)
+                return point;
+            // checked[point.column][point.row] = false;
+        }
+    }
+
+    return {};
+}
+
+void makeMove(std::vector<std::vector<int>>& board,
+              bool (&checked)[MAX_W][MAX_H], int (&impactedColumns)[MAX_W],
+              const Point& point)
+{
+    int color{board[point.column][point.row]};
+
+    static std::queue<Point> toCheck;
+    toCheck.push(point);
+    board[point.column][point.row] = EMPTY;
+    checked[point.column][point.row] = false;
+    while (!toCheck.empty())
+    {
+        const auto currentPoint{toCheck.front()};
+        toCheck.pop();
+
+        if (impactedColumns[currentPoint.column] == EMPTY)
+            impactedColumns[currentPoint.column] = currentPoint.row;
+        else
+        {
+            if (impactedColumns[currentPoint.column] < currentPoint.row)
+                impactedColumns[currentPoint.column] = currentPoint.row;
+        }
+
+        for (int k = 0; k < 4; ++k)
+        {
+            int col{currentPoint.column + cols[k]};
+            int row{currentPoint.row + rows[k]};
+            if (isFieldValid(board, col, row, color, board.size(),
+                             board[0].size()))
+            {
+                board[col][row] = EMPTY;
+                checked[col][row] = false;
+                toCheck.push({col, row});
+            }
+        }
+    }
+}
+
+void printBoard(const std::vector<std::vector<int>>& board)
+{
+    if (board.empty())
+        return;
+
+    for (unsigned int row = 0; row < board[0].size(); ++row)
+    {
+        for (unsigned int column = 0; column < board.size(); ++column)
+            std::cout << board[column][row] << "\t";
+        std::cout << std::endl;
+    }
+}
+
+void printPoint(Point point, std::ostringstream& output)
+{
+    output << point.row << " " << point.column << std::endl;
+}
+};  // namespace SameGame
