@@ -25,6 +25,8 @@ bool operator==(const Point& left, const Point& right);
 
 void printPoint(Point point, std::ostringstream& output);
 
+void printBoard(const std::vector<std::vector<int>>& board);
+
 Point getNextMove(const std::vector<std::vector<int>>& board,
                   bool (&checked)[MAX_W][MAX_H], unsigned int w,
                   unsigned int h);
@@ -35,5 +37,9 @@ void makeMove(std::vector<std::vector<int>>& board,
 
 void impactGravity(std::vector<std::vector<int>>& board,
                    int (&impactedColumns)[MAX_W]);
+
+unsigned int getClusterSize(const std::vector<std::vector<int>>& board,
+                            Point startPoint, bool (&checked)[MAX_W][MAX_H],
+                            unsigned int w, unsigned int h);
 
 };  // namespace SameGame
