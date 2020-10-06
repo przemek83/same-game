@@ -132,16 +132,34 @@ TEST(SameGameTest, makeMove)
     performMakeMoveTest(board, checked, impactedColumns, {2, 3}, expected, "2");
 }
 
+class SymetricalBoardTests
+    : public ::testing::TestWithParam<std::tuple<int, Point>>
+{
+protected:
+    std::vector<std::vector<int>> testBoard{
+        {0, 1, 0, 0}, {0, 1, 1, 1}, {1, 2, 2, 1}, {1, 2, 0, 2}};
+};
+
+TEST_P(SymetricalBoardTests, GetCluster)
+{
+    int expectedClusterSize = std::get<0>(GetParam());
+    Point point = std::get<1>(GetParam());
+    bool checked[MAX_W][MAX_H] = {};
+    std::memset(checked, false, sizeof(checked));
+    unsigned int currentClusterSize{getClusterSize(
+        testBoard, point, checked, testBoard.size(), testBoard[0].size())};
+    EXPECT_EQ(currentClusterSize, expectedClusterSize);
+}
+
+INSTANTIATE_TEST_SUITE_P(SameGameTest, SymetricalBoardTests,
+                         ::testing::Values(std::make_tuple(2, Point{0, 0}),
+                                           std::make_tuple(5, Point{0, 1}),
+                                           std::make_tuple(1, Point{3, 2}),
+                                           std::make_tuple(3, Point{2, 1})));
+
 TEST(SameGameTest, getCluster)
 {
-    std::vector<std::vector<int>> board{
-        {0, 1, 0, 0}, {0, 1, 1, 1}, {1, 2, 2, 1}, {1, 2, 0, 2}};
-    performGetClusterTests(board, 2, {0, 0}, "1");
-    performGetClusterTests(board, 5, {0, 1}, "2");
-    performGetClusterTests(board, 1, {3, 2}, "3");
-    performGetClusterTests(board, 3, {2, 1}, "4");
-
-    board = {{-1, 1, 0, 0}};
+    std::vector<std::vector<int>> board = {{-1, 1, 0, 0}};
     performGetClusterTests(board, 0, {0, 0}, "5");
     performGetClusterTests(board, 1, {0, 1}, "6");
     performGetClusterTests(board, 2, {0, 3}, "7");
