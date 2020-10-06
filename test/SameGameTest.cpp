@@ -45,25 +45,6 @@ void performMakeMoveTest(std::vector<std::vector<int>> board,
         std::cout << "SUCCESS: makeMove " + testName << std::endl;
 }
 
-void performGetClusterTests(const std::vector<std::vector<int>>& board,
-                            unsigned int expectedClusterSize, Point point,
-                            std::string testName)
-{
-    bool checked[MAX_W][MAX_H] = {};
-    std::memset(checked, false, sizeof(checked));
-    unsigned int currentClusterSize{
-        getClusterSize(board, point, checked, board.size(), board[0].size())};
-    EXPECT_EQ(currentClusterSize, expectedClusterSize);
-    if (currentClusterSize != expectedClusterSize)
-    {
-        std::cout << "FAIL: getCluster " + testName << std::endl;
-        std::cout << "Got:" << currentClusterSize << ", expected "
-                  << expectedClusterSize << std::endl;
-    }
-    else
-        std::cout << "SUCCESS: getCluster " + testName << std::endl;
-}
-
 TEST(SameGameTest, impactGravity)
 {
     std::vector<std::vector<int>> board{{1, 3, 4, -1, 5}};
