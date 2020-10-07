@@ -6,56 +6,56 @@
 
 using namespace SameGame;
 
-void performImpactGravityTest(std::vector<std::vector<int>> board,
-                              int (&impactedColumns)[MAX_W],
-                              std::vector<std::vector<int>> expected,
-                              std::string testName)
+class ImpaceGravityTests
+    : public ::testing::TestWithParam<
+          std::tuple<std::vector<std::vector<int>>,
+                     std::vector<std::vector<int>>, std::vector<Point>>>
 {
+};
+
+TEST_P(ImpaceGravityTests, impactGravity)
+{
+    std::vector<std::vector<int>> board{std::get<0>(GetParam())};
+    const std::vector<std::vector<int>> expected{std::get<1>(GetParam())};
+    const std::vector<Point> impactedColumnsPoints{std::get<2>(GetParam())};
+
+    int impactedColumns[MAX_W];
+    for (const auto point : impactedColumnsPoints)
+        impactedColumns[point.column] = point.row;
+
     impactGravity(board, impactedColumns);
     EXPECT_EQ(board, expected);
-    if (board != expected)
-    {
-        std::cout << "FAIL: impactGravity " + testName << std::endl;
-        std::cout << "Got:" << std::endl;
-        printBoard(board);
-        std::cout << "Expected:" << std::endl;
-        printBoard(expected);
-    }
-    else
-        std::cout << "SUCCESS: impactGravity " + testName << std::endl;
 }
 
-TEST(SameGameTest, impactGravity)
-{
-    std::vector<std::vector<int>> board{{1, 3, 4, -1, 5}};
-    std::vector<std::vector<int>> expected{{-1, 1, 3, 4, 5}};
-    int impactedColumns[MAX_W];
-    impactedColumns[0] = 3;
-    performImpactGravityTest(board, impactedColumns, expected, "1");
-    board = {{1, 3, -1, -1, -1}};
-    expected = {{-1, -1, -1, 1, 3}};
-    impactedColumns[0] = 4;
-    performImpactGravityTest(board, impactedColumns, expected, "2");
-    board = {{-1, -1, -1, -1, -1}};
-    expected = {{-1, -1, -1, -1, -1}};
-    impactedColumns[0] = EMPTY;
-    performImpactGravityTest(board, impactedColumns, expected, "3");
-    board = {{1, 2, 3, 4, 5}};
-    expected = {{1, 2, 3, 4, 5}};
-    impactedColumns[0] = EMPTY;
-    performImpactGravityTest(board, impactedColumns, expected, "4");
-    board = {{1, -1, -1, -1, -1}, {1, 2, -1, -1, -1},  {1, -1, -1, 1, -1},
-             {1, -1, -1, -1, 2},  {-1, -1, -1, 1, -1}, {1, -1, 1, -1, 1}};
-    expected = {{-1, -1, -1, -1, 1}, {-1, -1, -1, 1, 2},  {-1, -1, -1, 1, 1},
-                {-1, -1, -1, 1, 2},  {-1, -1, -1, -1, 1}, {-1, -1, 1, 1, 1}};
-    impactedColumns[0] = 4;
-    impactedColumns[1] = 4;
-    impactedColumns[2] = 4;
-    impactedColumns[3] = 3;
-    impactedColumns[4] = 4;
-    impactedColumns[5] = 3;
-    performImpactGravityTest(board, impactedColumns, expected, "5");
-}
+INSTANTIATE_TEST_SUITE_P(
+    SameGameTest, ImpaceGravityTests,
+    ::testing::Values(
+        std::make_tuple(std::vector<std::vector<int>>{{1, 3, 4, -1, 5}},
+                        std::vector<std::vector<int>>{{-1, 1, 3, 4, 5}},
+                        std::vector<Point>{{0, 3}}),
+        std::make_tuple(std::vector<std::vector<int>>{{1, 3, -1, -1, -1}},
+                        std::vector<std::vector<int>>{{-1, -1, -1, 1, 3}},
+                        std::vector<Point>{{0, 4}}),
+        std::make_tuple(std::vector<std::vector<int>>{{-1, -1, -1, -1, -1}},
+                        std::vector<std::vector<int>>{{-1, -1, -1, -1, -1}},
+                        std::vector<Point>{{0, EMPTY}}),
+        std::make_tuple(std::vector<std::vector<int>>{{1, 2, 3, 4, 5}},
+                        std::vector<std::vector<int>>{{1, 2, 3, 4, 5}},
+                        std::vector<Point>{{0, EMPTY}}),
+        std::make_tuple(std::vector<std::vector<int>>{{1, -1, -1, -1, -1},
+                                                      {1, 2, -1, -1, -1},
+                                                      {1, -1, -1, 1, -1},
+                                                      {1, -1, -1, -1, 2},
+                                                      {-1, -1, -1, 1, -1},
+                                                      {1, -1, 1, -1, 1}},
+                        std::vector<std::vector<int>>{{-1, -1, -1, -1, 1},
+                                                      {-1, -1, -1, 1, 2},
+                                                      {-1, -1, -1, 1, 1},
+                                                      {-1, -1, -1, 1, 2},
+                                                      {-1, -1, -1, -1, 1},
+                                                      {-1, -1, 1, 1, 1}},
+                        std::vector<Point>{
+                            {0, 4}, {1, 4}, {2, 4}, {3, 3}, {4, 4}, {5, 3}})));
 
 TEST(SameGameTest, makeMove6x5)
 {
