@@ -14,22 +14,8 @@
 
 namespace SameGame
 {
-// constexpr int EMPTY = -1;
-// constexpr unsigned int MIN_W{4};
-// constexpr unsigned int MIN_H{4};
-// constexpr unsigned int MIN_C{3};
-// constexpr unsigned int MAX_W{50};
-// constexpr unsigned int MAX_H{50};
-// constexpr unsigned int MAX_C{20};
-
 constexpr int cols[]{-1, 0, 0, 1};
 constexpr int rows[]{0, -1, 1, 0};
-
-// struct Point
-//{
-//    int column{EMPTY};
-//    int row{EMPTY};
-//};
 
 bool operator==(const Point& left, const Point& right)
 {
@@ -42,8 +28,6 @@ bool operator<(const Point& left, const Point& right)
         return false;
     return left.row < right.row;
 }
-
-// Point emptyPoint{EMPTY, EMPTY};
 
 void impactGravity(std::vector<std::vector<int>>& board,
                    int (&impactedColumns)[MAX_W])
