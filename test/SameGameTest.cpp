@@ -68,19 +68,16 @@ TEST(SameGameTest, makeMove6x5)
     int impactedColumns[MAX_W]{};
     std::memset(impactedColumns, EMPTY, sizeof(impactedColumns));
 
+    std::vector<Point> checkedPoints{{1, 3}, {2, 3}, {2, 4}, {3, 3}};
     bool checked[MAX_W][MAX_H]{};
-    checked[1][3] = true;
-    checked[2][3] = true;
-    checked[2][4] = true;
-    checked[3][3] = true;
+    for (const auto point : checkedPoints)
+        checked[point.column][point.row] = true;
 
     makeMove(board, checked, impactedColumns, {2, 3});
     EXPECT_EQ(board, expected);
 
-    EXPECT_FALSE(checked[1][3]);
-    EXPECT_FALSE(checked[2][3]);
-    EXPECT_FALSE(checked[2][4]);
-    EXPECT_FALSE(checked[3][3]);
+    for (const auto point : checkedPoints)
+        EXPECT_FALSE(checked[point.column][point.row]);
 
     EXPECT_EQ(impactedColumns[0], EMPTY);
     EXPECT_EQ(impactedColumns[1], 3);
@@ -95,23 +92,20 @@ TEST(SameGameTest, makeMove4x4)
         {0, 1, 0, 0}, {0, 1, 1, 1}, {1, 2, 2, 1}, {1, 2, 0, 2}};
     const std::vector<std::vector<int>> expected{
         {0, -1, 0, 0}, {0, -1, -1, -1}, {1, 2, 2, -1}, {1, 2, 0, 2}};
+
+    std::vector<Point> checkedPoints{{0, 1}, {1, 1}, {1, 2}, {1, 3}, {2, 3}};
     bool checked[MAX_W][MAX_H]{};
-    checked[0][1] = true;
-    checked[1][1] = true;
-    checked[1][2] = true;
-    checked[1][3] = true;
-    checked[2][3] = true;
+    for (const auto point : checkedPoints)
+        checked[point.column][point.row] = true;
 
     int impactedColumns[MAX_W]{};
     std::memset(impactedColumns, EMPTY, sizeof(impactedColumns));
+
     makeMove(board, checked, impactedColumns, {2, 3});
     EXPECT_EQ(board, expected);
 
-    EXPECT_FALSE(checked[0][1]);
-    EXPECT_FALSE(checked[1][1]);
-    EXPECT_FALSE(checked[1][2]);
-    EXPECT_FALSE(checked[1][3]);
-    EXPECT_FALSE(checked[2][3]);
+    for (const auto point : checkedPoints)
+        EXPECT_FALSE(checked[point.column][point.row]);
 
     EXPECT_EQ(impactedColumns[0], 1);
     EXPECT_EQ(impactedColumns[1], 3);
