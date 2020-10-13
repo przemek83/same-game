@@ -6,6 +6,11 @@ set(${PROJECT_TEST}_SOURCES
     ../SameGame.h
     )
 
+file(GLOB TXT_FILES
+  "${CMAKE_CURRENT_SOURCE_DIR}/*.txt"
+)
+file(COPY ${TXT_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+
 add_executable(${PROJECT_TEST} ${${PROJECT_TEST}_SOURCES})
 
 target_link_libraries(${PROJECT_TEST} gtest gtest_main)

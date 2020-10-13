@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
 
 #include <cstring>
+#include <fstream>
 
 #include "../SameGame.h"
 
@@ -145,3 +146,12 @@ INSTANTIATE_TEST_SUITE_P(
                       std::make_tuple(singleRowBoard, 0, Point{0, 0}),
                       std::make_tuple(singleRowBoard, 1, Point{0, 1}),
                       std::make_tuple(singleRowBoard, 2, Point{0, 3})));
+
+TEST(SameGameTest, loadBoard)
+{
+    std::ifstream in("testFile.txt", std::ifstream::in);
+    std::vector<std::vector<int>> currentBoard{loadBoard(4, 4, in)};
+    std::vector<std::vector<int>> expectedBoard{
+        {0, 1, 0, 0}, {0, 1, 1, 1}, {1, 2, 2, 1}, {1, 2, 0, 2}};
+    EXPECT_EQ(currentBoard, expectedBoard);
+}
