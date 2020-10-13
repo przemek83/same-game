@@ -42,4 +42,8 @@ unsigned int getClusterSize(const std::vector<std::vector<int>>& board,
                             Point startPoint, bool (&checked)[MAX_W][MAX_H],
                             unsigned int w, unsigned int h);
 
+std::vector<std::vector<int>> loadBoard(unsigned int columnsCount,
+                                        unsigned int rowsCount,
+                                        std::istream& in);
+
 };  // namespace SameGame

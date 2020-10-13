@@ -72,17 +72,7 @@ int main()
             continue;
         }
 
-        std::vector<std::vector<int>> board(w);
-        for (auto& column : board)
-            column.resize(h);
-
-        for (unsigned int row = 0; row < h; ++row)
-            for (unsigned int column = 0; column < w; ++column)
-            {
-                int field;
-                std::cin >> field;
-                board[column][row] = field;
-            }
+        std::vector<std::vector<int>> board{loadBoard(w, h, std::cin)};
 
         std::ostringstream output;
         // printBoard(board);

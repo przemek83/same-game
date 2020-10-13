@@ -220,4 +220,24 @@ void printPoint(Point point, std::ostringstream& output)
 {
     output << point.row << " " << point.column << std::endl;
 }
+
+std::vector<std::vector<int>> loadBoard(unsigned int columnsCount,
+                                        unsigned int rowsCount,
+                                        std::istream& in)
+{
+    std::vector<std::vector<int>> board(columnsCount);
+    for (auto& column : board)
+        column.resize(rowsCount);
+
+    for (unsigned int row = 0; row < rowsCount; ++row)
+        for (unsigned int column = 0; column < columnsCount; ++column)
+        {
+            int field;
+            in >> field;
+            board[column][row] = field;
+        }
+
+    return board;
+}
+
 };  // namespace SameGame
