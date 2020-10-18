@@ -148,6 +148,8 @@ TEST(SameGameTest, loadBoard)
     EXPECT_EQ(currentBoard, expectedBoard);
 }
 
+static std::vector<std::vector<int>> board50x50x3Colors{
+    preapreBoard(50, 50, "50x50_3_colors.txt")};
 static std::vector<std::vector<int>> board50x50x11Colors{
     preapreBoard(50, 50, "50x50_11_colors.txt")};
 static std::vector<std::vector<int>> board200x200x3Colors{
@@ -163,18 +165,19 @@ class PerformanceTests
 };
 
 // Test Name             | Release (ms) | Debug (ms)
+// board50x50x3Colors    | 8            | 27
 // board50x50x11Colors   | 23           | 79
 // board200x200x3Colors  | 1268         | 4739
 // board200x200x20Colors | 4875         | 18070
 // board500x500x20Colors | 236104       | 816494
 
-INSTANTIATE_TEST_SUITE_P(
-    SameGameTest, PerformanceTests,
-    ::testing::Values(board50x50x11Colors,   // 23 | 79 ms
-                      board200x200x3Colors,  // 1268 | 4739 ms
-                      board200x200x20Colors  // 4875 || 18070 ms
-                      //,board500x500x20Colors  // 816494 ms
-                      ));
+INSTANTIATE_TEST_SUITE_P(SameGameTest, PerformanceTests,
+                         ::testing::Values(board50x50x3Colors,
+                                           board50x50x11Colors,
+                                           board200x200x3Colors,
+                                           board200x200x20Colors
+                                           //,board500x500x20Colors
+                                           ));
 
 TEST_P(PerformanceTests, playGame)
 {
