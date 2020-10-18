@@ -3,6 +3,7 @@
 #include <cstring>
 #include <fstream>
 
+#include "../Board.h"
 #include "../SameGame.h"
 
 using namespace SameGame;
@@ -131,21 +132,21 @@ INSTANTIATE_TEST_SUITE_P(
                       std::make_tuple(singleRowBoard, 1, Point{0, 1}),
                       std::make_tuple(singleRowBoard, 2, Point{0, 3})));
 
-TEST(SameGameTest, loadBoard)
-{
-    std::ifstream in("4x4_3_colors.txt", std::ifstream::in);
-    std::vector<std::vector<int>> currentBoard{loadBoard(4, 4, in)};
-    std::vector<std::vector<int>> expectedBoard{
-        {0, 1, 0, 0}, {0, 1, 1, 1}, {1, 2, 2, 1}, {1, 2, 0, 2}};
-    EXPECT_EQ(currentBoard, expectedBoard);
-}
-
 static std::vector<std::vector<int>> preapreBoard(unsigned int columnsCount,
                                                   unsigned int rowsCount,
                                                   std::string fileName)
 {
     std::ifstream in(fileName, std::ifstream::in);
-    return loadBoard(columnsCount, rowsCount, in);
+    return Board::loadBoard(columnsCount, rowsCount, in);
+}
+
+TEST(SameGameTest, loadBoard)
+{
+    std::vector<std::vector<int>> currentBoard{
+        preapreBoard(4, 4, "4x4_3_colors.txt")};
+    std::vector<std::vector<int>> expectedBoard{
+        {0, 1, 0, 0}, {0, 1, 1, 1}, {1, 2, 2, 1}, {1, 2, 0, 2}};
+    EXPECT_EQ(currentBoard, expectedBoard);
 }
 
 static std::vector<std::vector<int>> board50x50x11Colors{

@@ -32,6 +32,8 @@ set(${PROJECT_NAME}_SOURCES
     main.cpp
     SameGame.cpp
     SameGame.h
+    Board.cpp
+    Board.h
     )
 
 add_executable(${CMAKE_PROJECT_NAME} ${${PROJECT_NAME}_SOURCES})

@@ -4,6 +4,8 @@ set(${PROJECT_TEST}_SOURCES
     SameGameTest.cpp
     ../SameGame.cpp
     ../SameGame.h
+    ../Board.cpp
+    ../Board.h
     )
 
 file(GLOB TXT_FILES

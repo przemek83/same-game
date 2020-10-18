@@ -37,6 +37,7 @@
 #include <sstream>
 #include <vector>
 
+#include "Board.h"
 #include "SameGame.h"
 
 int main()
@@ -55,7 +56,7 @@ int main()
         return 1;
 
     std::vector<std::vector<int>> board{
-        loadBoard(columnCount, rowCount, std::cin)};
+        Board::loadBoard(columnCount, rowCount, std::cin)};
 
     std::vector<Point> points{playGame(std::move(board))};
 

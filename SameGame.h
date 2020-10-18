@@ -1,6 +1,5 @@
 #pragma once
 
-#include <sstream>
 #include <vector>
 
 namespace SameGame
@@ -23,8 +22,6 @@ constexpr Point emptyPoint{EMPTY, EMPTY};
 
 bool operator==(const Point& left, const Point& right);
 
-void printBoard(const std::vector<std::vector<int>>& board);
-
 Point getNextMove(const std::vector<std::vector<int>>& board, unsigned int w,
                   unsigned int h);
 
@@ -37,10 +34,6 @@ void impactGravity(std::vector<std::vector<int>>& board,
 unsigned int getClusterSize(const std::vector<std::vector<int>>& board,
                             Point startPoint, bool (&checked)[MAX_W][MAX_H],
                             unsigned int w, unsigned int h);
-
-std::vector<std::vector<int>> loadBoard(unsigned int columnsCount,
-                                        unsigned int rowsCount,
-                                        std::istream& in);
 
 std::vector<Point> playGame(std::vector<std::vector<int>> board);
 

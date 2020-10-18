@@ -1,16 +1,8 @@
 #include "SameGame.h"
 
-#include <limits.h>
-#include <algorithm>
-#include <chrono>
+#include <cstdlib>
 #include <cstring>
-#include <fstream>
-#include <iomanip>
-#include <iostream>
 #include <queue>
-#include <unordered_map>
-#include <unordered_set>
-#include <vector>
 
 namespace SameGame
 {
@@ -198,38 +190,6 @@ void makeMove(std::vector<std::vector<int>>& board,
     }
 }
 
-void printBoard(const std::vector<std::vector<int>>& board)
-{
-    if (board.empty())
-        return;
-
-    for (unsigned int row = 0; row < board[0].size(); ++row)
-    {
-        for (unsigned int column = 0; column < board.size(); ++column)
-            std::cout << board[column][row] << "\t";
-        std::cout << std::endl;
-    }
-}
-
-std::vector<std::vector<int>> loadBoard(unsigned int columnsCount,
-                                        unsigned int rowsCount,
-                                        std::istream& in)
-{
-    std::vector<std::vector<int>> board(columnsCount);
-    for (auto& column : board)
-        column.resize(rowsCount);
-
-    for (unsigned int row = 0; row < rowsCount; ++row)
-        for (unsigned int column = 0; column < columnsCount; ++column)
-        {
-            int field;
-            in >> field;
-            board[column][row] = field;
-        }
-
-    return board;
-}
-
 std::vector<Point> playGame(std::vector<std::vector<int>> board)
 {
     if (board.size() == 0)
@@ -243,10 +203,9 @@ std::vector<Point> playGame(std::vector<std::vector<int>> board)
     std::memset(impactedColumns, EMPTY, sizeof(impactedColumns));
 
     std::vector<Point> points;
-    Point movePoint{emptyPoint};
     while (true)
     {
-        movePoint = getNextMove(board, columnsCount, rowsCount);
+        const Point movePoint{getNextMove(board, columnsCount, rowsCount)};
 
         points.push_back(movePoint);
         if (movePoint == emptyPoint)
