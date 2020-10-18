@@ -149,9 +149,17 @@ INSTANTIATE_TEST_SUITE_P(
 
 TEST(SameGameTest, loadBoard)
 {
-    std::ifstream in("testFile.txt", std::ifstream::in);
+    std::ifstream in("4x4_3_colors.txt", std::ifstream::in);
     std::vector<std::vector<int>> currentBoard{loadBoard(4, 4, in)};
     std::vector<std::vector<int>> expectedBoard{
         {0, 1, 0, 0}, {0, 1, 1, 1}, {1, 2, 2, 1}, {1, 2, 0, 2}};
     EXPECT_EQ(currentBoard, expectedBoard);
+}
+
+TEST(SameGameTest, performanceTest)
+{
+    srand(0);
+    std::ifstream in("50x50_11_colors.txt", std::ifstream::in);
+    std::vector<std::vector<int>> board{loadBoard(50, 50, in)};
+    playGame(50, 50, board);
 }
