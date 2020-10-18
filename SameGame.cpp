@@ -12,7 +12,7 @@ constexpr int rows[]{0, -1, 1, 0};
 constexpr Point emptyPoint{Point::EMPTY, Point::EMPTY};
 
 void impactGravity(std::vector<std::vector<int>>& board,
-                   int (&impactedColumns)[Board::MAX_W])
+                   std::vector<int>& impactedColumns)
 {
     for (unsigned int i = 0; i < board.size(); ++i)
     {
@@ -147,7 +147,7 @@ Point getNextMove(const std::vector<std::vector<int>>& board, unsigned int w,
 }
 
 void makeMove(std::vector<std::vector<int>>& board,
-              int (&impactedColumns)[Board::MAX_W], const Point& point)
+              std::vector<int>& impactedColumns, const Point& point)
 {
     int color{board[point.column][point.row]};
 
@@ -190,9 +190,7 @@ std::vector<Point> playGame(std::vector<std::vector<int>> board)
     const unsigned int rowsCount{
         static_cast<unsigned int>(board.front().size())};
 
-    static int impactedColumns[Board::MAX_W];
-    std::memset(impactedColumns, Point::EMPTY, sizeof(impactedColumns));
-
+    std::vector<int> impactedColumns(columnsCount, Point::EMPTY);
     std::vector<Point> points;
     while (true)
     {

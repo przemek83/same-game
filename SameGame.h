@@ -11,10 +11,10 @@ Point getNextMove(const std::vector<std::vector<int>>& board, unsigned int w,
                   unsigned int h);
 
 void makeMove(std::vector<std::vector<int>>& board,
-              int (&impactedColumns)[Board::MAX_W], const Point& point);
+              std::vector<int>& impactedColumns, const Point& point);
 
 void impactGravity(std::vector<std::vector<int>>& board,
-                   int (&impactedColumns)[Board::MAX_W]);
+                   std::vector<int>& impactedColumns);
 
 unsigned int getClusterSize(const std::vector<std::vector<int>>& board,
                             Point startPoint,

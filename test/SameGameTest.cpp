@@ -22,7 +22,7 @@ TEST_P(ImpaceGravityTests, impactGravity)
     const std::vector<std::vector<int>> expected{std::get<1>(GetParam())};
     const std::vector<Point> impactedColumnsPoints{std::get<2>(GetParam())};
 
-    int impactedColumns[Board::MAX_W];
+    std::vector<int> impactedColumns(board.size());
     for (const auto point : impactedColumnsPoints)
         impactedColumns[point.column] = point.row;
 
@@ -68,8 +68,7 @@ TEST(SameGameTest, makeMove6x5)
     std::vector<std::vector<int>> board{{-1, -1, -1, -1, 1}, {-1, -1, -1, 1, 2},
                                         {-1, -1, -1, 1, 1},  {-1, -1, -1, 1, 2},
                                         {-1, -1, -1, -1, 1}, {-1, -1, 1, 1, 1}};
-    int impactedColumns[Board::MAX_W]{};
-    std::memset(impactedColumns, Point::EMPTY, sizeof(impactedColumns));
+    std::vector<int> impactedColumns(board.size(), Point::EMPTY);
 
     makeMove(board, impactedColumns, {2, 3});
     EXPECT_EQ(board, expected);
@@ -88,8 +87,7 @@ TEST(SameGameTest, makeMove4x4)
     const std::vector<std::vector<int>> expected{
         {0, -1, 0, 0}, {0, -1, -1, -1}, {1, 2, 2, -1}, {1, 2, 0, 2}};
 
-    int impactedColumns[Board::MAX_W]{};
-    std::memset(impactedColumns, Point::EMPTY, sizeof(impactedColumns));
+    std::vector<int> impactedColumns(board.size(), Point::EMPTY);
 
     makeMove(board, impactedColumns, {2, 3});
     EXPECT_EQ(board, expected);
