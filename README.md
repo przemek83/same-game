@@ -105,7 +105,7 @@ Examples of usage:
 Project contains test subproject based on Goggle Test framework. Compile testing subproject and launch tests via IDE or directly from console.  
 Example run:
 ```
-$ ./same-game-test.exe
+$ ./same-game-test
 (...)
 [==========] Running 18 tests from 4 test suites.
 [----------] Global test environment set-up.
