@@ -164,22 +164,39 @@ static std::vector<std::vector<int>> preapreBoard(unsigned int columnsCount,
     return loadBoard(columnsCount, rowsCount, in);
 }
 
-static std::vector<std::vector<int>> bigBoard{
+static std::vector<std::vector<int>> board50x50x11Colors{
     preapreBoard(50, 50, "50x50_11_colors.txt")};
-
-static std::vector<std::vector<int>> veryBigBoard{
+static std::vector<std::vector<int>> board200x200x3Colors{
+    preapreBoard(200, 200, "200x200_3_colors.txt")};
+static std::vector<std::vector<int>> board200x200x20Colors{
+    preapreBoard(200, 200, "200x200_20_colors.txt")};
+static std::vector<std::vector<int>> board500x500x20Colors{
     preapreBoard(500, 500, "500x500_20_colors.txt")};
 
-TEST(SameGameTest, performanceTest)
+TEST(SameGamePerformanceTest, test50x50x11Colors)
 {
     // 79 ms
     srand(0);
-    playGame(50, 50, bigBoard);
+    playGame(50, 50, board50x50x11Colors);
 }
 
-TEST(SameGameTest, verylongPerformanceTest)
+TEST(SameGamePerformanceTest, test200x200x3Colors)
 {
-    // 816494 ms
+    // 4739 ms
     srand(0);
-    playGame(500, 500, veryBigBoard);
+    playGame(200, 200, board200x200x3Colors);
 }
+
+TEST(SameGamePerformanceTest, test200x200x20Colors)
+{
+    // 18070 ms
+    srand(0);
+    playGame(200, 200, board200x200x20Colors);
+}
+
+// TEST(SameGamePerformanceTest, test500x500x20Colors)
+//{
+//    // 816494 ms
+//    srand(0);
+//    playGame(500, 500, board500x500x20Colors);
+//}
