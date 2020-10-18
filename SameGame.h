@@ -23,17 +23,13 @@ constexpr Point emptyPoint{EMPTY, EMPTY};
 
 bool operator==(const Point& left, const Point& right);
 
-void printPoint(Point point, std::ostringstream& output);
-
 void printBoard(const std::vector<std::vector<int>>& board);
 
-Point getNextMove(const std::vector<std::vector<int>>& board,
-                  bool (&checked)[MAX_W][MAX_H], unsigned int w,
+Point getNextMove(const std::vector<std::vector<int>>& board, unsigned int w,
                   unsigned int h);
 
 void makeMove(std::vector<std::vector<int>>& board,
-              bool (&checked)[MAX_W][MAX_H], int (&impactedColumns)[MAX_W],
-              const Point& point);
+              int (&impactedColumns)[MAX_W], const Point& point);
 
 void impactGravity(std::vector<std::vector<int>>& board,
                    int (&impactedColumns)[MAX_W]);

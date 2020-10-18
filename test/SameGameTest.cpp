@@ -69,16 +69,8 @@ TEST(SameGameTest, makeMove6x5)
     int impactedColumns[MAX_W]{};
     std::memset(impactedColumns, EMPTY, sizeof(impactedColumns));
 
-    std::vector<Point> checkedPoints{{1, 3}, {2, 3}, {2, 4}, {3, 3}};
-    bool checked[MAX_W][MAX_H]{};
-    for (const auto point : checkedPoints)
-        checked[point.column][point.row] = true;
-
-    makeMove(board, checked, impactedColumns, {2, 3});
+    makeMove(board, impactedColumns, {2, 3});
     EXPECT_EQ(board, expected);
-
-    for (const auto point : checkedPoints)
-        EXPECT_FALSE(checked[point.column][point.row]);
 
     EXPECT_EQ(impactedColumns[0], EMPTY);
     EXPECT_EQ(impactedColumns[1], 3);
@@ -94,19 +86,11 @@ TEST(SameGameTest, makeMove4x4)
     const std::vector<std::vector<int>> expected{
         {0, -1, 0, 0}, {0, -1, -1, -1}, {1, 2, 2, -1}, {1, 2, 0, 2}};
 
-    std::vector<Point> checkedPoints{{0, 1}, {1, 1}, {1, 2}, {1, 3}, {2, 3}};
-    bool checked[MAX_W][MAX_H]{};
-    for (const auto point : checkedPoints)
-        checked[point.column][point.row] = true;
-
     int impactedColumns[MAX_W]{};
     std::memset(impactedColumns, EMPTY, sizeof(impactedColumns));
 
-    makeMove(board, checked, impactedColumns, {2, 3});
+    makeMove(board, impactedColumns, {2, 3});
     EXPECT_EQ(board, expected);
-
-    for (const auto point : checkedPoints)
-        EXPECT_FALSE(checked[point.column][point.row]);
 
     EXPECT_EQ(impactedColumns[0], 1);
     EXPECT_EQ(impactedColumns[1], 3);
@@ -178,16 +162,23 @@ class PerformanceTests
 {
 };
 
-INSTANTIATE_TEST_SUITE_P(SameGameTest, PerformanceTests,
-                         ::testing::Values(board50x50x11Colors,   // 79 ms
-                                           board200x200x3Colors,  // 4739 ms
-                                           board200x200x20Colors  // 18070 ms
-                                           //,board500x500x20Colors // 816494 ms
-                                           ));
+// Test Name             | Release (ms) | Debug (ms)
+// board50x50x11Colors   | 23           | 79
+// board200x200x3Colors  | 1268         | 4739
+// board200x200x20Colors | 4875         | 18070
+// board500x500x20Colors | 236104       | 816494
+
+INSTANTIATE_TEST_SUITE_P(
+    SameGameTest, PerformanceTests,
+    ::testing::Values(board50x50x11Colors,   // 23 | 79 ms
+                      board200x200x3Colors,  // 1268 | 4739 ms
+                      board200x200x20Colors  // 4875 || 18070 ms
+                      //,board500x500x20Colors  // 816494 ms
+                      ));
 
 TEST_P(PerformanceTests, playGame)
 {
     const std::vector<std::vector<int>> board{std::get<0>(GetParam())};
-    srand(0);
+    srand(1);
     playGame(board);
 }

@@ -58,10 +58,9 @@ int main()
         loadBoard(columnCount, rowCount, std::cin)};
 
     std::vector<Point> points{playGame(std::move(board))};
-    std::ostringstream output;
+
     for (auto point : points)
-        printPoint(point, output);
-    std::cout << output.str();
+        std::cout << point.row << " " << point.column << std::endl;
 
     return 0;
 }

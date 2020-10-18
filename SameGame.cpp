@@ -125,13 +125,12 @@ inline unsigned int fastRandInt()
     return (g_seed >> 16) & 0x7FFF;
 }
 
-Point getNextMove(const std::vector<std::vector<int>>& board,
-                  bool (&checked)[MAX_W][MAX_H], unsigned int w, unsigned int h)
+Point getNextMove(const std::vector<std::vector<int>>& board, unsigned int w,
+                  unsigned int h)
 {
+    static bool checked[MAX_W][MAX_H] = {};
     std::memset(checked, false, sizeof(checked));
     const unsigned int randomTries{static_cast<unsigned int>(w * h * .4)};
-    // const int maxSuccessfullTries{50};
-    // unsigned int successfullTries{0};
     unsigned int currentBestScore{0};
     Point currentBestPoint{emptyPoint};
     // Try 40% random hits.
@@ -158,7 +157,6 @@ Point getNextMove(const std::vector<std::vector<int>>& board,
             Point point{column, row};
             if (getClusterSize(board, point, checked, w, h) > 1)
                 return point;
-            // checked[point.column][point.row] = false;
         }
     }
 
@@ -166,15 +164,13 @@ Point getNextMove(const std::vector<std::vector<int>>& board,
 }
 
 void makeMove(std::vector<std::vector<int>>& board,
-              bool (&checked)[MAX_W][MAX_H], int (&impactedColumns)[MAX_W],
-              const Point& point)
+              int (&impactedColumns)[MAX_W], const Point& point)
 {
     int color{board[point.column][point.row]};
 
     static std::queue<Point> toCheck;
     toCheck.push(point);
     board[point.column][point.row] = EMPTY;
-    checked[point.column][point.row] = false;
     while (!toCheck.empty())
     {
         const auto currentPoint{toCheck.front()};
@@ -196,7 +192,6 @@ void makeMove(std::vector<std::vector<int>>& board,
                              board[0].size()))
             {
                 board[col][row] = EMPTY;
-                checked[col][row] = false;
                 toCheck.push({col, row});
             }
         }
@@ -214,11 +209,6 @@ void printBoard(const std::vector<std::vector<int>>& board)
             std::cout << board[column][row] << "\t";
         std::cout << std::endl;
     }
-}
-
-void printPoint(Point point, std::ostringstream& output)
-{
-    output << point.row << " " << point.column << std::endl;
 }
 
 std::vector<std::vector<int>> loadBoard(unsigned int columnsCount,
@@ -248,22 +238,20 @@ std::vector<Point> playGame(std::vector<std::vector<int>> board)
     const unsigned int columnsCount{static_cast<unsigned int>(board.size())};
     const unsigned int rowsCount{
         static_cast<unsigned int>(board.front().size())};
-    std::vector<Point> points;
-    static bool checked[MAX_W][MAX_H] = {};
-    std::memset(checked, false, sizeof(checked));
 
     static int impactedColumns[MAX_W];
     std::memset(impactedColumns, EMPTY, sizeof(impactedColumns));
 
+    std::vector<Point> points;
     Point movePoint{emptyPoint};
     while (true)
     {
-        movePoint = getNextMove(board, checked, columnsCount, rowsCount);
+        movePoint = getNextMove(board, columnsCount, rowsCount);
 
         points.push_back(movePoint);
         if (movePoint == emptyPoint)
             break;
-        makeMove(board, checked, impactedColumns, movePoint);
+        makeMove(board, impactedColumns, movePoint);
         impactGravity(board, impactedColumns);
         // printBoard(board);
     }
