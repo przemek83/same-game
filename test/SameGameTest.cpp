@@ -21,7 +21,7 @@ TEST_P(ImpaceGravityTests, impactGravity)
     const std::vector<std::vector<int>> expected{std::get<1>(GetParam())};
     const std::vector<Point> impactedColumnsPoints{std::get<2>(GetParam())};
 
-    int impactedColumns[MAX_W];
+    int impactedColumns[Board::MAX_W];
     for (const auto point : impactedColumnsPoints)
         impactedColumns[point.column] = point.row;
 
@@ -67,7 +67,7 @@ TEST(SameGameTest, makeMove6x5)
     std::vector<std::vector<int>> board{{-1, -1, -1, -1, 1}, {-1, -1, -1, 1, 2},
                                         {-1, -1, -1, 1, 1},  {-1, -1, -1, 1, 2},
                                         {-1, -1, -1, -1, 1}, {-1, -1, 1, 1, 1}};
-    int impactedColumns[MAX_W]{};
+    int impactedColumns[Board::MAX_W]{};
     std::memset(impactedColumns, EMPTY, sizeof(impactedColumns));
 
     makeMove(board, impactedColumns, {2, 3});
@@ -87,7 +87,7 @@ TEST(SameGameTest, makeMove4x4)
     const std::vector<std::vector<int>> expected{
         {0, -1, 0, 0}, {0, -1, -1, -1}, {1, 2, 2, -1}, {1, 2, 0, 2}};
 
-    int impactedColumns[MAX_W]{};
+    int impactedColumns[Board::MAX_W]{};
     std::memset(impactedColumns, EMPTY, sizeof(impactedColumns));
 
     makeMove(board, impactedColumns, {2, 3});
@@ -111,7 +111,7 @@ TEST_P(GetClusterTests, GetCluster)
     const int expectedClusterSize{std::get<1>(GetParam())};
     const Point point{std::get<2>(GetParam())};
 
-    bool checked[MAX_W][MAX_H]{};
+    bool checked[Board::MAX_W][Board::MAX_H]{};
     std::memset(checked, false, sizeof(checked));
     unsigned int currentClusterSize{
         getClusterSize(board, point, checked, board.size(), board[0].size())};

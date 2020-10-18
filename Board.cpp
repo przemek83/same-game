@@ -4,6 +4,11 @@
 
 namespace Board
 {
+constexpr unsigned int MIN_W{4};
+constexpr unsigned int MIN_H{4};
+constexpr unsigned int MIN_C{3};
+constexpr unsigned int MAX_C{20};
+
 void printBoard(const std::vector<std::vector<int>>& board)
 {
     if (board.empty())
@@ -35,4 +40,12 @@ std::vector<std::vector<int>> loadBoard(unsigned int columnsCount,
 
     return board;
 }
+
+bool isBoardDescriptionValid(unsigned int rowCount, unsigned int columnCount,
+                             unsigned int colorCount)
+{
+    return rowCount >= MIN_H && rowCount < MAX_H && columnCount >= MIN_W &&
+           columnCount < MAX_W && colorCount >= MIN_C && colorCount < MAX_C;
+}
+
 }  // namespace Board

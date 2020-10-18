@@ -51,8 +51,7 @@ int main()
     unsigned int colorCount{0};
     std::cin >> rowCount >> columnCount >> colorCount;
 
-    if (rowCount < MIN_H || rowCount > MAX_H || columnCount < MIN_W ||
-        columnCount > MAX_W || colorCount < MIN_C || colorCount > MAX_C)
+    if (!Board::isBoardDescriptionValid(rowCount, columnCount, colorCount))
         return 1;
 
     std::vector<std::vector<int>> board{

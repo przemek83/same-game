@@ -22,7 +22,7 @@ bool operator<(const Point& left, const Point& right)
 }
 
 void impactGravity(std::vector<std::vector<int>>& board,
-                   int (&impactedColumns)[MAX_W])
+                   int (&impactedColumns)[Board::MAX_W])
 {
     for (unsigned int i = 0; i < board.size(); ++i)
     {
@@ -69,7 +69,8 @@ bool isFieldValid(const std::vector<std::vector<int>>& board,
 }
 
 unsigned int getClusterSize(const std::vector<std::vector<int>>& board,
-                            Point startPoint, bool (&checked)[MAX_W][MAX_H],
+                            Point startPoint,
+                            bool (&checked)[Board::MAX_W][Board::MAX_H],
                             unsigned int w, unsigned int h)
 {
     int color{board[startPoint.column][startPoint.row]};
@@ -120,7 +121,7 @@ inline unsigned int fastRandInt()
 Point getNextMove(const std::vector<std::vector<int>>& board, unsigned int w,
                   unsigned int h)
 {
-    static bool checked[MAX_W][MAX_H] = {};
+    static bool checked[Board::MAX_W][Board::MAX_H] = {};
     std::memset(checked, false, sizeof(checked));
     const unsigned int randomTries{static_cast<unsigned int>(w * h * .4)};
     unsigned int currentBestScore{0};
@@ -156,7 +157,7 @@ Point getNextMove(const std::vector<std::vector<int>>& board, unsigned int w,
 }
 
 void makeMove(std::vector<std::vector<int>>& board,
-              int (&impactedColumns)[MAX_W], const Point& point)
+              int (&impactedColumns)[Board::MAX_W], const Point& point)
 {
     int color{board[point.column][point.row]};
 
@@ -199,7 +200,7 @@ std::vector<Point> playGame(std::vector<std::vector<int>> board)
     const unsigned int rowsCount{
         static_cast<unsigned int>(board.front().size())};
 
-    static int impactedColumns[MAX_W];
+    static int impactedColumns[Board::MAX_W];
     std::memset(impactedColumns, EMPTY, sizeof(impactedColumns));
 
     std::vector<Point> points;
