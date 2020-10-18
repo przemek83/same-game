@@ -9,54 +9,44 @@ namespace SameGame
 constexpr int cols[]{-1, 0, 0, 1};
 constexpr int rows[]{0, -1, 1, 0};
 
-bool operator==(const Point& left, const Point& right)
-{
-    return left.column == right.column && left.row == right.row;
-}
-
-bool operator<(const Point& left, const Point& right)
-{
-    if (left.column < right.column)
-        return false;
-    return left.row < right.row;
-}
+constexpr Point emptyPoint{Point::EMPTY, Point::EMPTY};
 
 void impactGravity(std::vector<std::vector<int>>& board,
                    int (&impactedColumns)[Board::MAX_W])
 {
     for (unsigned int i = 0; i < board.size(); ++i)
     {
-        if (impactedColumns[i] == EMPTY)
+        if (impactedColumns[i] == Point::EMPTY)
             continue;
 
         auto& column{board[i]};
-        int emptyStartIndex = {EMPTY};
+        int emptyStartIndex = {Point::EMPTY};
         unsigned int emptyCount{0};
         for (int row = impactedColumns[i]; row >= 0; --row)
         {
-            if (column[row] == EMPTY)
+            if (column[row] == Point::EMPTY)
             {
-                if (emptyStartIndex == EMPTY)
+                if (emptyStartIndex == Point::EMPTY)
                     emptyStartIndex = row;
                 emptyCount++;
             }
             else
             {
-                if (emptyStartIndex != EMPTY)
+                if (emptyStartIndex != Point::EMPTY)
                 {
                     for (size_t currentRow = emptyStartIndex;
                          currentRow >= emptyCount; --currentRow)
                     {
                         column[currentRow] = column[currentRow - emptyCount];
-                        column[currentRow - emptyCount] = EMPTY;
+                        column[currentRow - emptyCount] = Point::EMPTY;
                     }
-                    emptyStartIndex = EMPTY;
+                    emptyStartIndex = Point::EMPTY;
                     row += emptyCount;
                     emptyCount = 0;
                 }
             }
         }
-        impactedColumns[i] = EMPTY;
+        impactedColumns[i] = Point::EMPTY;
     }
 }
 
@@ -74,7 +64,7 @@ unsigned int getClusterSize(const std::vector<std::vector<int>>& board,
                             unsigned int w, unsigned int h)
 {
     int color{board[startPoint.column][startPoint.row]};
-    if (color == EMPTY)
+    if (color == Point::EMPTY)
         return 0;
 
     unsigned int clusterSize{0};
@@ -163,13 +153,13 @@ void makeMove(std::vector<std::vector<int>>& board,
 
     static std::queue<Point> toCheck;
     toCheck.push(point);
-    board[point.column][point.row] = EMPTY;
+    board[point.column][point.row] = Point::EMPTY;
     while (!toCheck.empty())
     {
         const auto currentPoint{toCheck.front()};
         toCheck.pop();
 
-        if (impactedColumns[currentPoint.column] == EMPTY)
+        if (impactedColumns[currentPoint.column] == Point::EMPTY)
             impactedColumns[currentPoint.column] = currentPoint.row;
         else
         {
@@ -184,7 +174,7 @@ void makeMove(std::vector<std::vector<int>>& board,
             if (isFieldValid(board, col, row, color, board.size(),
                              board[0].size()))
             {
-                board[col][row] = EMPTY;
+                board[col][row] = Point::EMPTY;
                 toCheck.push({col, row});
             }
         }
@@ -201,7 +191,7 @@ std::vector<Point> playGame(std::vector<std::vector<int>> board)
         static_cast<unsigned int>(board.front().size())};
 
     static int impactedColumns[Board::MAX_W];
-    std::memset(impactedColumns, EMPTY, sizeof(impactedColumns));
+    std::memset(impactedColumns, Point::EMPTY, sizeof(impactedColumns));
 
     std::vector<Point> points;
     while (true)

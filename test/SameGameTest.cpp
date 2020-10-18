@@ -4,6 +4,7 @@
 #include <fstream>
 
 #include "../Board.h"
+#include "../Point.h"
 #include "../SameGame.h"
 
 using namespace SameGame;
@@ -40,10 +41,10 @@ INSTANTIATE_TEST_SUITE_P(
                         std::vector<Point>{{0, 4}}),
         std::make_tuple(std::vector<std::vector<int>>{{-1, -1, -1, -1, -1}},
                         std::vector<std::vector<int>>{{-1, -1, -1, -1, -1}},
-                        std::vector<Point>{{0, EMPTY}}),
+                        std::vector<Point>{{0, Point::EMPTY}}),
         std::make_tuple(std::vector<std::vector<int>>{{1, 2, 3, 4, 5}},
                         std::vector<std::vector<int>>{{1, 2, 3, 4, 5}},
-                        std::vector<Point>{{0, EMPTY}}),
+                        std::vector<Point>{{0, Point::EMPTY}}),
         std::make_tuple(std::vector<std::vector<int>>{{1, -1, -1, -1, -1},
                                                       {1, 2, -1, -1, -1},
                                                       {1, -1, -1, 1, -1},
@@ -68,16 +69,16 @@ TEST(SameGameTest, makeMove6x5)
                                         {-1, -1, -1, 1, 1},  {-1, -1, -1, 1, 2},
                                         {-1, -1, -1, -1, 1}, {-1, -1, 1, 1, 1}};
     int impactedColumns[Board::MAX_W]{};
-    std::memset(impactedColumns, EMPTY, sizeof(impactedColumns));
+    std::memset(impactedColumns, Point::EMPTY, sizeof(impactedColumns));
 
     makeMove(board, impactedColumns, {2, 3});
     EXPECT_EQ(board, expected);
 
-    EXPECT_EQ(impactedColumns[0], EMPTY);
+    EXPECT_EQ(impactedColumns[0], Point::EMPTY);
     EXPECT_EQ(impactedColumns[1], 3);
     EXPECT_EQ(impactedColumns[2], 4);
     EXPECT_EQ(impactedColumns[3], 3);
-    EXPECT_EQ(impactedColumns[4], EMPTY);
+    EXPECT_EQ(impactedColumns[4], Point::EMPTY);
 }
 
 TEST(SameGameTest, makeMove4x4)
@@ -88,7 +89,7 @@ TEST(SameGameTest, makeMove4x4)
         {0, -1, 0, 0}, {0, -1, -1, -1}, {1, 2, 2, -1}, {1, 2, 0, 2}};
 
     int impactedColumns[Board::MAX_W]{};
-    std::memset(impactedColumns, EMPTY, sizeof(impactedColumns));
+    std::memset(impactedColumns, Point::EMPTY, sizeof(impactedColumns));
 
     makeMove(board, impactedColumns, {2, 3});
     EXPECT_EQ(board, expected);
@@ -96,7 +97,7 @@ TEST(SameGameTest, makeMove4x4)
     EXPECT_EQ(impactedColumns[0], 1);
     EXPECT_EQ(impactedColumns[1], 3);
     EXPECT_EQ(impactedColumns[2], 3);
-    EXPECT_EQ(impactedColumns[3], EMPTY);
+    EXPECT_EQ(impactedColumns[3], Point::EMPTY);
 }
 
 class GetClusterTests

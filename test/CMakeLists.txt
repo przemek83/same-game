@@ -6,6 +6,8 @@ set(${PROJECT_TEST}_SOURCES
     ../SameGame.h
     ../Board.cpp
     ../Board.h
+    ../Point.cpp
+    ../Point.h
     )
 
 file(GLOB TXT_FILES

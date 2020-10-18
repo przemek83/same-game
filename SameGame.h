@@ -3,21 +3,10 @@
 #include <vector>
 
 #include "Board.h"
+#include "Point.h"
 
 namespace SameGame
 {
-constexpr int EMPTY = -1;
-
-struct Point
-{
-    int column{EMPTY};
-    int row{EMPTY};
-};
-
-constexpr Point emptyPoint{EMPTY, EMPTY};
-
-bool operator==(const Point& left, const Point& right);
-
 Point getNextMove(const std::vector<std::vector<int>>& board, unsigned int w,
                   unsigned int h);
 
