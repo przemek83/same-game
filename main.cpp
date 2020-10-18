@@ -78,24 +78,9 @@ int main()
         // printBoard(board);
         output << "Y" << std::endl;
 
-        static bool checked[MAX_W][MAX_H] = {};
-        std::memset(checked, false, sizeof(checked));
-
-        static int impactedColumns[MAX_W];
-        std::memset(impactedColumns, EMPTY, sizeof(impactedColumns));
-
-        Point movePoint{emptyPoint};
-        while (true)
-        {
-            movePoint = getNextMove(board, checked, w, h);
-            if (movePoint == emptyPoint)
-                break;
-            printPoint(movePoint, output);
-            makeMove(board, checked, impactedColumns, movePoint);
-            impactGravity(board, impactedColumns);
-            // printBoard(board);
-        }
-        printPoint(emptyPoint, output);
+        std::vector<Point> points{playGame(w, h, board)};
+        for (auto point : points)
+            printPoint(point, output);
         std::cout << output.str();
     }
 

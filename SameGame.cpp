@@ -240,4 +240,29 @@ std::vector<std::vector<int>> loadBoard(unsigned int columnsCount,
     return board;
 }
 
+std::vector<Point> playGame(unsigned int columnsCount, unsigned int rowsCount,
+                            std::vector<std::vector<int>> board)
+{
+    std::vector<Point> points;
+    static bool checked[MAX_W][MAX_H] = {};
+    std::memset(checked, false, sizeof(checked));
+
+    static int impactedColumns[MAX_W];
+    std::memset(impactedColumns, EMPTY, sizeof(impactedColumns));
+
+    Point movePoint{emptyPoint};
+    while (true)
+    {
+        movePoint = getNextMove(board, checked, columnsCount, rowsCount);
+
+        points.push_back(movePoint);
+        if (movePoint == emptyPoint)
+            break;
+        makeMove(board, checked, impactedColumns, movePoint);
+        impactGravity(board, impactedColumns);
+        // printBoard(board);
+    }
+    return points;
+}
+
 };  // namespace SameGame
