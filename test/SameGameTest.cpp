@@ -173,30 +173,21 @@ static std::vector<std::vector<int>> board200x200x20Colors{
 static std::vector<std::vector<int>> board500x500x20Colors{
     preapreBoard(500, 500, "500x500_20_colors.txt")};
 
-TEST(SameGamePerformanceTest, test50x50x11Colors)
+class PerformanceTests
+    : public ::testing::TestWithParam<std::tuple<std::vector<std::vector<int>>>>
 {
-    // 79 ms
-    srand(0);
-    playGame(50, 50, board50x50x11Colors);
-}
+};
 
-TEST(SameGamePerformanceTest, test200x200x3Colors)
+INSTANTIATE_TEST_SUITE_P(SameGameTest, PerformanceTests,
+                         ::testing::Values(board50x50x11Colors,   // 79 ms
+                                           board200x200x3Colors,  // 4739 ms
+                                           board200x200x20Colors  // 18070 ms
+                                           //,board500x500x20Colors // 816494 ms
+                                           ));
+
+TEST_P(PerformanceTests, playGame)
 {
-    // 4739 ms
+    const std::vector<std::vector<int>> board{std::get<0>(GetParam())};
     srand(0);
-    playGame(200, 200, board200x200x3Colors);
+    playGame(board);
 }
-
-TEST(SameGamePerformanceTest, test200x200x20Colors)
-{
-    // 18070 ms
-    srand(0);
-    playGame(200, 200, board200x200x20Colors);
-}
-
-// TEST(SameGamePerformanceTest, test500x500x20Colors)
-//{
-//    // 816494 ms
-//    srand(0);
-//    playGame(500, 500, board500x500x20Colors);
-//}
