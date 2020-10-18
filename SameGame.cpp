@@ -196,14 +196,12 @@ std::vector<Point> playGame(std::vector<std::vector<int>> board)
     std::vector<Point> points;
     while (true)
     {
-        const Point movePoint{getNextMove(board)};
-
-        points.push_back(movePoint);
-        if (movePoint == emptyPoint)
+        const Point nextPoint{getNextMove(board)};
+        points.push_back(nextPoint);
+        if (nextPoint == emptyPoint)
             break;
-        makeMove(board, impactedColumns, movePoint);
+        makeMove(board, impactedColumns, nextPoint);
         impactGravity(board, impactedColumns);
-        // printBoard(board);
     }
     return points;
 }
