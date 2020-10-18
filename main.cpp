@@ -33,6 +33,7 @@
 //    -1 -1
 
 #include <cstring>
+#include <ctime>
 #include <iostream>
 #include <sstream>
 #include <vector>
