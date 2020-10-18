@@ -108,20 +108,25 @@ inline unsigned int fastRandInt()
     return (g_seed >> 16) & 0x7FFF;
 }
 
-Point getNextMove(const std::vector<std::vector<int>>& board, unsigned int w,
-                  unsigned int h)
+Point getNextMove(const std::vector<std::vector<int>>& board)
 {
+    const unsigned int columnsCount{static_cast<unsigned int>(board.size())};
+    const unsigned int rowsCount{
+        static_cast<unsigned int>(board.front().size())};
+
     static bool checked[Board::MAX_W][Board::MAX_H] = {};
     std::memset(checked, false, sizeof(checked));
-    const unsigned int randomTries{static_cast<unsigned int>(w * h * .4)};
+    const unsigned int randomTries{
+        static_cast<unsigned int>(columnsCount * rowsCount * .4)};
     unsigned int currentBestScore{0};
     Point currentBestPoint{emptyPoint};
     // Try 40% random hits.
     for (unsigned int tryNumber = 0; tryNumber < randomTries; ++tryNumber)
     {
-        Point point{static_cast<int>(fastRandInt() % w),
-                    static_cast<int>(fastRandInt() % h)};
-        unsigned int score = getClusterSize(board, point, checked, w, h);
+        Point point{static_cast<int>(fastRandInt() % columnsCount),
+                    static_cast<int>(fastRandInt() % rowsCount)};
+        unsigned int score =
+            getClusterSize(board, point, checked, columnsCount, rowsCount);
         if (score > 1 && score > currentBestScore)
         {
             currentBestScore = score;
@@ -133,12 +138,13 @@ Point getNextMove(const std::vector<std::vector<int>>& board, unsigned int w,
         return currentBestPoint;
 
     // If not found iterate one by one searching for cluster.
-    for (int row = 0; row < h; ++row)
+    for (int row = 0; row < rowsCount; ++row)
     {
-        for (int column = 0; column < w; ++column)
+        for (int column = 0; column < columnsCount; ++column)
         {
             Point point{column, row};
-            if (getClusterSize(board, point, checked, w, h) > 1)
+            if (getClusterSize(board, point, checked, rowsCount, columnsCount) >
+                1)
                 return point;
         }
     }
@@ -186,15 +192,11 @@ std::vector<Point> playGame(std::vector<std::vector<int>> board)
     if (board.size() == 0)
         return {emptyPoint};
 
-    const unsigned int columnsCount{static_cast<unsigned int>(board.size())};
-    const unsigned int rowsCount{
-        static_cast<unsigned int>(board.front().size())};
-
-    std::vector<int> impactedColumns(columnsCount, Point::EMPTY);
+    std::vector<int> impactedColumns(board.size(), Point::EMPTY);
     std::vector<Point> points;
     while (true)
     {
-        const Point movePoint{getNextMove(board, columnsCount, rowsCount)};
+        const Point movePoint{getNextMove(board)};
 
         points.push_back(movePoint);
         if (movePoint == emptyPoint)

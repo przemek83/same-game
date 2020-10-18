@@ -7,8 +7,7 @@
 
 namespace SameGame
 {
-Point getNextMove(const std::vector<std::vector<int>>& board, unsigned int w,
-                  unsigned int h);
+Point getNextMove(const std::vector<std::vector<int>>& board);
 
 void makeMove(std::vector<std::vector<int>>& board,
               std::vector<int>& impactedColumns, const Point& point);
