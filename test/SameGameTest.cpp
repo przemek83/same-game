@@ -156,17 +156,30 @@ TEST(SameGameTest, loadBoard)
     EXPECT_EQ(currentBoard, expectedBoard);
 }
 
-static std::vector<std::vector<int>> preapreBoard(std::string fileName)
+static std::vector<std::vector<int>> preapreBoard(unsigned int columnsCount,
+                                                  unsigned int rowsCount,
+                                                  std::string fileName)
 {
     std::ifstream in(fileName, std::ifstream::in);
-    return loadBoard(50, 50, in);
+    return loadBoard(columnsCount, rowsCount, in);
 }
 
 static std::vector<std::vector<int>> bigBoard{
-    preapreBoard("50x50_11_colors.txt")};
+    preapreBoard(50, 50, "50x50_11_colors.txt")};
+
+static std::vector<std::vector<int>> veryBigBoard{
+    preapreBoard(500, 500, "500x500_20_colors.txt")};
 
 TEST(SameGameTest, performanceTest)
 {
+    // 79 ms
     srand(0);
     playGame(50, 50, bigBoard);
+}
+
+TEST(SameGameTest, verylongPerformanceTest)
+{
+    // 816494 ms
+    srand(0);
+    playGame(500, 500, veryBigBoard);
 }

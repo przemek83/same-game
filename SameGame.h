@@ -9,8 +9,8 @@ constexpr int EMPTY = -1;
 constexpr unsigned int MIN_W{4};
 constexpr unsigned int MIN_H{4};
 constexpr unsigned int MIN_C{3};
-constexpr unsigned int MAX_W{50};
-constexpr unsigned int MAX_H{50};
+constexpr unsigned int MAX_W{500};
+constexpr unsigned int MAX_H{500};
 constexpr unsigned int MAX_C{20};
 
 struct Point
