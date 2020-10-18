@@ -9,14 +9,14 @@
 
 using namespace SameGame;
 
-class ImpaceGravityTests
+class ImpactGravityTests
     : public ::testing::TestWithParam<
           std::tuple<std::vector<std::vector<int>>,
                      std::vector<std::vector<int>>, std::vector<Point>>>
 {
 };
 
-TEST_P(ImpaceGravityTests, impactGravity)
+TEST_P(ImpactGravityTests, impactGravity)
 {
     std::vector<std::vector<int>> board{std::get<0>(GetParam())};
     const std::vector<std::vector<int>> expected{std::get<1>(GetParam())};
@@ -31,7 +31,7 @@ TEST_P(ImpaceGravityTests, impactGravity)
 }
 
 INSTANTIATE_TEST_SUITE_P(
-    SameGameTest, ImpaceGravityTests,
+    SameGameTest, ImpactGravityTests,
     ::testing::Values(
         std::make_tuple(std::vector<std::vector<int>>{{1, 3, 4, -1, 5}},
                         std::vector<std::vector<int>>{{-1, 1, 3, 4, 5}},
