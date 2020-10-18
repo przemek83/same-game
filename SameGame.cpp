@@ -129,7 +129,7 @@ Point getNextMove(const std::vector<std::vector<int>>& board,
                   bool (&checked)[MAX_W][MAX_H], unsigned int w, unsigned int h)
 {
     std::memset(checked, false, sizeof(checked));
-    const unsigned int randomTries{static_cast<unsigned int>(w * h * .6)};
+    const unsigned int randomTries{static_cast<unsigned int>(w * h * .4)};
     // const int maxSuccessfullTries{50};
     // unsigned int successfullTries{0};
     unsigned int currentBestScore{0};
