@@ -35,7 +35,6 @@
 //    3 2
 //    -1 -1
 
-//#include <chrono>
 #include <cstring>
 #include <iostream>
 #include <sstream>
@@ -46,13 +45,6 @@
 int main()
 {
     using namespace SameGame;
-    // auto start = std::chrono::high_resolution_clock::now();
-    // test();
-    // bigTestFile3Colors.txt bigTestFile.txt
-    // testFileVeryBig
-    // testFileVeryBig3Colors.txt
-    // testFileVeryVeryBig.txt std::ifstream in("testFileVeryVeryBig.txt",
-    // std::ifstream::in); std::cin.rdbuf(in.rdbuf());
 
     srand(time(NULL));
 
@@ -84,10 +76,5 @@ int main()
         std::cout << output.str();
     }
 
-    //    auto stop = std::chrono::high_resolution_clock::now();
-    //    auto duration =
-    //        std::chrono::duration_cast<std::chrono::milliseconds>(stop -
-    //        start);
-    //    std::cout << duration.count() << std::endl;
     return 0;
 }
