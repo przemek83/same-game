@@ -156,10 +156,17 @@ TEST(SameGameTest, loadBoard)
     EXPECT_EQ(currentBoard, expectedBoard);
 }
 
+static std::vector<std::vector<int>> preapreBoard(std::string fileName)
+{
+    std::ifstream in(fileName, std::ifstream::in);
+    return loadBoard(50, 50, in);
+}
+
+static std::vector<std::vector<int>> bigBoard{
+    preapreBoard("50x50_11_colors.txt")};
+
 TEST(SameGameTest, performanceTest)
 {
     srand(0);
-    std::ifstream in("50x50_11_colors.txt", std::ifstream::in);
-    std::vector<std::vector<int>> board{loadBoard(50, 50, in)};
-    playGame(50, 50, board);
+    playGame(50, 50, bigBoard);
 }
