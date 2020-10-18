@@ -46,7 +46,6 @@ std::vector<std::vector<int>> loadBoard(unsigned int columnsCount,
                                         unsigned int rowsCount,
                                         std::istream& in);
 
-std::vector<Point> playGame(unsigned int columnsCount, unsigned int rowsCount,
-                            std::vector<std::vector<int>> board);
+std::vector<Point> playGame(std::vector<std::vector<int>> board);
 
 };  // namespace SameGame

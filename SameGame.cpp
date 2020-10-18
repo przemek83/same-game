@@ -240,9 +240,14 @@ std::vector<std::vector<int>> loadBoard(unsigned int columnsCount,
     return board;
 }
 
-std::vector<Point> playGame(unsigned int columnsCount, unsigned int rowsCount,
-                            std::vector<std::vector<int>> board)
+std::vector<Point> playGame(std::vector<std::vector<int>> board)
 {
+    if (board.size() == 0)
+        return {emptyPoint};
+
+    const unsigned int columnsCount{static_cast<unsigned int>(board.size())};
+    const unsigned int rowsCount{
+        static_cast<unsigned int>(board.front().size())};
     std::vector<Point> points;
     static bool checked[MAX_W][MAX_H] = {};
     std::memset(checked, false, sizeof(checked));

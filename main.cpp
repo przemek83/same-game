@@ -78,7 +78,7 @@ int main()
         // printBoard(board);
         output << "Y" << std::endl;
 
-        std::vector<Point> points{playGame(w, h, board)};
+        std::vector<Point> points{playGame(std::move(board))};
         for (auto point : points)
             printPoint(point, output);
         std::cout << output.str();
