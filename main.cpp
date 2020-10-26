@@ -1,10 +1,5 @@
-#include <cstring>
-#include <ctime>
 #include <iostream>
-#include <sstream>
-#include <vector>
 
-#include "Board.h"
 #include "SameGame.h"
 
 int main()
