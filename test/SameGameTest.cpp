@@ -22,9 +22,9 @@ TEST_P(ImpactGravityTests, impactGravity)
     const std::vector<std::vector<int>> expected{std::get<1>(GetParam())};
     const std::vector<Point> impactedColumnsPoints{std::get<2>(GetParam())};
 
-    std::vector<int> impactedColumns(board.size());
+    std::set<int> impactedColumns;
     for (const auto point : impactedColumnsPoints)
-        impactedColumns[point.column] = point.row;
+        impactedColumns.insert(point.column);
 
     impactGravity(board, impactedColumns);
     EXPECT_EQ(board, expected);
@@ -68,16 +68,10 @@ TEST(SameGameTest, makeMove6x5)
     std::vector<std::vector<int>> board{{-1, -1, -1, -1, 1}, {-1, -1, -1, 1, 2},
                                         {-1, -1, -1, 1, 1},  {-1, -1, -1, 1, 2},
                                         {-1, -1, -1, -1, 1}, {-1, -1, 1, 1, 1}};
-    std::vector<int> impactedColumns(board.size(), Point::EMPTY);
 
-    makeMove(board, impactedColumns, {2, 3});
+    std::set<int> impactedColumns{makeMove(board, {2, 3})};
     EXPECT_EQ(board, expected);
-
-    EXPECT_EQ(impactedColumns[0], Point::EMPTY);
-    EXPECT_EQ(impactedColumns[1], 3);
-    EXPECT_EQ(impactedColumns[2], 4);
-    EXPECT_EQ(impactedColumns[3], 3);
-    EXPECT_EQ(impactedColumns[4], Point::EMPTY);
+    EXPECT_EQ(impactedColumns, std::set<int>({1, 2, 3}));
 }
 
 TEST(SameGameTest, makeMove4x4)
@@ -87,15 +81,9 @@ TEST(SameGameTest, makeMove4x4)
     const std::vector<std::vector<int>> expected{
         {0, -1, 0, 0}, {0, -1, -1, -1}, {1, 2, 2, -1}, {1, 2, 0, 2}};
 
-    std::vector<int> impactedColumns(board.size(), Point::EMPTY);
-
-    makeMove(board, impactedColumns, {2, 3});
+    std::set<int> impactedColumns{makeMove(board, {2, 3})};
     EXPECT_EQ(board, expected);
-
-    EXPECT_EQ(impactedColumns[0], 1);
-    EXPECT_EQ(impactedColumns[1], 3);
-    EXPECT_EQ(impactedColumns[2], 3);
-    EXPECT_EQ(impactedColumns[3], Point::EMPTY);
+    EXPECT_EQ(impactedColumns, std::set<int>({0, 1, 2}));
 }
 
 class GetClusterTests

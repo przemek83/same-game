@@ -1,5 +1,6 @@
 #pragma once
 
+#include <set>
 #include <vector>
 
 #include "Board.h"
@@ -9,11 +10,11 @@ namespace SameGame
 {
 Point getNextMove(const std::vector<std::vector<int>>& board);
 
-void makeMove(std::vector<std::vector<int>>& board,
-              std::vector<int>& impactedColumns, const Point& point);
+std::set<int> makeMove(std::vector<std::vector<int>>& board,
+                       const Point& point);
 
 void impactGravity(std::vector<std::vector<int>>& board,
-                   std::vector<int>& impactedColumns);
+                   std::set<int> impactedColumns);
 
 unsigned int getClusterSize(const std::vector<std::vector<int>>& board,
                             Point startPoint,
