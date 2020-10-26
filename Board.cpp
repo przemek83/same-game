@@ -22,14 +22,21 @@ void printBoard(const std::vector<std::vector<int>>& board)
     }
 }
 
-std::vector<std::vector<int>> loadBoard(unsigned int columnsCount,
-                                        unsigned int rowsCount,
-                                        std::istream& in)
+std::vector<std::vector<int>> initBoard(unsigned int columnsCount,
+                                        unsigned int rowsCount)
 {
     std::vector<std::vector<int>> board(columnsCount);
     for (auto& column : board)
         column.resize(rowsCount);
 
+    return board;
+}
+
+std::vector<std::vector<int>> loadBoard(unsigned int columnsCount,
+                                        unsigned int rowsCount,
+                                        std::istream& in)
+{
+    std::vector<std::vector<int>> board(initBoard(columnsCount, rowsCount));
     for (unsigned int row = 0; row < rowsCount; ++row)
         for (unsigned int column = 0; column < columnsCount; ++column)
         {
