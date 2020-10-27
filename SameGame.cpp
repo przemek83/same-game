@@ -106,19 +106,38 @@ inline unsigned int fastRandInt()
     return (g_seed >> 16) & 0x7FFF;
 }
 
-Point getNextMove(const std::vector<std::vector<int>>& board)
+Point findFirstCluster(const std::vector<std::vector<int>>& board,
+                       bool (&checked)[Board::MAX_W][Board::MAX_H])
 {
     const unsigned int columnsCount{static_cast<unsigned int>(board.size())};
     const unsigned int rowsCount{
         static_cast<unsigned int>(board.front().size())};
 
-    static bool checked[Board::MAX_W][Board::MAX_H] = {};
-    std::memset(checked, false, sizeof(checked));
+    // Iterate one by one searching for cluster.
+    for (unsigned int row = 0; row < rowsCount; ++row)
+    {
+        for (unsigned int column = 0; column < columnsCount; ++column)
+        {
+            Point point{static_cast<int>(column), static_cast<int>(row)};
+            if (getClusterSize(board, point, checked, rowsCount, columnsCount) >
+                1)
+                return point;
+        }
+    }
+    return emptyPoint;
+}
+
+Point findBiggestCluster(const std::vector<std::vector<int>>& board,
+                         bool (&checked)[Board::MAX_W][Board::MAX_H])
+{
+    const unsigned int columnsCount{static_cast<unsigned int>(board.size())};
+    const unsigned int rowsCount{
+        static_cast<unsigned int>(board.front().size())};
+
     const unsigned int randomTries{
         static_cast<unsigned int>(columnsCount * rowsCount * .4)};
     unsigned int currentBestScore{0};
     Point currentBestPoint{emptyPoint};
-    // Try 40% random hits.
     for (unsigned int tryNumber = 0; tryNumber < randomTries; ++tryNumber)
     {
         Point point{static_cast<int>(fastRandInt() % columnsCount),
@@ -135,19 +154,18 @@ Point getNextMove(const std::vector<std::vector<int>>& board)
     if (currentBestScore > 0)
         return currentBestPoint;
 
-    // If not found iterate one by one searching for cluster.
-    for (int row = 0; row < rowsCount; ++row)
-    {
-        for (int column = 0; column < columnsCount; ++column)
-        {
-            Point point{column, row};
-            if (getClusterSize(board, point, checked, rowsCount, columnsCount) >
-                1)
-                return point;
-        }
-    }
+    return emptyPoint;
+}
 
-    return {};
+Point getNextMove(const std::vector<std::vector<int>>& board)
+{
+    static bool checked[Board::MAX_W][Board::MAX_H] = {};
+    std::memset(checked, false, sizeof(checked));
+
+    Point currentBestPoint{findBiggestCluster(board, checked)};
+    if (currentBestPoint == emptyPoint)
+        currentBestPoint = findFirstCluster(board, checked);
+    return currentBestPoint;
 }
 
 std::set<int> makeMove(std::vector<std::vector<int>>& board, const Point& point)
