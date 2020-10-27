@@ -186,7 +186,6 @@ std::vector<Point> playGame(std::vector<std::vector<int>> board)
     if (board.size() == 0)
         return {emptyPoint};
 
-    std::vector<int> impactedColumns(board.size(), Point::EMPTY);
     std::vector<Point> points;
     while (true)
     {
