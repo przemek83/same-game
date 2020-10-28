@@ -162,10 +162,10 @@ Point getNextMove(const std::vector<std::vector<int>>& board)
     static bool checked[Board::MAX_W][Board::MAX_H] = {};
     std::memset(checked, false, sizeof(checked));
 
-    Point currentBestPoint{findBiggestCluster(board, checked)};
-    if (currentBestPoint == emptyPoint)
-        currentBestPoint = findFirstCluster(board, checked);
-    return currentBestPoint;
+    Point nextPoint{findBiggestCluster(board, checked)};
+    if (nextPoint == emptyPoint)
+        nextPoint = findFirstCluster(board, checked);
+    return nextPoint;
 }
 
 std::set<int> makeMove(std::vector<std::vector<int>>& board, const Point& point)
