@@ -9,6 +9,27 @@
 
 using namespace SameGame;
 
+static Board createBoard(const std::vector<std::vector<int>>& data)
+{
+    const unsigned int columnCount{static_cast<unsigned int>(data.size())};
+    const unsigned int rowCount{static_cast<unsigned int>(data[0].size())};
+
+    std::string boardAsString;
+    for (unsigned int row = 0; row < rowCount; ++row)
+    {
+        for (unsigned int column = 0; column < columnCount; ++column)
+        {
+            if (column > 0)
+                boardAsString += " ";
+            boardAsString += std::to_string(data[column][row]);
+        }
+        boardAsString += '\n';
+    }
+
+    std::istringstream stringStream(boardAsString);
+    return Board(columnCount, rowCount, stringStream);
+}
+
 class ImpactGravityTests
     : public ::testing::TestWithParam<
           std::tuple<std::vector<std::vector<int>>,
@@ -18,7 +39,7 @@ class ImpactGravityTests
 
 TEST_P(ImpactGravityTests, impactGravity)
 {
-    std::vector<std::vector<int>> board{std::get<0>(GetParam())};
+    std::vector<std::vector<int>> boardData{std::get<0>(GetParam())};
     const std::vector<std::vector<int>> expected{std::get<1>(GetParam())};
     const std::vector<Point> impactedColumnsPoints{std::get<2>(GetParam())};
 
@@ -26,8 +47,9 @@ TEST_P(ImpactGravityTests, impactGravity)
     for (const auto point : impactedColumnsPoints)
         impactedColumns.insert(point.column);
 
+    Board board{createBoard(boardData)};
     impactGravity(board, impactedColumns);
-    EXPECT_EQ(board, expected);
+    EXPECT_EQ(board, createBoard(expected));
 }
 
 INSTANTIATE_TEST_SUITE_P(
@@ -65,24 +87,26 @@ TEST(SameGameTest, makeMove6x5)
     const std::vector<std::vector<int>> expected{
         {-1, -1, -1, -1, 1}, {-1, -1, -1, -1, 2}, {-1, -1, -1, -1, -1},
         {-1, -1, -1, -1, 2}, {-1, -1, -1, -1, 1}, {-1, -1, 1, 1, 1}};
-    std::vector<std::vector<int>> board{{-1, -1, -1, -1, 1}, {-1, -1, -1, 1, 2},
-                                        {-1, -1, -1, 1, 1},  {-1, -1, -1, 1, 2},
-                                        {-1, -1, -1, -1, 1}, {-1, -1, 1, 1, 1}};
+    std::vector<std::vector<int>> boardData{
+        {-1, -1, -1, -1, 1}, {-1, -1, -1, 1, 2},  {-1, -1, -1, 1, 1},
+        {-1, -1, -1, 1, 2},  {-1, -1, -1, -1, 1}, {-1, -1, 1, 1, 1}};
 
+    Board board{createBoard(boardData)};
     std::set<int> impactedColumns{makeMove(board, {2, 3})};
-    EXPECT_EQ(board, expected);
+    EXPECT_EQ(board, createBoard(expected));
     EXPECT_EQ(impactedColumns, std::set<int>({1, 2, 3}));
 }
 
 TEST(SameGameTest, makeMove4x4)
 {
-    std::vector<std::vector<int>> board{
+    std::vector<std::vector<int>> boardData{
         {0, 1, 0, 0}, {0, 1, 1, 1}, {1, 2, 2, 1}, {1, 2, 0, 2}};
     const std::vector<std::vector<int>> expected{
         {0, -1, 0, 0}, {0, -1, -1, -1}, {1, 2, 2, -1}, {1, 2, 0, 2}};
 
+    Board board{createBoard(boardData)};
     std::set<int> impactedColumns{makeMove(board, {2, 3})};
-    EXPECT_EQ(board, expected);
+    EXPECT_EQ(board, createBoard(expected));
     EXPECT_EQ(impactedColumns, std::set<int>({0, 1, 2}));
 }
 
@@ -94,14 +118,14 @@ class GetClusterTests
 
 TEST_P(GetClusterTests, GetCluster)
 {
-    const std::vector<std::vector<int>> board{std::get<0>(GetParam())};
+    const std::vector<std::vector<int>> boardData{std::get<0>(GetParam())};
     const int expectedClusterSize{std::get<1>(GetParam())};
     const Point point{std::get<2>(GetParam())};
 
     bool checked[Board::MAX_W][Board::MAX_H]{};
     std::memset(checked, false, sizeof(checked));
-    unsigned int currentClusterSize{
-        getClusterSize(board, point, checked, board.size(), board[0].size())};
+    Board board{createBoard(boardData)};
+    unsigned int currentClusterSize{getClusterSize(board, point, checked)};
     EXPECT_EQ(currentClusterSize, expectedClusterSize);
 }
 
@@ -119,36 +143,31 @@ INSTANTIATE_TEST_SUITE_P(
                       std::make_tuple(singleRowBoard, 1, Point{0, 1}),
                       std::make_tuple(singleRowBoard, 2, Point{0, 3})));
 
-static std::vector<std::vector<int>> preapreBoard(unsigned int columnsCount,
-                                                  unsigned int rowsCount,
-                                                  std::string fileName)
+static Board prepareBoard(unsigned int columnsCount, unsigned int rowsCount,
+                          std::string fileName)
 {
     std::ifstream in(fileName, std::ifstream::in);
-    return Board::loadBoard(columnsCount, rowsCount, in);
+    return Board(columnsCount, rowsCount, in);
 }
 
 TEST(SameGameTest, loadBoard)
 {
-    std::vector<std::vector<int>> currentBoard{
-        preapreBoard(4, 4, "4x4_3_colors.txt")};
+    Board currentBoard{prepareBoard(4, 4, "4x4_3_colors.txt")};
     std::vector<std::vector<int>> expectedBoard{
         {0, 1, 0, 0}, {0, 1, 1, 1}, {1, 2, 2, 1}, {1, 2, 0, 2}};
-    EXPECT_EQ(currentBoard, expectedBoard);
+    EXPECT_EQ(currentBoard, createBoard(expectedBoard));
 }
 
-static std::vector<std::vector<int>> board50x50x3Colors{
-    preapreBoard(50, 50, "50x50_3_colors.txt")};
-static std::vector<std::vector<int>> board50x50x11Colors{
-    preapreBoard(50, 50, "50x50_11_colors.txt")};
-static std::vector<std::vector<int>> board200x200x3Colors{
-    preapreBoard(200, 200, "200x200_3_colors.txt")};
-static std::vector<std::vector<int>> board200x200x20Colors{
-    preapreBoard(200, 200, "200x200_20_colors.txt")};
-static std::vector<std::vector<int>> board500x500x20Colors{
-    preapreBoard(500, 500, "500x500_20_colors.txt")};
+static Board board50x50x3Colors{prepareBoard(50, 50, "50x50_3_colors.txt")};
+static Board board50x50x11Colors{prepareBoard(50, 50, "50x50_11_colors.txt")};
+static Board board200x200x3Colors{
+    prepareBoard(200, 200, "200x200_3_colors.txt")};
+static Board board200x200x20Colors{
+    prepareBoard(200, 200, "200x200_20_colors.txt")};
+static Board board500x500x20Colors{
+    prepareBoard(500, 500, "500x500_20_colors.txt")};
 
-class PerformanceTests
-    : public ::testing::TestWithParam<std::tuple<std::vector<std::vector<int>>>>
+class PerformanceTests : public ::testing::TestWithParam<std::tuple<Board>>
 {
 };
 
@@ -164,12 +183,12 @@ INSTANTIATE_TEST_SUITE_P(SameGameTest, PerformanceTests,
                                            board50x50x11Colors,
                                            board200x200x3Colors,
                                            board200x200x20Colors
-                                           //,board500x500x20Colors
+                                           // ,board500x500x20Colors
                                            ));
 
 TEST_P(PerformanceTests, playGame)
 {
-    const std::vector<std::vector<int>> board{std::get<0>(GetParam())};
+    const Board board{std::get<0>(GetParam())};
     srand(1);
     playGame(board);
 }

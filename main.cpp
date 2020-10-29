@@ -13,12 +13,10 @@ int main()
     unsigned int colorCount{0};
     std::cin >> rowCount >> columnCount >> colorCount;
 
-    if (!Board::isBoardDescriptionValid(rowCount, columnCount, colorCount))
+    if (!Board::isDescriptionValid(rowCount, columnCount, colorCount))
         return 1;
 
-    std::vector<std::vector<int>> board{
-        Board::loadBoard(columnCount, rowCount, std::cin)};
-
+    Board board(columnCount, rowCount, std::cin);
     std::vector<Point> points{playGame(std::move(board))};
 
     for (auto point : points)

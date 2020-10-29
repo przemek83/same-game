@@ -8,19 +8,15 @@
 
 namespace SameGame
 {
-Point getNextMove(const std::vector<std::vector<int>>& board);
+Point getNextMove(const Board& board);
 
-std::set<int> makeMove(std::vector<std::vector<int>>& board,
-                       const Point& point);
+std::set<int> makeMove(Board& board, const Point& point);
 
-void impactGravity(std::vector<std::vector<int>>& board,
-                   std::set<int> impactedColumns);
+void impactGravity(Board& board, std::set<int> impactedColumns);
 
-unsigned int getClusterSize(const std::vector<std::vector<int>>& board,
-                            Point startPoint,
-                            bool (&checked)[Board::MAX_W][Board::MAX_H],
-                            unsigned int w, unsigned int h);
+unsigned int getClusterSize(const Board& board, Point startPoint,
+                            bool (&checked)[Board::MAX_W][Board::MAX_H]);
 
-std::vector<Point> playGame(std::vector<std::vector<int>> board);
+std::vector<Point> playGame(Board board);
 
 };  // namespace SameGame

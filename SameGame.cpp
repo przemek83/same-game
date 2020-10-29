@@ -11,19 +11,16 @@ constexpr int rows[]{0, -1, 1, 0};
 
 constexpr Point emptyPoint{Point::EMPTY, Point::EMPTY};
 
-void impactGravity(std::vector<std::vector<int>>& board,
-                   std::set<int> impactedColumns)
+void impactGravity(Board& board, std::set<int> impactedColumns)
 {
-    const unsigned long rowCount{board[0].size()};
     for (int impactedColumn : impactedColumns)
     {
-        auto& column{board[impactedColumn]};
         int emptyStartIndex = {Point::EMPTY};
         unsigned int emptyCount{0};
 
-        for (int row = rowCount; row >= 0; --row)
+        for (int row = board.getRowCount(); row >= 0; --row)
         {
-            if (column[row] == Point::EMPTY)
+            if (board.getColor(impactedColumn, row) == Point::EMPTY)
             {
                 if (emptyStartIndex == Point::EMPTY)
                     emptyStartIndex = row;
@@ -37,8 +34,10 @@ void impactGravity(std::vector<std::vector<int>>& board,
                 for (size_t currentRow = emptyStartIndex;
                      currentRow >= emptyCount; --currentRow)
                 {
-                    column[currentRow] = column[currentRow - emptyCount];
-                    column[currentRow - emptyCount] = Point::EMPTY;
+                    board.setColor(impactedColumn, currentRow,
+                                   board.getColor(impactedColumn,
+                                                  currentRow - emptyCount));
+                    board.setEmpty(impactedColumn, currentRow - emptyCount);
                 }
                 emptyStartIndex = Point::EMPTY;
                 row += emptyCount;
@@ -48,20 +47,17 @@ void impactGravity(std::vector<std::vector<int>>& board,
     }
 }
 
-bool isFieldValid(const std::vector<std::vector<int>>& board,
-                  unsigned int column, unsigned int row, int color,
-                  unsigned int w, unsigned int h)
+bool isFieldValid(const Board& board, unsigned int column, unsigned int row,
+                  int color)
 {
-    return column >= 0 && column < w && row >= 0 && row < h &&
-           board[column][row] == color;
+    return column >= 0 && column < board.getColumnCount() && row >= 0 &&
+           row < board.getRowCount() && board.getColor(column, row) == color;
 }
 
-unsigned int getClusterSize(const std::vector<std::vector<int>>& board,
-                            Point startPoint,
-                            bool (&checked)[Board::MAX_W][Board::MAX_H],
-                            unsigned int w, unsigned int h)
+unsigned int getClusterSize(const Board& board, Point startPoint,
+                            bool (&checked)[Board::MAX_W][Board::MAX_H])
 {
-    int color{board[startPoint.column][startPoint.row]};
+    int color{board.getColor(startPoint)};
     if (color == Point::EMPTY)
         return 0;
 
@@ -72,7 +68,7 @@ unsigned int getClusterSize(const std::vector<std::vector<int>>& board,
     {
         const auto point{toCheck.front()};
         toCheck.pop();
-        if (board[point.column][point.row] != color)
+        if (board.getColor(point) != color)
             continue;
 
         if (!checked[point.column][point.row])
@@ -85,8 +81,7 @@ unsigned int getClusterSize(const std::vector<std::vector<int>>& board,
         {
             int col{point.column + cols[k]};
             int row{point.row + rows[k]};
-            if (!checked[col][row] &&
-                isFieldValid(board, col, row, color, w, h))
+            if (!checked[col][row] && isFieldValid(board, col, row, color))
             {
                 checked[col][row] = true;
                 clusterSize++;
@@ -106,44 +101,34 @@ inline unsigned int fastRandInt()
     return (g_seed >> 16) & 0x7FFF;
 }
 
-Point findFirstCluster(const std::vector<std::vector<int>>& board,
+Point findFirstCluster(const Board& board,
                        bool (&checked)[Board::MAX_W][Board::MAX_H])
 {
-    const unsigned int columnsCount{static_cast<unsigned int>(board.size())};
-    const unsigned int rowsCount{
-        static_cast<unsigned int>(board.front().size())};
-
     // Iterate one by one searching for cluster.
-    for (unsigned int row = 0; row < rowsCount; ++row)
+    for (unsigned int row = 0; row < board.getRowCount(); ++row)
     {
-        for (unsigned int column = 0; column < columnsCount; ++column)
+        for (unsigned int column = 0; column < board.getColumnCount(); ++column)
         {
             Point point{static_cast<int>(column), static_cast<int>(row)};
-            if (getClusterSize(board, point, checked, rowsCount, columnsCount) >
-                1)
+            if (getClusterSize(board, point, checked) > 1)
                 return point;
         }
     }
     return emptyPoint;
 }
 
-Point findBiggestCluster(const std::vector<std::vector<int>>& board,
+Point findBiggestCluster(const Board& board,
                          bool (&checked)[Board::MAX_W][Board::MAX_H])
 {
-    const unsigned int columnsCount{static_cast<unsigned int>(board.size())};
-    const unsigned int rowsCount{
-        static_cast<unsigned int>(board.front().size())};
-
-    const unsigned int randomTries{
-        static_cast<unsigned int>(columnsCount * rowsCount * .4)};
+    const unsigned int randomTries{static_cast<unsigned int>(
+        board.getColumnCount() * board.getRowCount() * .4)};
     unsigned int currentBestScore{0};
     Point currentBestPoint{emptyPoint};
     for (unsigned int tryNumber = 0; tryNumber < randomTries; ++tryNumber)
     {
-        Point point{static_cast<int>(fastRandInt() % columnsCount),
-                    static_cast<int>(fastRandInt() % rowsCount)};
-        unsigned int score =
-            getClusterSize(board, point, checked, columnsCount, rowsCount);
+        Point point{static_cast<int>(fastRandInt() % board.getColumnCount()),
+                    static_cast<int>(fastRandInt() % board.getRowCount())};
+        unsigned int score = getClusterSize(board, point, checked);
         if (score > 1 && score > currentBestScore)
         {
             currentBestScore = score;
@@ -157,7 +142,7 @@ Point findBiggestCluster(const std::vector<std::vector<int>>& board,
     return emptyPoint;
 }
 
-Point getNextMove(const std::vector<std::vector<int>>& board)
+Point getNextMove(const Board& board)
 {
     static bool checked[Board::MAX_W][Board::MAX_H] = {};
     std::memset(checked, false, sizeof(checked));
@@ -168,14 +153,14 @@ Point getNextMove(const std::vector<std::vector<int>>& board)
     return nextPoint;
 }
 
-std::set<int> makeMove(std::vector<std::vector<int>>& board, const Point& point)
+std::set<int> makeMove(Board& board, const Point& point)
 {
-    int color{board[point.column][point.row]};
+    int color{board.getColor(point)};
 
     std::set<int> impactedColumns;
     std::queue<Point> toCheck;
     toCheck.push(point);
-    board[point.column][point.row] = Point::EMPTY;
+    board.setEmpty(point);
     while (!toCheck.empty())
     {
         const auto currentPoint{toCheck.front()};
@@ -187,10 +172,9 @@ std::set<int> makeMove(std::vector<std::vector<int>>& board, const Point& point)
         {
             int col{currentPoint.column + cols[k]};
             int row{currentPoint.row + rows[k]};
-            if (isFieldValid(board, col, row, color, board.size(),
-                             board[0].size()))
+            if (isFieldValid(board, col, row, color))
             {
-                board[col][row] = Point::EMPTY;
+                board.setEmpty(col, row);
                 toCheck.push({col, row});
             }
         }
@@ -199,9 +183,9 @@ std::set<int> makeMove(std::vector<std::vector<int>>& board, const Point& point)
     return impactedColumns;
 }
 
-std::vector<Point> playGame(std::vector<std::vector<int>> board)
+std::vector<Point> playGame(Board board)
 {
-    if (board.size() == 0)
+    if (board.getColumnCount() == 0 || board.getRowCount() == 0)
         return {emptyPoint};
 
     std::vector<Point> points;

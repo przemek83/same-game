@@ -2,57 +2,49 @@
 
 #include <iostream>
 
-namespace Board
+Board::Board(unsigned int columnsCount, unsigned int rowsCount,
+             std::istream& in)
+    : columnsCount_(columnsCount), rowsCount_(rowsCount), data_(columnsCount)
 {
-constexpr unsigned int MIN_W{4};
-constexpr unsigned int MIN_H{4};
-constexpr unsigned int MIN_C{3};
-constexpr unsigned int MAX_C{20};
-
-void printBoard(const std::vector<std::vector<int>>& board)
-{
-    if (board.empty())
-        return;
-
-    for (unsigned int row = 0; row < board[0].size(); ++row)
-    {
-        for (unsigned int column = 0; column < board.size(); ++column)
-            std::cout << board[column][row] << "\t";
-        std::cout << std::endl;
-    }
-}
-
-std::vector<std::vector<int>> initBoard(unsigned int columnsCount,
-                                        unsigned int rowsCount)
-{
-    std::vector<std::vector<int>> board(columnsCount);
-    for (auto& column : board)
-        column.resize(rowsCount);
-
-    return board;
-}
-
-std::vector<std::vector<int>> loadBoard(unsigned int columnsCount,
-                                        unsigned int rowsCount,
-                                        std::istream& in)
-{
-    std::vector<std::vector<int>> board(initBoard(columnsCount, rowsCount));
+    initData(columnsCount, rowsCount);
     for (unsigned int row = 0; row < rowsCount; ++row)
         for (unsigned int column = 0; column < columnsCount; ++column)
         {
             int field;
             in >> field;
-            board[column][row] = field;
+            data_[column][row] = field;
         }
-
-    return board;
 }
 
-bool isBoardDescriptionValid(unsigned int rowCount, unsigned int columnCount,
-                             unsigned int colorCount)
+void Board::print()
+{
+    if (data_.empty())
+        return;
+
+    for (unsigned int row = 0; row < data_[0].size(); ++row)
+    {
+        for (unsigned int column = 0; column < data_.size(); ++column)
+            std::cout << data_[column][row] << "\t";
+        std::cout << std::endl;
+    }
+}
+
+bool Board::isDescriptionValid(unsigned int rowCount, unsigned int columnCount,
+                               unsigned int colorCount)
 {
     return rowCount >= MIN_H && rowCount < MAX_H && columnCount >= MIN_W &&
            columnCount < MAX_W && colorCount >= MIN_C && colorCount < MAX_C;
 }
 
-}  // namespace Board
+bool Board::operator==(const Board& that) const
+{
+    return columnsCount_ == that.columnsCount_ &&
+           rowsCount_ == that.rowsCount_ && data_ == that.data_;
+}
+
+void Board::initData(unsigned int columnsCount, unsigned int rowsCount)
+{
+    data_.resize(columnsCount);
+    for (auto& column : data_)
+        column.resize(rowsCount);
+}
