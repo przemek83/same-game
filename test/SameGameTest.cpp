@@ -14,20 +14,12 @@ static Board createBoard(const std::vector<std::vector<int>>& data)
     const unsigned int columnCount{static_cast<unsigned int>(data.size())};
     const unsigned int rowCount{static_cast<unsigned int>(data[0].size())};
 
-    std::string boardAsString;
+    std::istringstream stringStream;
+    Board board(columnCount, rowCount, stringStream);
     for (unsigned int row = 0; row < rowCount; ++row)
-    {
         for (unsigned int column = 0; column < columnCount; ++column)
-        {
-            if (column > 0)
-                boardAsString += " ";
-            boardAsString += std::to_string(data[column][row]);
-        }
-        boardAsString += '\n';
-    }
-
-    std::istringstream stringStream(boardAsString);
-    return Board(columnCount, rowCount, stringStream);
+            board.setColor(column, row, data[column][row]);
+    return board;
 }
 
 class ImpactGravityTests
