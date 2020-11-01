@@ -18,7 +18,8 @@ static Board createBoard(const std::vector<std::vector<int>>& data)
     Board board(columnCount, rowCount, stringStream);
     for (unsigned int row = 0; row < rowCount; ++row)
         for (unsigned int column = 0; column < columnCount; ++column)
-            board.setColor(column, row, data[column][row]);
+            board.setColor({static_cast<int>(column), static_cast<int>(row)},
+                           data[column][row]);
     return board;
 }
 

@@ -23,37 +23,27 @@ public:
 
     inline unsigned int getColumnCount() const { return columnsCount_; };
 
-    inline int getColor(unsigned int column, unsigned int row) const
-    {
-        return data_[column][row];
-    }
-
     inline int getColor(Point point) const
     {
-        return getColor(point.column, point.row);
+        return data_[point.column][point.row];
     }
-
-    inline void setColor(unsigned int column, unsigned int row, int color)
-    {
-        data_[column][row] = color;
-    };
 
     inline void setColor(Point point, int color)
     {
-        setColor(point.column, point.row, color);
-    };
+        data_[point.column][point.row] = color;
+    }
 
-    inline void setEmpty(unsigned int column, unsigned int row)
+    inline void setEmpty(Point point)
     {
-        data_[column][row] = Point::EMPTY;
-    };
-
-    inline void setEmpty(Point point) { setEmpty(point.column, point.row); };
+        data_[point.column][point.row] = Point::EMPTY;
+    }
 
     bool operator==(const Board& that) const;
 
 private:
     void initData(unsigned int columnsCount, unsigned int rowsCount);
+
+    void loadData(std::istream& in);
 
     const unsigned int columnsCount_;
 

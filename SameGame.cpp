@@ -16,11 +16,11 @@ void impactGravity(Board& board, std::set<int> impactedColumns)
     for (int impactedColumn : impactedColumns)
     {
         int emptyStartIndex = {Point::EMPTY};
-        unsigned int emptyCount{0};
+        int emptyCount{0};
 
         for (int row = board.getRowCount(); row >= 0; --row)
         {
-            if (board.getColor(impactedColumn, row) == Point::EMPTY)
+            if (board.getColor({impactedColumn, row}) == Point::EMPTY)
             {
                 if (emptyStartIndex == Point::EMPTY)
                     emptyStartIndex = row;
@@ -31,13 +31,13 @@ void impactGravity(Board& board, std::set<int> impactedColumns)
                 if (emptyStartIndex == Point::EMPTY)
                     continue;
 
-                for (size_t currentRow = emptyStartIndex;
-                     currentRow >= emptyCount; --currentRow)
+                for (int currentRow = emptyStartIndex; currentRow >= emptyCount;
+                     --currentRow)
                 {
-                    board.setColor(impactedColumn, currentRow,
-                                   board.getColor(impactedColumn,
-                                                  currentRow - emptyCount));
-                    board.setEmpty(impactedColumn, currentRow - emptyCount);
+                    board.setColor({impactedColumn, currentRow},
+                                   board.getColor({impactedColumn,
+                                                   currentRow - emptyCount}));
+                    board.setEmpty({impactedColumn, currentRow - emptyCount});
                 }
                 emptyStartIndex = Point::EMPTY;
                 row += emptyCount;
@@ -51,7 +51,9 @@ bool isFieldValid(const Board& board, unsigned int column, unsigned int row,
                   int color)
 {
     return column >= 0 && column < board.getColumnCount() && row >= 0 &&
-           row < board.getRowCount() && board.getColor(column, row) == color;
+           row < board.getRowCount() &&
+           board.getColor({static_cast<int>(column), static_cast<int>(row)}) ==
+               color;
 }
 
 unsigned int getClusterSize(const Board& board, Point startPoint,
@@ -174,7 +176,7 @@ std::set<int> makeMove(Board& board, const Point& point)
             int row{currentPoint.row + rows[k]};
             if (isFieldValid(board, col, row, color))
             {
-                board.setEmpty(col, row);
+                board.setEmpty({col, row});
                 toCheck.push({col, row});
             }
         }

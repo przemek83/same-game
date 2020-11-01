@@ -7,13 +7,7 @@ Board::Board(unsigned int columnsCount, unsigned int rowsCount,
     : columnsCount_(columnsCount), rowsCount_(rowsCount), data_(columnsCount)
 {
     initData(columnsCount, rowsCount);
-    for (unsigned int row = 0; row < rowsCount; ++row)
-        for (unsigned int column = 0; column < columnsCount; ++column)
-        {
-            int field;
-            in >> field;
-            data_[column][row] = field;
-        }
+    loadData(in);
 }
 
 void Board::print()
@@ -47,4 +41,15 @@ void Board::initData(unsigned int columnsCount, unsigned int rowsCount)
     data_.resize(columnsCount);
     for (auto& column : data_)
         column.resize(rowsCount);
+}
+
+void Board::loadData(std::istream& in)
+{
+    for (unsigned int row = 0; row < rowsCount_; ++row)
+        for (unsigned int column = 0; column < columnsCount_; ++column)
+        {
+            int field;
+            in >> field;
+            data_[column][row] = field;
+        }
 }
