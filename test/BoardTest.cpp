@@ -26,3 +26,11 @@ TEST(BoardTest, getColumnCount)
     Board board(expectedColumnCount, 2, stringStream);
     EXPECT_EQ(board.getColumnCount(), expectedColumnCount);
 }
+
+TEST(BoardTest, comparisonOperatorPositive)
+{
+    std::vector<std::vector<int>> data{{{1, 2, 3, 4}}};
+    Board firstBoard{TestTools::createBoard(data)};
+    Board secondBoard{TestTools::createBoard(data)};
+    EXPECT_TRUE(firstBoard == secondBoard);
+}
