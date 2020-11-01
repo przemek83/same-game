@@ -143,14 +143,6 @@ static Board prepareBoard(unsigned int columnsCount, unsigned int rowsCount,
     return Board(columnsCount, rowsCount, in);
 }
 
-TEST(SameGameTest, loadBoard)
-{
-    Board currentBoard{prepareBoard(4, 4, "4x4_3_colors.txt")};
-    std::vector<std::vector<int>> expectedBoard{
-        {0, 1, 0, 0}, {0, 1, 1, 1}, {1, 2, 2, 1}, {1, 2, 0, 2}};
-    EXPECT_EQ(currentBoard, createBoard(expectedBoard));
-}
-
 static Board board50x50x3Colors{prepareBoard(50, 50, "50x50_3_colors.txt")};
 static Board board50x50x11Colors{prepareBoard(50, 50, "50x50_11_colors.txt")};
 static Board board200x200x3Colors{

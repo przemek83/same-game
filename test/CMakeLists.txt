@@ -2,6 +2,7 @@ SET(PROJECT_TEST ${PROJECT_NAME}-test )
 
 set(${PROJECT_TEST}_SOURCES
     SameGameTest.cpp
+    BoardTest.cpp
     ../SameGame.cpp
     ../SameGame.h
     ../Board.cpp
