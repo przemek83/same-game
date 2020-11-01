@@ -23,44 +23,54 @@ TEST(BoardTest, getColumnCount)
 {
     const int expectedColumnCount{5};
     std::istringstream stringStream;
-    Board board(expectedColumnCount, 2, stringStream);
+    const Board board(expectedColumnCount, 2, stringStream);
     EXPECT_EQ(board.getColumnCount(), expectedColumnCount);
 }
 
 TEST(BoardTest, comparisonOperatorPositive)
 {
-    std::vector<std::vector<int>> data{{{1, 2, 3, 4}}};
-    Board firstBoard{TestTools::createBoard(data)};
-    Board secondBoard{TestTools::createBoard(data)};
+    const std::vector<std::vector<int>> data{{{1, 2, 3, 4}}};
+    const Board firstBoard{TestTools::createBoard(data)};
+    const Board secondBoard{TestTools::createBoard(data)};
     EXPECT_TRUE(firstBoard == secondBoard);
 }
 
 TEST(BoardTest, comparisonOperatorDifferentRowCount)
 {
-    Board firstBoard{TestTools::createBoard({{1, 2, 3, 4}})};
-    Board secondBoard{TestTools::createBoard({{1, 2, 3, 4, 2}})};
+    const Board firstBoard{TestTools::createBoard({{1, 2, 3, 4}})};
+    const Board secondBoard{TestTools::createBoard({{1, 2, 3, 4, 2}})};
     EXPECT_FALSE(firstBoard == secondBoard);
 }
 
 TEST(BoardTest, comparisonOperatorDifferentColumnCount)
 {
-    Board firstBoard{TestTools::createBoard({{1, 2, 3, 4}})};
-    Board secondBoard{TestTools::createBoard({{1, 2, 3, 4}, {1, 1, 1, 1}})};
+    const Board firstBoard{TestTools::createBoard({{1, 2, 3, 4}})};
+    const Board secondBoard{
+        TestTools::createBoard({{1, 2, 3, 4}, {1, 1, 1, 1}})};
     EXPECT_FALSE(firstBoard == secondBoard);
 }
 
 TEST(BoardTest, comparisonOperatorDifferentData)
 {
-    Board firstBoard{TestTools::createBoard({{1, 2, 3, 4}})};
-    Board secondBoard{TestTools::createBoard({{1, 2, 3, 3}})};
+    const Board firstBoard{TestTools::createBoard({{1, 2, 3, 4}})};
+    const Board secondBoard{TestTools::createBoard({{1, 2, 3, 3}})};
     EXPECT_FALSE(firstBoard == secondBoard);
 }
 
 TEST(BoardTest, getColor)
 {
-    Board board{TestTools::createBoard({{1, 2, 3, 4}})};
+    const Board board{TestTools::createBoard({{1, 2, 3, 4}})};
     EXPECT_EQ(board.getColor({0, 0}), 1);
     EXPECT_EQ(board.getColor({0, 1}), 2);
     EXPECT_EQ(board.getColor({0, 2}), 3);
     EXPECT_EQ(board.getColor({0, 3}), 4);
+}
+
+TEST(BoardTest, setColor)
+{
+    Board board{TestTools::createBoard({{1, 2, 3, 4}})};
+    const Point point{0, 2};
+    const int expectedColor{5};
+    board.setColor(point, expectedColor);
+    EXPECT_EQ(board.getColor(point), expectedColor);
 }
