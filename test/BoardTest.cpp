@@ -34,3 +34,24 @@ TEST(BoardTest, comparisonOperatorPositive)
     Board secondBoard{TestTools::createBoard(data)};
     EXPECT_TRUE(firstBoard == secondBoard);
 }
+
+TEST(BoardTest, comparisonOperatorDifferentColumnCount)
+{
+    Board firstBoard{TestTools::createBoard({{1, 2, 3, 4}})};
+    Board secondBoard{TestTools::createBoard({{1, 2, 3, 4, 2}})};
+    EXPECT_FALSE(firstBoard == secondBoard);
+}
+
+TEST(BoardTest, comparisonOperatorDifferentRowCount)
+{
+    Board firstBoard{TestTools::createBoard({{1, 2, 3, 4}})};
+    Board secondBoard{TestTools::createBoard({{1, 2, 3, 4}, {1, 1, 1, 1}})};
+    EXPECT_FALSE(firstBoard == secondBoard);
+}
+
+TEST(BoardTest, comparisonOperatorDifferentData)
+{
+    Board firstBoard{TestTools::createBoard({{1, 2, 3, 4}})};
+    Board secondBoard{TestTools::createBoard({{1, 2, 3, 3}})};
+    EXPECT_FALSE(firstBoard == secondBoard);
+}
