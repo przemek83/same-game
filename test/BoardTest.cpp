@@ -72,5 +72,19 @@ TEST(BoardTest, setColor)
     const Point point{0, 2};
     const int expectedColor{5};
     board.setColor(point, expectedColor);
+    EXPECT_EQ(board.getColor({0, 0}), 1);
+    EXPECT_EQ(board.getColor({0, 1}), 2);
     EXPECT_EQ(board.getColor(point), expectedColor);
+    EXPECT_EQ(board.getColor({0, 3}), 4);
+}
+
+TEST(BoardTest, setEmpty)
+{
+    Board board{TestTools::createBoard({{1, 2, 3, 4}})};
+    const Point point{0, 2};
+    board.setEmpty(point);
+    EXPECT_EQ(board.getColor({0, 0}), 1);
+    EXPECT_EQ(board.getColor({0, 1}), 2);
+    EXPECT_EQ(board.getColor(point), Point::EMPTY);
+    EXPECT_EQ(board.getColor({0, 3}), 4);
 }
