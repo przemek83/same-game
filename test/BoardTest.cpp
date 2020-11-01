@@ -35,14 +35,14 @@ TEST(BoardTest, comparisonOperatorPositive)
     EXPECT_TRUE(firstBoard == secondBoard);
 }
 
-TEST(BoardTest, comparisonOperatorDifferentColumnCount)
+TEST(BoardTest, comparisonOperatorDifferentRowCount)
 {
     Board firstBoard{TestTools::createBoard({{1, 2, 3, 4}})};
     Board secondBoard{TestTools::createBoard({{1, 2, 3, 4, 2}})};
     EXPECT_FALSE(firstBoard == secondBoard);
 }
 
-TEST(BoardTest, comparisonOperatorDifferentRowCount)
+TEST(BoardTest, comparisonOperatorDifferentColumnCount)
 {
     Board firstBoard{TestTools::createBoard({{1, 2, 3, 4}})};
     Board secondBoard{TestTools::createBoard({{1, 2, 3, 4}, {1, 1, 1, 1}})};
@@ -54,4 +54,13 @@ TEST(BoardTest, comparisonOperatorDifferentData)
     Board firstBoard{TestTools::createBoard({{1, 2, 3, 4}})};
     Board secondBoard{TestTools::createBoard({{1, 2, 3, 3}})};
     EXPECT_FALSE(firstBoard == secondBoard);
+}
+
+TEST(BoardTest, getColor)
+{
+    Board board{TestTools::createBoard({{1, 2, 3, 4}})};
+    EXPECT_EQ(board.getColor({0, 0}), 1);
+    EXPECT_EQ(board.getColor({0, 1}), 2);
+    EXPECT_EQ(board.getColor({0, 2}), 3);
+    EXPECT_EQ(board.getColor({0, 3}), 4);
 }
