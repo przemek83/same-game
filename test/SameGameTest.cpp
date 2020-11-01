@@ -1,27 +1,13 @@
 #include "gtest/gtest.h"
 
 #include <cstring>
-#include <fstream>
 
 #include "../Board.h"
 #include "../Point.h"
 #include "../SameGame.h"
+#include "TestTools.h"
 
 using namespace SameGame;
-
-static Board createBoard(const std::vector<std::vector<int>>& data)
-{
-    const unsigned int columnCount{static_cast<unsigned int>(data.size())};
-    const unsigned int rowCount{static_cast<unsigned int>(data[0].size())};
-
-    std::istringstream stringStream;
-    Board board(columnCount, rowCount, stringStream);
-    for (unsigned int row = 0; row < rowCount; ++row)
-        for (unsigned int column = 0; column < columnCount; ++column)
-            board.setColor({static_cast<int>(column), static_cast<int>(row)},
-                           data[column][row]);
-    return board;
-}
 
 class ImpactGravityTests
     : public ::testing::TestWithParam<
@@ -40,9 +26,9 @@ TEST_P(ImpactGravityTests, impactGravity)
     for (const auto point : impactedColumnsPoints)
         impactedColumns.insert(point.column);
 
-    Board board{createBoard(boardData)};
+    Board board{TestTools::createBoard(boardData)};
     impactGravity(board, impactedColumns);
-    EXPECT_EQ(board, createBoard(expected));
+    EXPECT_EQ(board, TestTools::createBoard(expected));
 }
 
 INSTANTIATE_TEST_SUITE_P(
@@ -84,9 +70,9 @@ TEST(SameGameTest, makeMove6x5)
         {-1, -1, -1, -1, 1}, {-1, -1, -1, 1, 2},  {-1, -1, -1, 1, 1},
         {-1, -1, -1, 1, 2},  {-1, -1, -1, -1, 1}, {-1, -1, 1, 1, 1}};
 
-    Board board{createBoard(boardData)};
+    Board board{TestTools::createBoard(boardData)};
     std::set<int> impactedColumns{makeMove(board, {2, 3})};
-    EXPECT_EQ(board, createBoard(expected));
+    EXPECT_EQ(board, TestTools::createBoard(expected));
     EXPECT_EQ(impactedColumns, std::set<int>({1, 2, 3}));
 }
 
@@ -97,9 +83,9 @@ TEST(SameGameTest, makeMove4x4)
     const std::vector<std::vector<int>> expected{
         {0, -1, 0, 0}, {0, -1, -1, -1}, {1, 2, 2, -1}, {1, 2, 0, 2}};
 
-    Board board{createBoard(boardData)};
+    Board board{TestTools::createBoard(boardData)};
     std::set<int> impactedColumns{makeMove(board, {2, 3})};
-    EXPECT_EQ(board, createBoard(expected));
+    EXPECT_EQ(board, TestTools::createBoard(expected));
     EXPECT_EQ(impactedColumns, std::set<int>({0, 1, 2}));
 }
 
@@ -117,7 +103,7 @@ TEST_P(GetClusterTests, GetCluster)
 
     bool checked[Board::MAX_W][Board::MAX_H]{};
     std::memset(checked, false, sizeof(checked));
-    Board board{createBoard(boardData)};
+    Board board{TestTools::createBoard(boardData)};
     unsigned int currentClusterSize{getClusterSize(board, point, checked)};
     EXPECT_EQ(currentClusterSize, expectedClusterSize);
 }
@@ -136,21 +122,16 @@ INSTANTIATE_TEST_SUITE_P(
                       std::make_tuple(singleRowBoard, 1, Point{0, 1}),
                       std::make_tuple(singleRowBoard, 2, Point{0, 3})));
 
-static Board prepareBoard(unsigned int columnsCount, unsigned int rowsCount,
-                          std::string fileName)
-{
-    std::ifstream in(fileName, std::ifstream::in);
-    return Board(columnsCount, rowsCount, in);
-}
-
-static Board board50x50x3Colors{prepareBoard(50, 50, "50x50_3_colors.txt")};
-static Board board50x50x11Colors{prepareBoard(50, 50, "50x50_11_colors.txt")};
+static Board board50x50x3Colors{
+    TestTools::prepareBoard(50, 50, "50x50_3_colors.txt")};
+static Board board50x50x11Colors{
+    TestTools::prepareBoard(50, 50, "50x50_11_colors.txt")};
 static Board board200x200x3Colors{
-    prepareBoard(200, 200, "200x200_3_colors.txt")};
+    TestTools::prepareBoard(200, 200, "200x200_3_colors.txt")};
 static Board board200x200x20Colors{
-    prepareBoard(200, 200, "200x200_20_colors.txt")};
+    TestTools::prepareBoard(200, 200, "200x200_20_colors.txt")};
 static Board board500x500x20Colors{
-    prepareBoard(500, 500, "500x500_20_colors.txt")};
+    TestTools::prepareBoard(500, 500, "500x500_20_colors.txt")};
 
 class PerformanceTests : public ::testing::TestWithParam<std::tuple<Board>>
 {
