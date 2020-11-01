@@ -103,9 +103,11 @@ inline unsigned int fastRandInt()
     return (g_seed >> 16) & 0x7FFF;
 }
 
-Point findFirstCluster(const Board& board,
-                       bool (&checked)[Board::MAX_W][Board::MAX_H])
+Point findFirstCluster(const Board& board)
 {
+    static bool checked[Board::MAX_W][Board::MAX_H] = {};
+    std::memset(checked, false, sizeof(checked));
+
     // Iterate one by one searching for cluster.
     for (unsigned int row = 0; row < board.getRowCount(); ++row)
     {
@@ -119,9 +121,11 @@ Point findFirstCluster(const Board& board,
     return emptyPoint;
 }
 
-Point findBiggestCluster(const Board& board,
-                         bool (&checked)[Board::MAX_W][Board::MAX_H])
+Point findBiggestCluster(const Board& board)
 {
+    static bool checked[Board::MAX_W][Board::MAX_H] = {};
+    std::memset(checked, false, sizeof(checked));
+
     const unsigned int randomTries{static_cast<unsigned int>(
         board.getColumnCount() * board.getRowCount() * .4)};
     unsigned int currentBestScore{0};
@@ -146,12 +150,9 @@ Point findBiggestCluster(const Board& board,
 
 Point getNextMove(const Board& board)
 {
-    static bool checked[Board::MAX_W][Board::MAX_H] = {};
-    std::memset(checked, false, sizeof(checked));
-
-    Point nextPoint{findBiggestCluster(board, checked)};
+    Point nextPoint{findBiggestCluster(board)};
     if (nextPoint == emptyPoint)
-        nextPoint = findFirstCluster(board, checked);
+        nextPoint = findFirstCluster(board);
     return nextPoint;
 }
 
