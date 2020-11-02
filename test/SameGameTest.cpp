@@ -101,9 +101,10 @@ TEST_P(GetClusterTests, GetCluster)
     const int expectedClusterSize{std::get<1>(GetParam())};
     const Point point{std::get<2>(GetParam())};
 
-    bool checked[Board::MAX_W][Board::MAX_H]{};
-    std::memset(checked, false, sizeof(checked));
     Board board{TestTools::createBoard(boardData)};
+    std::vector<std::vector<bool>> checked(board.getColumnCount());
+    for (auto& column : checked)
+        column.resize(board.getRowCount(), false);
     unsigned int currentClusterSize{getClusterSize(board, point, checked)};
     EXPECT_EQ(currentClusterSize, expectedClusterSize);
 }
@@ -145,12 +146,9 @@ class PerformanceTests : public ::testing::TestWithParam<std::tuple<Board>>
 // board500x500x20Colors | 236104       | 816494
 
 INSTANTIATE_TEST_SUITE_P(SameGameTest, PerformanceTests,
-                         ::testing::Values(board50x50x3Colors,
-                                           board50x50x11Colors,
-                                           board200x200x3Colors,
-                                           board200x200x20Colors
-                                           // ,board500x500x20Colors
-                                           ));
+                         ::testing::Values(  // board500x500x20Colors,
+                             board200x200x20Colors, board200x200x3Colors,
+                             board50x50x11Colors, board50x50x3Colors));
 
 TEST_P(PerformanceTests, playGame)
 {

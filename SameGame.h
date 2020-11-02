@@ -15,7 +15,7 @@ std::set<int> makeMove(Board& board, const Point& point);
 void impactGravity(Board& board, std::set<int> impactedColumns);
 
 unsigned int getClusterSize(const Board& board, Point startPoint,
-                            bool (&checked)[Board::MAX_W][Board::MAX_H]);
+                            std::vector<std::vector<bool> >& checked);
 
 std::vector<Point> playGame(Board board);
 

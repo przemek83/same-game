@@ -57,7 +57,7 @@ bool isFieldValid(const Board& board, unsigned int column, unsigned int row,
 }
 
 unsigned int getClusterSize(const Board& board, Point startPoint,
-                            bool (&checked)[Board::MAX_W][Board::MAX_H])
+                            std::vector<std::vector<bool>>& checked)
 {
     int color{board.getColor(startPoint)};
     if (color == Point::EMPTY)
@@ -83,7 +83,7 @@ unsigned int getClusterSize(const Board& board, Point startPoint,
         {
             int col{point.column + cols[k]};
             int row{point.row + rows[k]};
-            if (!checked[col][row] && isFieldValid(board, col, row, color))
+            if (isFieldValid(board, col, row, color) && !checked[col][row])
             {
                 checked[col][row] = true;
                 clusterSize++;
@@ -102,11 +102,22 @@ inline unsigned int fastRandInt()
     g_seed = (214013 * g_seed + 2531011);
     return (g_seed >> 16) & 0x7FFF;
 }
+static std::vector<std::vector<bool>> getCheckedVector(unsigned int columnCount,
+                                                       unsigned int rowCount)
+{
+    std::vector<std::vector<bool>> checked(columnCount);
+    for (auto& column : checked)
+        column.resize(rowCount);
+    return checked;
+}
 
 Point findFirstCluster(const Board& board)
 {
-    static bool checked[Board::MAX_W][Board::MAX_H] = {};
-    std::memset(checked, false, sizeof(checked));
+    std::vector<std::vector<bool>> checked{
+        getCheckedVector(board.getColumnCount(), board.getRowCount())};
+    for (auto& column : checked)
+        std::fill(column.begin(), column.end(), false);
+
     for (int row = board.getRowCount() - 1; row >= 0; --row)
         for (unsigned int column = 0; column < board.getColumnCount(); ++column)
         {
@@ -119,8 +130,10 @@ Point findFirstCluster(const Board& board)
 
 Point findBiggestCluster(const Board& board)
 {
-    static bool checked[Board::MAX_W][Board::MAX_H] = {};
-    std::memset(checked, false, sizeof(checked));
+    std::vector<std::vector<bool>> checked{
+        getCheckedVector(board.getColumnCount(), board.getRowCount())};
+    for (auto& column : checked)
+        std::fill(column.begin(), column.end(), false);
 
     const unsigned int randomTries{static_cast<unsigned int>(
         board.getColumnCount() * board.getRowCount() * .4)};
