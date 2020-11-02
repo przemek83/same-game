@@ -107,17 +107,13 @@ Point findFirstCluster(const Board& board)
 {
     static bool checked[Board::MAX_W][Board::MAX_H] = {};
     std::memset(checked, false, sizeof(checked));
-
-    // Iterate one by one searching for cluster.
-    for (unsigned int row = 0; row < board.getRowCount(); ++row)
-    {
+    for (int row = board.getRowCount() - 1; row >= 0; --row)
         for (unsigned int column = 0; column < board.getColumnCount(); ++column)
         {
-            Point point{static_cast<int>(column), static_cast<int>(row)};
+            Point point{static_cast<int>(column), row};
             if (getClusterSize(board, point, checked) > 1)
                 return point;
         }
-    }
     return emptyPoint;
 }
 
