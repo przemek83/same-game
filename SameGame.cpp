@@ -102,8 +102,8 @@ inline unsigned int fastRandInt()
     g_seed = (214013 * g_seed + 2531011);
     return (g_seed >> 16) & 0x7FFF;
 }
-static std::vector<std::vector<bool>> getCheckedVector(unsigned int columnCount,
-                                                       unsigned int rowCount)
+static std::vector<std::vector<bool>> createCheckedVector(
+    unsigned int columnCount, unsigned int rowCount)
 {
     std::vector<std::vector<bool>> checked(columnCount);
     for (auto& column : checked)
@@ -114,7 +114,7 @@ static std::vector<std::vector<bool>> getCheckedVector(unsigned int columnCount,
 Point findFirstCluster(const Board& board)
 {
     std::vector<std::vector<bool>> checked{
-        getCheckedVector(board.getColumnCount(), board.getRowCount())};
+        createCheckedVector(board.getColumnCount(), board.getRowCount())};
     for (int row = board.getRowCount() - 1; row >= 0; --row)
         for (unsigned int column = 0; column < board.getColumnCount(); ++column)
         {
@@ -125,30 +125,35 @@ Point findFirstCluster(const Board& board)
     return emptyPoint;
 }
 
+static Point getRandomPoint(const Board& board)
+{
+    return {static_cast<int>(fastRandInt() % board.getColumnCount()),
+            static_cast<int>(fastRandInt() % board.getRowCount())};
+}
+
+static unsigned int getRandomTries(const Board& board)
+{
+    return static_cast<unsigned int>(board.getColumnCount() *
+                                     board.getRowCount() * .4);
+}
+
 Point findBiggestCluster(const Board& board)
 {
     std::vector<std::vector<bool>> checked{
-        getCheckedVector(board.getColumnCount(), board.getRowCount())};
-    const unsigned int randomTries{static_cast<unsigned int>(
-        board.getColumnCount() * board.getRowCount() * .4)};
-    unsigned int currentBestScore{0};
-    Point currentBestPoint{emptyPoint};
-    for (unsigned int tryNumber = 0; tryNumber < randomTries; ++tryNumber)
+        createCheckedVector(board.getColumnCount(), board.getRowCount())};
+    unsigned int bestScore{0};
+    Point bestPoint{emptyPoint};
+    for (unsigned int i = 0; i < getRandomTries(board); ++i)
     {
-        Point point{static_cast<int>(fastRandInt() % board.getColumnCount()),
-                    static_cast<int>(fastRandInt() % board.getRowCount())};
-        unsigned int score = getClusterSize(board, point, checked);
-        if (score > 1 && score > currentBestScore)
+        const Point currentPoint{getRandomPoint(board)};
+        const unsigned int score{getClusterSize(board, currentPoint, checked)};
+        if (score > 1 && score > bestScore)
         {
-            currentBestScore = score;
-            currentBestPoint = point;
+            bestScore = score;
+            bestPoint = currentPoint;
         }
     }
-
-    if (currentBestScore > 0)
-        return currentBestPoint;
-
-    return emptyPoint;
+    return bestScore > 0 ? bestPoint : emptyPoint;
 }
 
 Point getNextMove(const Board& board)
