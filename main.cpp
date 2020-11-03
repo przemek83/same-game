@@ -13,7 +13,7 @@ int main()
     unsigned int colorCount{0};
     std::cin >> rowCount >> columnCount >> colorCount;
 
-    if (!Board::isDescriptionValid(rowCount, columnCount, colorCount))
+    if (!Board::isDescriptionValid(colorCount))
         return 1;
 
     Board board(columnCount, rowCount, std::cin);

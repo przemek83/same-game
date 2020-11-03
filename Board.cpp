@@ -23,11 +23,9 @@ void Board::print()
     }
 }
 
-bool Board::isDescriptionValid(unsigned int rowCount, unsigned int columnCount,
-                               unsigned int colorCount)
+bool Board::isDescriptionValid(unsigned int colorCount)
 {
-    return rowCount >= MIN_H && rowCount < MAX_H && columnCount >= MIN_W &&
-           columnCount < MAX_W && colorCount >= MIN_C && colorCount < MAX_C;
+    return colorCount >= MIN_COLOR_COUNT;
 }
 
 bool Board::operator==(const Board& that) const

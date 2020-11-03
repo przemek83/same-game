@@ -10,14 +10,9 @@ class Board
 public:
     Board(unsigned int columnsCount, unsigned int rowsCount, std::istream& in);
 
-    static constexpr unsigned int MAX_W{500};
-    static constexpr unsigned int MAX_H{500};
-
     void print();
 
-    static bool isDescriptionValid(unsigned int rowCount,
-                                   unsigned int columnCount,
-                                   unsigned int colorCount);
+    static bool isDescriptionValid(unsigned int colorCount);
 
     inline unsigned int getRowCount() const { return rowsCount_; };
 
@@ -51,8 +46,5 @@ private:
 
     std::vector<std::vector<int>> data_{};
 
-    static constexpr unsigned int MIN_W{4};
-    static constexpr unsigned int MIN_H{4};
-    static constexpr unsigned int MIN_C{3};
-    static constexpr unsigned int MAX_C{20};
+    static constexpr unsigned int MIN_COLOR_COUNT{1};
 };  // namespace Board
