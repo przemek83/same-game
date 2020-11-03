@@ -164,29 +164,27 @@ Point getNextMove(const Board& board)
     return nextPoint;
 }
 
-std::set<int> makeMove(Board& board, const Point& point)
+std::set<int> makeMove(Board& board, const Point& startPoint)
 {
-    int color{board.getColor(point)};
+    const int color{board.getColor(startPoint)};
 
     std::set<int> impactedColumns;
-    std::queue<Point> toCheck;
-    toCheck.push(point);
-    board.setEmpty(point);
-    while (!toCheck.empty())
+    std::queue<Point> pointToCheck;
+    pointToCheck.push(startPoint);
+    board.setEmpty(startPoint);
+    while (!pointToCheck.empty())
     {
-        const auto currentPoint{toCheck.front()};
-        toCheck.pop();
-
+        const auto currentPoint{pointToCheck.front()};
+        pointToCheck.pop();
         impactedColumns.insert(currentPoint.column);
-
         for (int k = 0; k < 4; ++k)
         {
-            int col{currentPoint.column + cols[k]};
-            int row{currentPoint.row + rows[k]};
+            const int col{currentPoint.column + cols[k]};
+            const int row{currentPoint.row + rows[k]};
             if (isFieldValid(board, col, row, color))
             {
                 board.setEmpty({col, row});
-                toCheck.push({col, row});
+                pointToCheck.push({col, row});
             }
         }
     }
