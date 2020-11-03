@@ -107,7 +107,7 @@ static std::vector<std::vector<bool>> getCheckedVector(unsigned int columnCount,
 {
     std::vector<std::vector<bool>> checked(columnCount);
     for (auto& column : checked)
-        column.resize(rowCount);
+        column.resize(rowCount, false);
     return checked;
 }
 
@@ -115,9 +115,6 @@ Point findFirstCluster(const Board& board)
 {
     std::vector<std::vector<bool>> checked{
         getCheckedVector(board.getColumnCount(), board.getRowCount())};
-    for (auto& column : checked)
-        std::fill(column.begin(), column.end(), false);
-
     for (int row = board.getRowCount() - 1; row >= 0; --row)
         for (unsigned int column = 0; column < board.getColumnCount(); ++column)
         {
@@ -132,9 +129,6 @@ Point findBiggestCluster(const Board& board)
 {
     std::vector<std::vector<bool>> checked{
         getCheckedVector(board.getColumnCount(), board.getRowCount())};
-    for (auto& column : checked)
-        std::fill(column.begin(), column.end(), false);
-
     const unsigned int randomTries{static_cast<unsigned int>(
         board.getColumnCount() * board.getRowCount() * .4)};
     unsigned int currentBestScore{0};
