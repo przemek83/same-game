@@ -9,40 +9,43 @@ namespace SameGame
 constexpr int cols[]{-1, 0, 0, 1};
 constexpr int rows[]{0, -1, 1, 0};
 
-constexpr Point emptyPoint{Point::EMPTY, Point::EMPTY};
+constexpr Point emptyPoint{Point::NOT_SET, Point::NOT_SET};
 
-void impactGravity(Board& board, std::set<int> impactedColumns)
+void impactGravity(Board& board, std::set<unsigned int> impactedColumns)
 {
-    for (int impactedColumn : impactedColumns)
+    for (unsigned int impactedColumn : impactedColumns)
     {
-        int emptyStartIndex = {Point::EMPTY};
-        int emptyCount{0};
+        int emptyStartIndex{-1};
+        unsigned int emptyCount{0};
 
-        for (int row = board.getRowCount(); row >= 0; --row)
+        for (int row = board.getRowCount() - 1; row >= 0; --row)
         {
-            if (board.getColor({impactedColumn, row}) == Point::EMPTY)
+            if (board.getColor({impactedColumn, static_cast<unsigned int>(
+                                                    row)}) == Board::EMPTY)
             {
-                if (emptyStartIndex == Point::EMPTY)
+                if (emptyStartIndex == -1)
                     emptyStartIndex = row;
                 emptyCount++;
+                continue;
             }
-            else
-            {
-                if (emptyStartIndex == Point::EMPTY)
-                    continue;
 
-                for (int currentRow = emptyStartIndex; currentRow >= emptyCount;
-                     --currentRow)
-                {
-                    board.setColor({impactedColumn, currentRow},
-                                   board.getColor({impactedColumn,
-                                                   currentRow - emptyCount}));
-                    board.setEmpty({impactedColumn, currentRow - emptyCount});
-                }
-                emptyStartIndex = Point::EMPTY;
-                row += emptyCount;
-                emptyCount = 0;
+            if (emptyStartIndex == -1)
+                continue;
+
+            for (int currentRow = emptyStartIndex; currentRow >= emptyCount;
+                 --currentRow)
+            {
+                board.setColor(
+                    {impactedColumn, static_cast<unsigned int>(currentRow)},
+                    board.getColor(
+                        {impactedColumn,
+                         static_cast<unsigned int>(currentRow - emptyCount)}));
+                board.setEmpty({impactedColumn, static_cast<unsigned int>(
+                                                    currentRow - emptyCount)});
             }
+            emptyStartIndex = -1;
+            row += emptyCount;
+            emptyCount = 0;
         }
     }
 }
@@ -51,16 +54,14 @@ bool isFieldValid(const Board& board, unsigned int column, unsigned int row,
                   int color)
 {
     return column >= 0 && column < board.getColumnCount() && row >= 0 &&
-           row < board.getRowCount() &&
-           board.getColor({static_cast<int>(column), static_cast<int>(row)}) ==
-               color;
+           row < board.getRowCount() && board.getColor({column, row}) == color;
 }
 
 unsigned int getClusterSize(const Board& board, Point startPoint,
                             std::vector<std::vector<bool>>& checked)
 {
     int color{board.getColor(startPoint)};
-    if (color == Point::EMPTY)
+    if (color == Board::EMPTY)
         return 0;
 
     unsigned int clusterSize{0};
@@ -81,8 +82,8 @@ unsigned int getClusterSize(const Board& board, Point startPoint,
 
         for (int k = 0; k < 4; ++k)
         {
-            int col{point.column + cols[k]};
-            int row{point.row + rows[k]};
+            unsigned int col{point.column + cols[k]};
+            unsigned int row{point.row + rows[k]};
             if (isFieldValid(board, col, row, color) && !checked[col][row])
             {
                 checked[col][row] = true;
@@ -118,7 +119,7 @@ Point findFirstCluster(const Board& board)
     for (int row = board.getRowCount() - 1; row >= 0; --row)
         for (unsigned int column = 0; column < board.getColumnCount(); ++column)
         {
-            Point point{static_cast<int>(column), row};
+            Point point{column, static_cast<unsigned int>(row)};
             if (getClusterSize(board, point, checked) > 1)
                 return point;
         }
@@ -127,8 +128,8 @@ Point findFirstCluster(const Board& board)
 
 static Point getRandomPoint(const Board& board)
 {
-    return {static_cast<int>(fastRandInt() % board.getColumnCount()),
-            static_cast<int>(fastRandInt() % board.getRowCount())};
+    return {fastRandInt() % board.getColumnCount(),
+            fastRandInt() % board.getRowCount()};
 }
 
 static unsigned int getRandomTries(const Board& board)
@@ -164,11 +165,11 @@ Point getNextMove(const Board& board)
     return nextPoint;
 }
 
-std::set<int> makeMove(Board& board, const Point& startPoint)
+std::set<unsigned int> makeMove(Board& board, const Point& startPoint)
 {
     const int color{board.getColor(startPoint)};
 
-    std::set<int> impactedColumns;
+    std::set<unsigned int> impactedColumns;
     std::queue<Point> pointToCheck;
     pointToCheck.push(startPoint);
     board.setEmpty(startPoint);
@@ -179,8 +180,8 @@ std::set<int> makeMove(Board& board, const Point& startPoint)
         impactedColumns.insert(currentPoint.column);
         for (int k = 0; k < 4; ++k)
         {
-            const int col{currentPoint.column + cols[k]};
-            const int row{currentPoint.row + rows[k]};
+            const unsigned int col{currentPoint.column + cols[k]};
+            const unsigned int row{currentPoint.row + rows[k]};
             if (isFieldValid(board, col, row, color))
             {
                 board.setEmpty({col, row});
@@ -195,16 +196,16 @@ std::set<int> makeMove(Board& board, const Point& startPoint)
 std::vector<Point> playGame(Board board)
 {
     if (board.getColumnCount() == 0 || board.getRowCount() == 0)
-        return {emptyPoint};
+        return {};
 
     std::vector<Point> points;
     while (true)
     {
         const Point nextPoint{getNextMove(board)};
-        points.push_back(nextPoint);
         if (nextPoint == emptyPoint)
             break;
-        std::set<int> impactedColumns{makeMove(board, nextPoint)};
+        points.push_back(nextPoint);
+        std::set<unsigned int> impactedColumns{makeMove(board, nextPoint)};
         impactGravity(board, std::move(impactedColumns));
     }
     return points;

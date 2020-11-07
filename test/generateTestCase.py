@@ -8,10 +8,9 @@ h = 500
 to = w * h
 colors = 20
 
-print("1")
 print(h, w, colors)
 for i in range(to):
-	value = randint(0, colors-1)
+	value = randint(1, colors)
 	if i != 0 and i % w == 0 and i != to - 1:
 		print()
 	print(value, end ="")

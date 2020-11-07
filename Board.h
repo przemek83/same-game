@@ -10,7 +10,9 @@ class Board
 public:
     Board(unsigned int columnsCount, unsigned int rowsCount, std::istream& in);
 
-    void print();
+    static constexpr unsigned int EMPTY{0};
+
+    std::string print() const;
 
     static bool isDescriptionValid(unsigned int colorCount);
 
@@ -23,17 +25,22 @@ public:
         return data_[point.column][point.row];
     }
 
-    inline void setColor(Point point, int color)
+    inline void setColor(Point point, unsigned int color)
     {
         data_[point.column][point.row] = color;
     }
 
     inline void setEmpty(Point point)
     {
-        data_[point.column][point.row] = Point::EMPTY;
+        data_[point.column][point.row] = EMPTY;
     }
 
     bool operator==(const Board& that) const;
+
+    friend std::ostream& operator<<(std::ostream& os, const Board& board)
+    {
+        return os << board.print();
+    }
 
 private:
     void initData(unsigned int columnsCount, unsigned int rowsCount);
@@ -44,7 +51,7 @@ private:
 
     const unsigned int rowsCount_;
 
-    std::vector<std::vector<int>> data_{};
+    std::vector<std::vector<unsigned int>> data_{};
 
     static constexpr unsigned int MIN_COLOR_COUNT{1};
 };  // namespace Board

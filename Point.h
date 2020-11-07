@@ -1,12 +1,14 @@
 #ifndef POINT_H
 #define POINT_H
 
+#include <climits>
+
 struct Point
 {
-    int column{EMPTY};
-    int row{EMPTY};
+    unsigned int column{NOT_SET};
+    unsigned int row{NOT_SET};
 
-    static constexpr int EMPTY = -1;
+    static constexpr unsigned int NOT_SET{UINT_MAX};
 
     bool operator==(const Point& that) const;
 

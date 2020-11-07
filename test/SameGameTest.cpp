@@ -10,19 +10,20 @@
 using namespace SameGame;
 
 class ImpactGravityTests
-    : public ::testing::TestWithParam<
-          std::tuple<std::vector<std::vector<int>>,
-                     std::vector<std::vector<int>>, std::vector<Point>>>
+    : public ::testing::TestWithParam<std::tuple<
+          std::vector<std::vector<unsigned int>>,
+          std::vector<std::vector<unsigned int>>, std::vector<Point>>>
 {
 };
 
 TEST_P(ImpactGravityTests, impactGravity)
 {
-    std::vector<std::vector<int>> boardData{std::get<0>(GetParam())};
-    const std::vector<std::vector<int>> expected{std::get<1>(GetParam())};
+    std::vector<std::vector<unsigned int>> boardData{std::get<0>(GetParam())};
+    const std::vector<std::vector<unsigned int>> expected{
+        std::get<1>(GetParam())};
     const std::vector<Point> impactedColumnsPoints{std::get<2>(GetParam())};
 
-    std::set<int> impactedColumns;
+    std::set<unsigned int> impactedColumns;
     for (const auto point : impactedColumnsPoints)
         impactedColumns.insert(point.column);
 
@@ -34,70 +35,94 @@ TEST_P(ImpactGravityTests, impactGravity)
 INSTANTIATE_TEST_SUITE_P(
     SameGameTest, ImpactGravityTests,
     ::testing::Values(
-        std::make_tuple(std::vector<std::vector<int>>{{1, 3, 4, -1, 5}},
-                        std::vector<std::vector<int>>{{-1, 1, 3, 4, 5}},
-                        std::vector<Point>{{0, 3}}),
-        std::make_tuple(std::vector<std::vector<int>>{{1, 3, -1, -1, -1}},
-                        std::vector<std::vector<int>>{{-1, -1, -1, 1, 3}},
-                        std::vector<Point>{{0, 4}}),
-        std::make_tuple(std::vector<std::vector<int>>{{-1, -1, -1, -1, -1}},
-                        std::vector<std::vector<int>>{{-1, -1, -1, -1, -1}},
-                        std::vector<Point>{{0, Point::EMPTY}}),
-        std::make_tuple(std::vector<std::vector<int>>{{1, 2, 3, 4, 5}},
-                        std::vector<std::vector<int>>{{1, 2, 3, 4, 5}},
-                        std::vector<Point>{{0, Point::EMPTY}}),
-        std::make_tuple(std::vector<std::vector<int>>{{1, -1, -1, -1, -1},
-                                                      {1, 2, -1, -1, -1},
-                                                      {1, -1, -1, 1, -1},
-                                                      {1, -1, -1, -1, 2},
-                                                      {-1, -1, -1, 1, -1},
-                                                      {1, -1, 1, -1, 1}},
-                        std::vector<std::vector<int>>{{-1, -1, -1, -1, 1},
-                                                      {-1, -1, -1, 1, 2},
-                                                      {-1, -1, -1, 1, 1},
-                                                      {-1, -1, -1, 1, 2},
-                                                      {-1, -1, -1, -1, 1},
-                                                      {-1, -1, 1, 1, 1}},
-                        std::vector<Point>{
-                            {0, 4}, {1, 4}, {2, 4}, {3, 3}, {4, 4}, {5, 3}})));
+        std::make_tuple(
+            std::vector<std::vector<unsigned int>>{{1, 3, 4, Board::EMPTY, 5}},
+            std::vector<std::vector<unsigned int>>{{Board::EMPTY, 1, 3, 4, 5}},
+            std::vector<Point>{{0, 3}}),
+        std::make_tuple(
+            std::vector<std::vector<unsigned int>>{
+                {1, 3, Board::EMPTY, Board::EMPTY, Board::EMPTY}},
+            std::vector<std::vector<unsigned int>>{
+                {Board::EMPTY, Board::EMPTY, Board::EMPTY, 1, 3}},
+            std::vector<Point>{{0, 4}}),
+        std::make_tuple(
+            std::vector<std::vector<unsigned int>>{{Board::EMPTY, Board::EMPTY,
+                                                    Board::EMPTY, Board::EMPTY,
+                                                    Board::EMPTY}},
+            std::vector<std::vector<unsigned int>>{{Board::EMPTY, Board::EMPTY,
+                                                    Board::EMPTY, Board::EMPTY,
+                                                    Board::EMPTY}},
+            std::vector<Point>{{0, Point::NOT_SET}}),
+        std::make_tuple(std::vector<std::vector<unsigned int>>{{1, 2, 3, 4, 5}},
+                        std::vector<std::vector<unsigned int>>{{1, 2, 3, 4, 5}},
+                        std::vector<Point>{{0, Point::NOT_SET}}),
+        std::make_tuple(
+            std::vector<std::vector<unsigned int>>{
+                {1, Board::EMPTY, Board::EMPTY, Board::EMPTY, Board::EMPTY},
+                {1, 2, Board::EMPTY, Board::EMPTY, Board::EMPTY},
+                {1, Board::EMPTY, Board::EMPTY, 1, Board::EMPTY},
+                {1, Board::EMPTY, Board::EMPTY, Board::EMPTY, 2},
+                {Board::EMPTY, Board::EMPTY, Board::EMPTY, 1, Board::EMPTY},
+                {1, Board::EMPTY, 1, Board::EMPTY, 1}},
+            std::vector<std::vector<unsigned int>>{
+                {Board::EMPTY, Board::EMPTY, Board::EMPTY, Board::EMPTY, 1},
+                {Board::EMPTY, Board::EMPTY, Board::EMPTY, 1, 2},
+                {Board::EMPTY, Board::EMPTY, Board::EMPTY, 1, 1},
+                {Board::EMPTY, Board::EMPTY, Board::EMPTY, 1, 2},
+                {Board::EMPTY, Board::EMPTY, Board::EMPTY, Board::EMPTY, 1},
+                {Board::EMPTY, Board::EMPTY, 1, 1, 1}},
+            std::vector<Point>{
+                {0, 4}, {1, 4}, {2, 4}, {3, 3}, {4, 4}, {5, 3}})));
 
 TEST(SameGameTest, makeMove6x5)
 {
-    const std::vector<std::vector<int>> expected{
-        {-1, -1, -1, -1, 1}, {-1, -1, -1, -1, 2}, {-1, -1, -1, -1, -1},
-        {-1, -1, -1, -1, 2}, {-1, -1, -1, -1, 1}, {-1, -1, 1, 1, 1}};
-    std::vector<std::vector<int>> boardData{
-        {-1, -1, -1, -1, 1}, {-1, -1, -1, 1, 2},  {-1, -1, -1, 1, 1},
-        {-1, -1, -1, 1, 2},  {-1, -1, -1, -1, 1}, {-1, -1, 1, 1, 1}};
+    const std::vector<std::vector<unsigned int>> expected{
+        {Board::EMPTY, Board::EMPTY, Board::EMPTY, Board::EMPTY, 1},
+        {Board::EMPTY, Board::EMPTY, Board::EMPTY, Board::EMPTY, 2},
+        {Board::EMPTY, Board::EMPTY, Board::EMPTY, Board::EMPTY, Board::EMPTY},
+        {Board::EMPTY, Board::EMPTY, Board::EMPTY, Board::EMPTY, 2},
+        {Board::EMPTY, Board::EMPTY, Board::EMPTY, Board::EMPTY, 1},
+        {Board::EMPTY, Board::EMPTY, 1, 1, 1}};
+    std::vector<std::vector<unsigned int>> boardData{
+        {Board::EMPTY, Board::EMPTY, Board::EMPTY, Board::EMPTY, 1},
+        {Board::EMPTY, Board::EMPTY, Board::EMPTY, 1, 2},
+        {Board::EMPTY, Board::EMPTY, Board::EMPTY, 1, 1},
+        {Board::EMPTY, Board::EMPTY, Board::EMPTY, 1, 2},
+        {Board::EMPTY, Board::EMPTY, Board::EMPTY, Board::EMPTY, 1},
+        {Board::EMPTY, Board::EMPTY, 1, 1, 1}};
 
     Board board{TestTools::createBoard(boardData)};
-    std::set<int> impactedColumns{makeMove(board, {2, 3})};
+    std::set<unsigned int> impactedColumns{makeMove(board, {2, 3})};
     EXPECT_EQ(board, TestTools::createBoard(expected));
-    EXPECT_EQ(impactedColumns, std::set<int>({1, 2, 3}));
+    EXPECT_EQ(impactedColumns, std::set<unsigned int>({1, 2, 3}));
 }
 
 TEST(SameGameTest, makeMove4x4)
 {
-    std::vector<std::vector<int>> boardData{
-        {0, 1, 0, 0}, {0, 1, 1, 1}, {1, 2, 2, 1}, {1, 2, 0, 2}};
-    const std::vector<std::vector<int>> expected{
-        {0, -1, 0, 0}, {0, -1, -1, -1}, {1, 2, 2, -1}, {1, 2, 0, 2}};
+    std::vector<std::vector<unsigned int>> boardData{
+        {3, 1, 3, 3}, {3, 1, 1, 1}, {1, 2, 2, 1}, {1, 2, 3, 2}};
+    const std::vector<std::vector<unsigned int>> expected{
+        {3, Board::EMPTY, 3, 3},
+        {3, Board::EMPTY, Board::EMPTY, Board::EMPTY},
+        {1, 2, 2, Board::EMPTY},
+        {1, 2, 3, 2}};
 
     Board board{TestTools::createBoard(boardData)};
-    std::set<int> impactedColumns{makeMove(board, {2, 3})};
+    std::set<unsigned int> impactedColumns{makeMove(board, {2, 3})};
     EXPECT_EQ(board, TestTools::createBoard(expected));
-    EXPECT_EQ(impactedColumns, std::set<int>({0, 1, 2}));
+    EXPECT_EQ(impactedColumns, std::set<unsigned int>({0, 1, 2}));
 }
 
 class GetClusterTests
     : public ::testing::TestWithParam<
-          std::tuple<std::vector<std::vector<int>>, int, Point>>
+          std::tuple<std::vector<std::vector<unsigned int>>, int, Point>>
 {
 };
 
 TEST_P(GetClusterTests, GetCluster)
 {
-    const std::vector<std::vector<int>> boardData{std::get<0>(GetParam())};
+    const std::vector<std::vector<unsigned int>> boardData{
+        std::get<0>(GetParam())};
     const int expectedClusterSize{std::get<1>(GetParam())};
     const Point point{std::get<2>(GetParam())};
 
@@ -109,9 +134,10 @@ TEST_P(GetClusterTests, GetCluster)
     EXPECT_EQ(currentClusterSize, expectedClusterSize);
 }
 
-static std::vector<std::vector<int>> symmetricalBoard{
-    {0, 1, 0, 0}, {0, 1, 1, 1}, {1, 2, 2, 1}, {1, 2, 0, 2}};
-static std::vector<std::vector<int>> singleRowBoard{{-1, 1, 0, 0}};
+static std::vector<std::vector<unsigned int>> symmetricalBoard{
+    {3, 1, 3, 3}, {3, 1, 1, 1}, {1, 2, 2, 1}, {1, 2, 3, 2}};
+static std::vector<std::vector<unsigned int>> singleRowBoard{
+    {Board::EMPTY, 1, 3, 3}};
 
 INSTANTIATE_TEST_SUITE_P(
     SameGameTest, GetClusterTests,

@@ -1,6 +1,7 @@
 #include "Board.h"
 
 #include <iostream>
+#include <ostream>
 
 Board::Board(unsigned int columnsCount, unsigned int rowsCount,
              std::istream& in)
@@ -10,17 +11,16 @@ Board::Board(unsigned int columnsCount, unsigned int rowsCount,
     loadData(in);
 }
 
-void Board::print()
+std::string Board::print() const
 {
-    if (data_.empty())
-        return;
-
+    std::ostringstream outString;
     for (unsigned int row = 0; row < data_[0].size(); ++row)
     {
         for (unsigned int column = 0; column < data_.size(); ++column)
-            std::cout << data_[column][row] << "\t";
-        std::cout << std::endl;
+            outString << data_[column][row] << "\t";
+        outString << std::endl;
     }
+    return outString.str();
 }
 
 bool Board::isDescriptionValid(unsigned int colorCount)

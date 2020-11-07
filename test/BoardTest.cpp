@@ -6,8 +6,8 @@
 TEST(BoardTest, createBoard)
 {
     Board currentBoard{TestTools::prepareBoard(4, 4, "4x4_3_colors.txt")};
-    std::vector<std::vector<int>> expectedBoard{
-        {0, 1, 0, 0}, {0, 1, 1, 1}, {1, 2, 2, 1}, {1, 2, 0, 2}};
+    std::vector<std::vector<unsigned int>> expectedBoard{
+        {3, 1, 3, 3}, {3, 1, 1, 1}, {1, 2, 2, 1}, {1, 2, 3, 2}};
     EXPECT_EQ(currentBoard, TestTools::createBoard(expectedBoard));
 }
 
@@ -29,7 +29,7 @@ TEST(BoardTest, getColumnCount)
 
 TEST(BoardTest, comparisonOperatorPositive)
 {
-    const std::vector<std::vector<int>> data{{{1, 2, 3, 4}}};
+    const std::vector<std::vector<unsigned int>> data{{{1, 2, 3, 4}}};
     const Board firstBoard{TestTools::createBoard(data)};
     const Board secondBoard{TestTools::createBoard(data)};
     EXPECT_TRUE(firstBoard == secondBoard);
@@ -85,6 +85,6 @@ TEST(BoardTest, setEmpty)
     board.setEmpty(point);
     EXPECT_EQ(board.getColor({0, 0}), 1);
     EXPECT_EQ(board.getColor({0, 1}), 2);
-    EXPECT_EQ(board.getColor(point), Point::EMPTY);
+    EXPECT_EQ(board.getColor(point), Board::EMPTY);
     EXPECT_EQ(board.getColor({0, 3}), 4);
 }
