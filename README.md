@@ -103,16 +103,37 @@ Example run:
 ```
 $ ./same-game-test
 (...)
-[==========] Running 18 tests from 4 test suites.
+[==========] Running 28 tests from 5 test suites.
 [----------] Global test environment set-up.
-[----------] 3 tests from SameGameTest
+[----------] 10 tests from BoardTest
+[ RUN      ] BoardTest.createBoard
+[       OK ] BoardTest.createBoard (0 ms)
+[ RUN      ] BoardTest.getRowCount
+[       OK ] BoardTest.getRowCount (0 ms)
+[ RUN      ] BoardTest.getColumnCount
+[       OK ] BoardTest.getColumnCount (0 ms)
+[ RUN      ] BoardTest.comparisonOperatorPositive
+[       OK ] BoardTest.comparisonOperatorPositive (0 ms)
+[ RUN      ] BoardTest.comparisonOperatorDifferentRowCount
+[       OK ] BoardTest.comparisonOperatorDifferentRowCount (0 ms)
+[ RUN      ] BoardTest.comparisonOperatorDifferentColumnCount
+[       OK ] BoardTest.comparisonOperatorDifferentColumnCount (0 ms)
+[ RUN      ] BoardTest.comparisonOperatorDifferentData
+[       OK ] BoardTest.comparisonOperatorDifferentData (0 ms)
+[ RUN      ] BoardTest.getColor
+[       OK ] BoardTest.getColor (0 ms)
+[ RUN      ] BoardTest.setColor
+[       OK ] BoardTest.setColor (0 ms)
+[ RUN      ] BoardTest.setEmpty
+[       OK ] BoardTest.setEmpty (0 ms)
+[----------] 10 tests from BoardTest (0 ms total)
+
+[----------] 2 tests from SameGameTest
 [ RUN      ] SameGameTest.makeMove6x5
 [       OK ] SameGameTest.makeMove6x5 (0 ms)
 [ RUN      ] SameGameTest.makeMove4x4
 [       OK ] SameGameTest.makeMove4x4 (0 ms)
-[ RUN      ] SameGameTest.loadBoard
-[       OK ] SameGameTest.loadBoard (0 ms)
-[----------] 3 tests from SameGameTest (0 ms total)
+[----------] 2 tests from SameGameTest (0 ms total)
 
 [----------] 5 tests from SameGameTest/ImpactGravityTests
 [ RUN      ] SameGameTest/ImpactGravityTests.impactGravity/0
@@ -142,20 +163,22 @@ $ ./same-game-test
 [       OK ] SameGameTest/GetClusterTests.GetCluster/5 (0 ms)
 [ RUN      ] SameGameTest/GetClusterTests.GetCluster/6
 [       OK ] SameGameTest/GetClusterTests.GetCluster/6 (0 ms)
-[----------] 7 tests from SameGameTest/GetClusterTests (0 ms total)
+[----------] 7 tests from SameGameTest/GetClusterTests (1 ms total)
 
-[----------] 3 tests from SameGameTest/PerformanceTests
+[----------] 4 tests from SameGameTest/PerformanceTests
 [ RUN      ] SameGameTest/PerformanceTests.playGame/0
-[       OK ] SameGameTest/PerformanceTests.playGame/0 (23 ms)
+[       OK ] SameGameTest/PerformanceTests.playGame/0 (9 ms)
 [ RUN      ] SameGameTest/PerformanceTests.playGame/1
-[       OK ] SameGameTest/PerformanceTests.playGame/1 (1223 ms)
+[       OK ] SameGameTest/PerformanceTests.playGame/1 (25 ms)
 [ RUN      ] SameGameTest/PerformanceTests.playGame/2
-[       OK ] SameGameTest/PerformanceTests.playGame/2 (4744 ms)
-[----------] 3 tests from SameGameTest/PerformanceTests (5990 ms total)
+[       OK ] SameGameTest/PerformanceTests.playGame/2 (1283 ms)
+[ RUN      ] SameGameTest/PerformanceTests.playGame/3
+[       OK ] SameGameTest/PerformanceTests.playGame/3 (4448 ms)
+[----------] 4 tests from SameGameTest/PerformanceTests (5765 ms total)
 
 [----------] Global test environment tear-down
-[==========] 18 tests from 4 test suites ran. (5990 ms total)
-[  PASSED  ] 18 tests.
+[==========] 28 tests from 5 test suites ran. (5766 ms total)
+[  PASSED  ] 28 tests.
 ```
 
 ## License
