@@ -46,7 +46,7 @@ static void impactColumn(Board& board, unsigned int column)
         removeRows(board, column, emptyStartIndex, emptyCount);
 
         emptyStartIndex = -1;
-        row += static_cast<unsigned int>(emptyCount);
+        row += static_cast<int>(emptyCount);
         emptyCount = 0;
     }
 }
@@ -83,8 +83,8 @@ unsigned int getClusterSize(const Board& board, Point startPoint,
         pointsToCheck.pop();
         for (unsigned int k{0}; k < 4; ++k)
         {
-            const unsigned int col{point.column + cols[k]};
-            const unsigned int row{point.row + rows[k]};
+            const unsigned int col{point.column + cols.at(k)};
+            const unsigned int row{point.row + rows.at(k)};
             if (isFieldValid(board, col, row) &&
                 board.getColor({col, row}) == color && !checked[col][row])
             {
@@ -180,10 +180,10 @@ std::set<unsigned int> makeMove(Board& board, Point startPoint)
         const auto currentPoint{pointsToCheck.front()};
         pointsToCheck.pop();
         impactedColumns.insert(currentPoint.column);
-        for (int k = 0; k < 4; ++k)
+        for (unsigned int k{0}; k < 4; ++k)
         {
-            const unsigned int col{currentPoint.column + cols[k]};
-            const unsigned int row{currentPoint.row + rows[k]};
+            const unsigned int col{currentPoint.column + cols.at(k)};
+            const unsigned int row{currentPoint.row + rows.at(k)};
             if (isFieldValid(board, col, row) &&
                 board.getColor({col, row}) == color)
             {

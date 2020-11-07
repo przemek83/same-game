@@ -18,7 +18,7 @@ Board createBoard(const std::vector<std::vector<unsigned int>>& data)
 }
 
 Board prepareBoard(unsigned int columnsCount, unsigned int rowsCount,
-                   std::string fileName)
+                   const std::string& fileName)
 {
     std::ifstream in(fileName, std::ifstream::in);
     return Board(columnsCount, rowsCount, in);

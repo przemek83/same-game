@@ -7,7 +7,6 @@
 #include "../SameGame.h"
 #include "TestTools.h"
 
-using namespace SameGame;
 using BoardData = std::vector<std::vector<unsigned int>>;
 static unsigned int EMPTY{Board::EMPTY};
 
@@ -19,16 +18,16 @@ class ImpactGravityTests
 
 TEST_P(ImpactGravityTests, impactGravity)
 {
-    BoardData boardData{std::get<0>(GetParam())};
-    const BoardData expected{std::get<1>(GetParam())};
-    const std::vector<Point> impactedColumnsPoints{std::get<2>(GetParam())};
+    const BoardData& boardData{std::get<0>(GetParam())};
+    const BoardData& expected{std::get<1>(GetParam())};
+    const std::vector<Point>& impactedColumnsPoints{std::get<2>(GetParam())};
 
     std::set<unsigned int> impactedColumns;
     for (const auto point : impactedColumnsPoints)
         impactedColumns.insert(point.column);
 
     Board board{TestTools::createBoard(boardData)};
-    impactGravity(board, impactedColumns);
+    SameGame::impactGravity(board, impactedColumns);
     EXPECT_EQ(board, TestTools::createBoard(expected));
 }
 
@@ -73,21 +72,22 @@ TEST(SameGameTest, makeMove6x5)
         {EMPTY, EMPTY, EMPTY, EMPTY, 1}, {EMPTY, EMPTY, 1, 1, 1}};
 
     Board board{TestTools::createBoard(boardData)};
-    std::set<unsigned int> impactedColumns{makeMove(board, {2, 3})};
+    std::set<unsigned int> impactedColumns{SameGame::makeMove(board, {2, 3})};
     EXPECT_EQ(board, TestTools::createBoard(expected));
     EXPECT_EQ(impactedColumns, std::set<unsigned int>({1, 2, 3}));
 }
 
 TEST(SameGameTest, makeMove4x4)
 {
-    BoardData boardData{{3, 1, 3, 3}, {3, 1, 1, 1}, {1, 2, 2, 1}, {1, 2, 3, 2}};
+    const BoardData boardData{
+        {3, 1, 3, 3}, {3, 1, 1, 1}, {1, 2, 2, 1}, {1, 2, 3, 2}};
     const BoardData expected{{3, EMPTY, 3, 3},
                              {3, EMPTY, EMPTY, EMPTY},
                              {1, 2, 2, EMPTY},
                              {1, 2, 3, 2}};
 
     Board board{TestTools::createBoard(boardData)};
-    std::set<unsigned int> impactedColumns{makeMove(board, {2, 3})};
+    std::set<unsigned int> impactedColumns{SameGame::makeMove(board, {2, 3})};
     EXPECT_EQ(board, TestTools::createBoard(expected));
     EXPECT_EQ(impactedColumns, std::set<unsigned int>({0, 1, 2}));
 }
@@ -99,15 +99,16 @@ class GetClusterTests
 
 TEST_P(GetClusterTests, GetCluster)
 {
-    const BoardData boardData{std::get<0>(GetParam())};
+    const BoardData& boardData{std::get<0>(GetParam())};
     const int expectedClusterSize{std::get<1>(GetParam())};
     const Point point{std::get<2>(GetParam())};
 
-    Board board{TestTools::createBoard(boardData)};
+    const Board board{TestTools::createBoard(boardData)};
     std::vector<std::vector<bool>> checked(board.getColumnCount());
     for (auto& column : checked)
         column.resize(board.getRowCount(), false);
-    unsigned int currentClusterSize{getClusterSize(board, point, checked)};
+    unsigned int currentClusterSize{
+        SameGame::getClusterSize(board, point, checked)};
     EXPECT_EQ(currentClusterSize, expectedClusterSize);
 }
 
@@ -157,7 +158,7 @@ INSTANTIATE_TEST_SUITE_P(SameGameTest, PerformanceTests,
 
 TEST_P(PerformanceTests, playGame)
 {
-    const Board board{std::get<0>(GetParam())};
+    const Board& board{std::get<0>(GetParam())};
     srand(1);
-    playGame(board);
+    SameGame::playGame(board);
 }
