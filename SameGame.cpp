@@ -60,7 +60,10 @@ bool isFieldValid(const Board& board, unsigned int column, unsigned int row,
 unsigned int getClusterSize(const Board& board, Point startPoint,
                             std::vector<std::vector<bool>>& checked)
 {
-    int color{board.getColor(startPoint)};
+    if (checked[startPoint.column][startPoint.row])
+        return 0;
+
+    const int color{board.getColor(startPoint)};
     if (color == Board::EMPTY)
         return 0;
 
