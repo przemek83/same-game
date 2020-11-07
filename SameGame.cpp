@@ -25,24 +25,25 @@ static void removeRows(Board& board, unsigned int column, unsigned int fromRow,
 
 static void impactColumn(Board& board, unsigned int column)
 {
-    int emptyStartIndex{-1};
+    const unsigned int NOT_SET{UINT_MAX};
+    unsigned int emptyStartIndex{NOT_SET};
     unsigned int emptyCount{0};
     for (unsigned int row{board.getRowCount()}; row-- > 0;)
     {
         if (board.getColor({column, row}) == Board::EMPTY)
         {
-            if (emptyStartIndex == -1)
+            if (emptyStartIndex == NOT_SET)
                 emptyStartIndex = row;
             emptyCount++;
             continue;
         }
 
-        if (emptyStartIndex == -1)
+        if (emptyStartIndex == NOT_SET)
             continue;
 
         removeRows(board, column, emptyStartIndex, emptyCount);
 
-        emptyStartIndex = -1;
+        emptyStartIndex = NOT_SET;
         row += emptyCount;
         emptyCount = 0;
     }
