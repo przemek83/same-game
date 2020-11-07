@@ -14,9 +14,9 @@ Simple board game based on rules of Same Game (known also as JawBreaker and few 
 ## Problem description
 Write application playing Same Game. Program gets H x W board on input with C different numbers as cells.  
 Assumption are:
-- 4 <= H <= 50 – board rows count
-- 4 <= W <= 50 – board columns count
-- 3 <= C <= 20 – colour count
+- H >= 0 – board rows count
+- W >= 0 – board columns count
+- C >= 1 – colour count
 
 Program can remove cells if there are minimum 1 neighbor in same colour
 (above, below, left or right). Gravity fills the gaps if needed.
@@ -26,7 +26,7 @@ Game ends when on board there is no cells with neighbor in same colour.
 Line containing H W C (space separated) followed by H lines with W numbers representing initial board.
 
 **Output**:  
-Coordinates of cells to pick. At end "-1 -1" meaning no more moves.
+Coordinates of cells to pick in form of lines with 2 numbers separated by space each. Line format: `row column`.
 
 ## Getting Started
 This section describes briefly how to setup environment and build project.
@@ -58,17 +58,16 @@ Application expects in first line number of rows, columns and colors. In followi
 Example input:
 ```
 4 4 3
-0 0 1 1
+3 3 1 1
 1 1 2 2
-0 1 2 0
-0 1 1 2
+3 1 2 3
+3 1 1 2
 ```
 Example output:
 ```
 3 1
 2 0
 2 2
--1 -1
 ```
 
 Examples of usage:  
@@ -78,20 +77,18 @@ Examples of usage:
     1 0
     2 0
     2 2
-    -1 -1
     ```
 2. Use binary directly:
     ```shell
     $ ./same-game
     4 4 3
-    0 0 1 1
+    3 3 1 1
     1 1 2 2
-    0 1 2 0
-    0 1 1 2
+    3 1 2 3
+    3 1 1 2
     2 2
     2 2
     1 0
-    -1 -1
     ```
 3. Pipe input:
     ```shell
@@ -99,7 +96,6 @@ Examples of usage:
     3 2
     1 0
     2 2
-    -1 -1
     ```
 ## Testing
 Project contains test subproject based on Goggle Test framework. Compile testing subproject and launch tests via IDE or directly from console.  
