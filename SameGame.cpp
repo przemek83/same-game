@@ -12,15 +12,13 @@ constexpr std::array<int, 4> rows{0, -1, 1, 0};
 
 constexpr Point emptyPoint{Point::NOT_SET, Point::NOT_SET};
 
-static void removeRows(Board& board, unsigned int column, int fromRow,
+static void removeRows(Board& board, unsigned int column, unsigned int fromRow,
                        unsigned int count)
 {
-    for (int row{static_cast<int>(fromRow)}; row >= static_cast<int>(count);
-         --row)
+    for (unsigned int row{fromRow + 1}; row-- > count;)
     {
-        const unsigned int rowToChange{static_cast<unsigned int>(row) - count};
-        board.setColor({column, static_cast<unsigned int>(row)},
-                       board.getColor({column, rowToChange}));
+        const unsigned int rowToChange{row - count};
+        board.setColor({column, row}, board.getColor({column, rowToChange}));
         board.setEmpty({column, rowToChange});
     }
 }
@@ -29,10 +27,9 @@ static void impactColumn(Board& board, unsigned int column)
 {
     int emptyStartIndex{-1};
     unsigned int emptyCount{0};
-    for (int row{static_cast<int>(board.getRowCount()) - 1}; row >= 0; --row)
+    for (unsigned int row{board.getRowCount()}; row-- > 0;)
     {
-        if (board.getColor({column, static_cast<unsigned int>(row)}) ==
-            Board::EMPTY)
+        if (board.getColor({column, row}) == Board::EMPTY)
         {
             if (emptyStartIndex == -1)
                 emptyStartIndex = row;
@@ -46,7 +43,7 @@ static void impactColumn(Board& board, unsigned int column)
         removeRows(board, column, emptyStartIndex, emptyCount);
 
         emptyStartIndex = -1;
-        row += static_cast<int>(emptyCount);
+        row += emptyCount;
         emptyCount = 0;
     }
 }
@@ -118,10 +115,10 @@ static Point findFirstCluster(const Board& board)
 {
     std::vector<std::vector<bool>> checked{
         createCheckedVector(board.getColumnCount(), board.getRowCount())};
-    for (int row{static_cast<int>(board.getRowCount()) - 1}; row >= 0; --row)
+    for (unsigned int row{board.getRowCount()}; row-- > 0;)
         for (unsigned int column{0}; column < board.getColumnCount(); ++column)
         {
-            Point point{column, static_cast<unsigned int>(row)};
+            Point point{column, row};
             if (getClusterSize(board, point, checked) > 1)
                 return point;
         }
