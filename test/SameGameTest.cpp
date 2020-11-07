@@ -141,11 +141,11 @@ class PerformanceTests : public ::testing::TestWithParam<std::tuple<Board>>
 };
 
 // Test Name             | Release (ms) | Debug (ms)
-// board50x50x3Colors    | 6            | 53
-// board50x50x11Colors   | 18           | 133
-// board200x200x3Colors  | 1041         | 7623
-// board200x200x20Colors | 3751         | 26710
-// board500x500x20Colors | 184518       | 1155038
+// board50x50x3Colors    | 6            | 47
+// board50x50x11Colors   | 18           | 121
+// board200x200x3Colors  | 1011         | 6847
+// board200x200x20Colors | 3546         | 24081
+// board500x500x20Colors | 176365       | 1077859
 
 INSTANTIATE_TEST_SUITE_P(SameGameTest, PerformanceTests,
                          ::testing::Values(board50x50x3Colors,
