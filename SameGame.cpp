@@ -11,43 +11,49 @@ constexpr int rows[]{0, -1, 1, 0};
 
 constexpr Point emptyPoint{Point::NOT_SET, Point::NOT_SET};
 
+static void removeRows(Board& board, unsigned int column, unsigned int fromRow,
+                       unsigned int number)
+{
+    for (int row{static_cast<int>(fromRow)}; row >= static_cast<int>(number);
+         --row)
+    {
+        const unsigned int rowToChange{static_cast<unsigned int>(row - number)};
+        board.setColor({column, static_cast<unsigned int>(row)},
+                       board.getColor({column, rowToChange}));
+        board.setEmpty({column, rowToChange});
+    }
+}
+
+static void impactColumn(Board& board, unsigned int column)
+{
+    int emptyStartIndex{-1};
+    unsigned int emptyCount{0};
+    for (int row{static_cast<int>(board.getRowCount()) - 1}; row >= 0; --row)
+    {
+        if (board.getColor({column, static_cast<unsigned int>(row)}) ==
+            Board::EMPTY)
+        {
+            if (emptyStartIndex == -1)
+                emptyStartIndex = row;
+            emptyCount++;
+            continue;
+        }
+
+        if (emptyStartIndex == -1)
+            continue;
+
+        removeRows(board, column, emptyStartIndex, emptyCount);
+
+        emptyStartIndex = -1;
+        row += emptyCount;
+        emptyCount = 0;
+    }
+}
+
 void impactGravity(Board& board, std::set<unsigned int> impactedColumns)
 {
-    for (unsigned int impactedColumn : impactedColumns)
-    {
-        int emptyStartIndex{-1};
-        unsigned int emptyCount{0};
-
-        for (int row = board.getRowCount() - 1; row >= 0; --row)
-        {
-            if (board.getColor({impactedColumn, static_cast<unsigned int>(
-                                                    row)}) == Board::EMPTY)
-            {
-                if (emptyStartIndex == -1)
-                    emptyStartIndex = row;
-                emptyCount++;
-                continue;
-            }
-
-            if (emptyStartIndex == -1)
-                continue;
-
-            for (int currentRow = emptyStartIndex; currentRow >= emptyCount;
-                 --currentRow)
-            {
-                board.setColor(
-                    {impactedColumn, static_cast<unsigned int>(currentRow)},
-                    board.getColor(
-                        {impactedColumn,
-                         static_cast<unsigned int>(currentRow - emptyCount)}));
-                board.setEmpty({impactedColumn, static_cast<unsigned int>(
-                                                    currentRow - emptyCount)});
-            }
-            emptyStartIndex = -1;
-            row += emptyCount;
-            emptyCount = 0;
-        }
-    }
+    for (unsigned int column : impactedColumns)
+        impactColumn(board, column);
 }
 
 bool isFieldValid(const Board& board, unsigned int column, unsigned int row)
