@@ -12,12 +12,12 @@ constexpr int rows[]{0, -1, 1, 0};
 constexpr Point emptyPoint{Point::NOT_SET, Point::NOT_SET};
 
 static void removeRows(Board& board, unsigned int column, unsigned int fromRow,
-                       unsigned int number)
+                       unsigned int count)
 {
-    for (int row{static_cast<int>(fromRow)}; row >= static_cast<int>(number);
+    for (int row{static_cast<int>(fromRow)}; row >= static_cast<int>(count);
          --row)
     {
-        const unsigned int rowToChange{static_cast<unsigned int>(row - number)};
+        const unsigned int rowToChange{static_cast<unsigned int>(row - count)};
         board.setColor({column, static_cast<unsigned int>(row)},
                        board.getColor({column, rowToChange}));
         board.setEmpty({column, rowToChange});
