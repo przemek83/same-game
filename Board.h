@@ -16,11 +16,11 @@ public:
 
     static bool isDescriptionValid(unsigned int colorCount);
 
-    inline unsigned int getRowCount() const { return rowsCount_; };
+    inline unsigned int getRowCount() const { return rowsCount_; }
 
-    inline unsigned int getColumnCount() const { return columnsCount_; };
+    inline unsigned int getColumnCount() const { return columnsCount_; }
 
-    inline int getColor(Point point) const
+    inline unsigned int getColor(Point point) const
     {
         return data_[point.column][point.row];
     }

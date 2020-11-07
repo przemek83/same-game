@@ -16,8 +16,8 @@ std::string Board::print() const
     std::ostringstream outString;
     for (unsigned int row = 0; row < data_[0].size(); ++row)
     {
-        for (unsigned int column = 0; column < data_.size(); ++column)
-            outString << data_[column][row] << "\t";
+        for (const auto& column : data_)
+            outString << column[row] << "\t";
         outString << std::endl;
     }
     return outString.str();
@@ -46,7 +46,7 @@ void Board::loadData(std::istream& in)
     for (unsigned int row = 0; row < rowsCount_; ++row)
         for (unsigned int column = 0; column < columnsCount_; ++column)
         {
-            int field;
+            unsigned int field{0};
             in >> field;
             data_[column][row] = field;
         }

@@ -10,9 +10,9 @@ struct Point
 
     static constexpr unsigned int NOT_SET{UINT_MAX};
 
-    bool operator==(const Point& that) const;
+    bool operator==(Point that) const;
 
-    bool operator<(const Point& that) const;
+    bool operator<(Point that) const;
 };
 
 #endif  // POINT_H

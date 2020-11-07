@@ -5,9 +5,7 @@
 
 int main()
 {
-    using namespace SameGame;
-
-    srand(time(NULL));
+    srand(static_cast<unsigned int>(time(nullptr)));
 
     unsigned int rowCount{0};
     unsigned int columnCount{0};
@@ -18,7 +16,7 @@ int main()
         return 1;
 
     Board board(columnCount, rowCount, std::cin);
-    std::vector<Point> points{playGame(std::move(board))};
+    std::vector<Point> points{SameGame::playGame(std::move(board))};
 
     for (auto point : points)
         std::cout << point.row << " " << point.column << std::endl;

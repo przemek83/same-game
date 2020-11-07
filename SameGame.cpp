@@ -1,23 +1,24 @@
 #include "SameGame.h"
 
+#include <array>
 #include <cstdlib>
 #include <cstring>
 #include <queue>
 
 namespace SameGame
 {
-constexpr int cols[]{-1, 0, 0, 1};
-constexpr int rows[]{0, -1, 1, 0};
+constexpr std::array<int, 4> cols{-1, 0, 0, 1};
+constexpr std::array<int, 4> rows{0, -1, 1, 0};
 
 constexpr Point emptyPoint{Point::NOT_SET, Point::NOT_SET};
 
-static void removeRows(Board& board, unsigned int column, unsigned int fromRow,
+static void removeRows(Board& board, unsigned int column, int fromRow,
                        unsigned int count)
 {
     for (int row{static_cast<int>(fromRow)}; row >= static_cast<int>(count);
          --row)
     {
-        const unsigned int rowToChange{static_cast<unsigned int>(row - count)};
+        const unsigned int rowToChange{static_cast<unsigned int>(row) - count};
         board.setColor({column, static_cast<unsigned int>(row)},
                        board.getColor({column, rowToChange}));
         board.setEmpty({column, rowToChange});
@@ -45,7 +46,7 @@ static void impactColumn(Board& board, unsigned int column)
         removeRows(board, column, emptyStartIndex, emptyCount);
 
         emptyStartIndex = -1;
-        row += emptyCount;
+        row += static_cast<unsigned int>(emptyCount);
         emptyCount = 0;
     }
 }
@@ -56,10 +57,10 @@ void impactGravity(Board& board, std::set<unsigned int> impactedColumns)
         impactColumn(board, column);
 }
 
-bool isFieldValid(const Board& board, unsigned int column, unsigned int row)
+static bool isFieldValid(const Board& board, unsigned int column,
+                         unsigned int row)
 {
-    return column >= 0 && column < board.getColumnCount() && row >= 0 &&
-           row < board.getRowCount();
+    return column < board.getColumnCount() && row < board.getRowCount();
 }
 
 unsigned int getClusterSize(const Board& board, Point startPoint,
@@ -68,7 +69,7 @@ unsigned int getClusterSize(const Board& board, Point startPoint,
     if (checked[startPoint.column][startPoint.row])
         return 0;
 
-    const int color{board.getColor(startPoint)};
+    const unsigned int color{board.getColor(startPoint)};
     if (color == Board::EMPTY)
         return 0;
 
@@ -80,7 +81,7 @@ unsigned int getClusterSize(const Board& board, Point startPoint,
     {
         const Point point{pointsToCheck.front()};
         pointsToCheck.pop();
-        for (int k = 0; k < 4; ++k)
+        for (unsigned int k{0}; k < 4; ++k)
         {
             const unsigned int col{point.column + cols[k]};
             const unsigned int row{point.row + rows[k]};
@@ -113,7 +114,7 @@ static std::vector<std::vector<bool>> createCheckedVector(
     return checked;
 }
 
-Point findFirstCluster(const Board& board)
+static Point findFirstCluster(const Board& board)
 {
     std::vector<std::vector<bool>> checked{
         createCheckedVector(board.getColumnCount(), board.getRowCount())};
@@ -139,7 +140,7 @@ static unsigned int getRandomTries(const Board& board)
                                      board.getRowCount() * .4);
 }
 
-Point findBiggestCluster(const Board& board)
+static Point findBiggestCluster(const Board& board)
 {
     std::vector<std::vector<bool>> checked{
         createCheckedVector(board.getColumnCount(), board.getRowCount())};
@@ -166,9 +167,9 @@ Point getNextMove(const Board& board)
     return nextPoint;
 }
 
-std::set<unsigned int> makeMove(Board& board, const Point& startPoint)
+std::set<unsigned int> makeMove(Board& board, Point startPoint)
 {
-    const int color{board.getColor(startPoint)};
+    const unsigned int color{board.getColor(startPoint)};
 
     std::set<unsigned int> impactedColumns;
     std::queue<Point> pointsToCheck;

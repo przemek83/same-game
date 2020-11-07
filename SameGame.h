@@ -10,7 +10,7 @@ namespace SameGame
 {
 Point getNextMove(const Board& board);
 
-std::set<unsigned int> makeMove(Board& board, const Point& point);
+std::set<unsigned int> makeMove(Board& board, Point point);
 
 void impactGravity(Board& board, std::set<unsigned int> impactedColumns);
 
