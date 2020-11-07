@@ -50,11 +50,10 @@ void impactGravity(Board& board, std::set<unsigned int> impactedColumns)
     }
 }
 
-bool isFieldValid(const Board& board, unsigned int column, unsigned int row,
-                  int color)
+bool isFieldValid(const Board& board, unsigned int column, unsigned int row)
 {
     return column >= 0 && column < board.getColumnCount() && row >= 0 &&
-           row < board.getRowCount() && board.getColor({column, row}) == color;
+           row < board.getRowCount();
 }
 
 unsigned int getClusterSize(const Board& board, Point startPoint,
@@ -67,31 +66,24 @@ unsigned int getClusterSize(const Board& board, Point startPoint,
     if (color == Board::EMPTY)
         return 0;
 
-    unsigned int clusterSize{0};
-    static std::queue<Point> toCheck;
-    toCheck.push(startPoint);
-    while (!toCheck.empty())
+    unsigned int clusterSize{1};
+    checked[startPoint.column][startPoint.row] = true;
+    static std::queue<Point> pointsToCheck;
+    pointsToCheck.push(startPoint);
+    while (!pointsToCheck.empty())
     {
-        const auto point{toCheck.front()};
-        toCheck.pop();
-        if (board.getColor(point) != color)
-            continue;
-
-        if (!checked[point.column][point.row])
-        {
-            clusterSize++;
-            checked[point.column][point.row] = true;
-        }
-
+        const Point point{pointsToCheck.front()};
+        pointsToCheck.pop();
         for (int k = 0; k < 4; ++k)
         {
-            unsigned int col{point.column + cols[k]};
-            unsigned int row{point.row + rows[k]};
-            if (isFieldValid(board, col, row, color) && !checked[col][row])
+            const unsigned int col{point.column + cols[k]};
+            const unsigned int row{point.row + rows[k]};
+            if (isFieldValid(board, col, row) &&
+                board.getColor({col, row}) == color && !checked[col][row])
             {
                 checked[col][row] = true;
                 clusterSize++;
-                toCheck.push({col, row});
+                pointsToCheck.emplace(Point{col, row});
             }
         }
     }
@@ -173,26 +165,26 @@ std::set<unsigned int> makeMove(Board& board, const Point& startPoint)
     const int color{board.getColor(startPoint)};
 
     std::set<unsigned int> impactedColumns;
-    std::queue<Point> pointToCheck;
-    pointToCheck.push(startPoint);
+    std::queue<Point> pointsToCheck;
+    pointsToCheck.push(startPoint);
     board.setEmpty(startPoint);
-    while (!pointToCheck.empty())
+    while (!pointsToCheck.empty())
     {
-        const auto currentPoint{pointToCheck.front()};
-        pointToCheck.pop();
+        const auto currentPoint{pointsToCheck.front()};
+        pointsToCheck.pop();
         impactedColumns.insert(currentPoint.column);
         for (int k = 0; k < 4; ++k)
         {
             const unsigned int col{currentPoint.column + cols[k]};
             const unsigned int row{currentPoint.row + rows[k]};
-            if (isFieldValid(board, col, row, color))
+            if (isFieldValid(board, col, row) &&
+                board.getColor({col, row}) == color)
             {
                 board.setEmpty({col, row});
-                pointToCheck.push({col, row});
+                pointsToCheck.emplace(Point{col, row});
             }
         }
     }
-
     return impactedColumns;
 }
 
