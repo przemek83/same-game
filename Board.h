@@ -51,7 +51,7 @@ private:
 
     const unsigned int rowsCount_;
 
-    std::vector<std::vector<unsigned int>> data_{};
+    std::vector<std::vector<unsigned int>> data_;
 
     static constexpr unsigned int MIN_COLOR_COUNT{1};
 };  // namespace Board
