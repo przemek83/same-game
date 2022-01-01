@@ -206,7 +206,7 @@ std::vector<Point> playGame(Board board)
             break;
         points.push_back(nextPoint);
         std::set<unsigned int> impactedColumns{makeMove(board, nextPoint)};
-        impactGravity(board, std::move(impactedColumns));
+        impactGravity(board, impactedColumns);
     }
     return points;
 }
