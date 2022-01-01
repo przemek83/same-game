@@ -49,7 +49,7 @@ static void impactColumn(Board& board, unsigned int column)
     }
 }
 
-void impactGravity(Board& board, std::set<unsigned int> impactedColumns)
+void impactGravity(Board& board, const std::set<unsigned int>& impactedColumns)
 {
     for (unsigned int column : impactedColumns)
         impactColumn(board, column);

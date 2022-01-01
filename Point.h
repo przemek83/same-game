@@ -1,5 +1,4 @@
-#ifndef POINT_H
-#define POINT_H
+#pragma once
 
 #include <climits>
 
@@ -14,5 +13,3 @@ struct Point
 
     bool operator<(Point that) const;
 };
-
-#endif  // POINT_H

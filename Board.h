@@ -12,15 +12,18 @@ public:
 
     static constexpr unsigned int EMPTY{0};
 
-    std::string print() const;
+    [[nodiscard]] std::string print() const;
 
     static bool isDescriptionValid(unsigned int colorCount);
 
-    inline unsigned int getRowCount() const { return rowsCount_; }
+    [[nodiscard]] inline unsigned int getRowCount() const { return rowsCount_; }
 
-    inline unsigned int getColumnCount() const { return columnsCount_; }
+    [[nodiscard]] inline unsigned int getColumnCount() const
+    {
+        return columnsCount_;
+    }
 
-    inline unsigned int getColor(Point point) const
+    [[nodiscard]] inline unsigned int getColor(Point point) const
     {
         return data_[point.column][point.row];
     }
