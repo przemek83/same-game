@@ -1,5 +1,5 @@
 ## Same Game
-Simple board game based on rules of Same Game (known also as JawBreaker and few other names). Played by basic algorithm.
+Simple board game based on rules of Same Game (also known as JawBreaker and few other names). Played by basic algorithm.
 
 ## Table of content
 - [Problem description](#problem-description)
@@ -16,11 +16,11 @@ Write application playing Same Game. Program gets H x W board on input with C di
 Assumption are:
 - H >= 0 – board rows count
 - W >= 0 – board columns count
-- C >= 1 – colour count
+- C >= 1 – color count
 
-Program can remove cells if there are minimum 1 neighbor in same colour
+Program can remove cells if there are minimum 1 neighbors in same color
 (above, below, left or right). Gravity fills the gaps if needed.
-Game ends when on board there is no cells with neighbor in same colour.
+The game ends when, on the board, there are no cells with neighbor in the same color.
 
 **Input**:  
 Line containing H W C (space separated) followed by H lines with W numbers representing initial board.
@@ -29,14 +29,14 @@ Line containing H W C (space separated) followed by H lines with W numbers repre
 Coordinates of cells to pick in form of lines with 2 numbers separated by space each. Line format: `row column`.
 
 ## Getting Started
-This section describes briefly how to setup environment and build project.
+This section describes briefly how to setup the environment and build the project.
 
 ### Prerequisites
-C++ compiler with C++17 support as a minimum and CMake 3.8+. Additionally Git tool for downloading Google Test library as it is needed by test subproject.
+C++ compiler with C++17 support as a minimum and CMake 3.8+. Additionally, Git tool for downloading Google Test library as it is needed by test subproject.
 
 ### Building
 Recommended:  
-Use Cmake directly or your favorite IDE supporting CMake projects.  
+Use CMake directly or your favorite IDE supporting CMake projects.  
 
 Alternative:  
 Use bare compiler for building project binary:
@@ -49,12 +49,12 @@ $ g++ -Wall -std=c++17 -O3 -o same-game *.o
 | Tool |  Windows 10 | Lubuntu 20.04 |
 | --- | --- | --- |
 | GCC | 7.3.0 | 9.3.0 |
-| Cmake | 3.14 | 3.17 |
+| CMake | 3.14 | 3.17 |
 | Git | 2.20 | 2.25 |
-| QtCreator | 4.12.0 | 4.13.0 |
+| Qt Creator | 4.12.0 | 4.13.0 |
 
 ## Usage
-Application expects in first line number of rows, columns and colors. In following lines board.
+Application expects in first line number of rows, columns and colors. In following lines, board.
 Example input:
 ```
 4 4 3
@@ -98,7 +98,7 @@ Examples of usage:
     2 2
     ```
 ## Testing
-Project contains test subproject based on Goggle Test framework. Compile testing subproject and launch tests via IDE or directly from console.  
+The project contains a test subproject based on Goggle Test framework. Compile testing subproject and launch tests via IDE or directly from console.  
 Example run:
 ```
 $ ./same-game-test
@@ -182,4 +182,4 @@ $ ./same-game-test
 ```
 
 ## License
-Project is distributed under the MIT License. See `LICENSE` for more information.
+The project is distributed under the MIT License. See `LICENSE` for more information.
