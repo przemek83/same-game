@@ -138,7 +138,7 @@ static Board board200x200x20Colors{
 static Board board500x500x20Colors{
     TestTools::prepareBoard(500, 500, "500x500_20_colors.txt")};
 
-class PerformanceTests : public ::testing::TestWithParam<std::tuple<Board>>
+class Benchmark : public ::testing::TestWithParam<std::tuple<Board>>
 {
 };
 
@@ -149,7 +149,7 @@ class PerformanceTests : public ::testing::TestWithParam<std::tuple<Board>>
 // board200x200x20Colors | 3546         | 24081
 // board500x500x20Colors | 176365       | 1077859
 
-INSTANTIATE_TEST_SUITE_P(SameGameTest, PerformanceTests,
+INSTANTIATE_TEST_SUITE_P(SameGameTest, Benchmark,
                          ::testing::Values(board50x50x3Colors,
                                            board50x50x11Colors,
                                            board200x200x3Colors,
@@ -157,7 +157,7 @@ INSTANTIATE_TEST_SUITE_P(SameGameTest, PerformanceTests,
                                            //,board500x500x20Colors
                                            ));
 
-TEST_P(PerformanceTests, playGame)
+TEST_P(Benchmark, playGame)
 {
     const Board& board{std::get<0>(GetParam())};
     srand(1);
