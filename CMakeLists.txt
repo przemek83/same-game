@@ -20,18 +20,18 @@ endif()
 file(COPY testFile.txt DESTINATION ${CMAKE_BINARY_DIR})
 
 set(${PROJECT_NAME}_SOURCES
-    SameGame.cpp
-    SameGame.h
-    Board.cpp
-    Board.h
-    Point.cpp
-    Point.h
+    src/SameGame.cpp
+    src/SameGame.h
+    src/Board.cpp
+    src/Board.h
+    src/Point.cpp
+    src/Point.h
 )
 
 add_library (${PROJECT_NAME}-lib STATIC ${${PROJECT_NAME}_SOURCES})
 target_link_libraries(${PROJECT_NAME}-lib)
 
-add_executable(${PROJECT_NAME} main.cpp)
+add_executable(${PROJECT_NAME} src/main.cpp)
 target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}-lib)
 
 enable_testing()

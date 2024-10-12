@@ -1,6 +1,7 @@
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
-#include "../Board.h"
+#include <src/Board.h>
+
 #include "TestTools.h"
 
 TEST(BoardTest, createBoard)

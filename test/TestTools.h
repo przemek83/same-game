@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Board.h"
+#include <src/Board.h>
 
 namespace TestTools
 {

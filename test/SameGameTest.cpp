@@ -1,10 +1,11 @@
-#include "gtest/gtest.h"
-
 #include <cstring>
 
-#include "../Board.h"
-#include "../Point.h"
-#include "../SameGame.h"
+#include <gtest/gtest.h>
+
+#include <src/Board.h>
+#include <src/Point.h>
+#include <src/SameGame.h>
+
 #include "TestTools.h"
 
 using BoardData = std::vector<std::vector<unsigned int>>;
