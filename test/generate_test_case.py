@@ -1,5 +1,8 @@
+"""Module for generating test cases in same-game."""
+
 from random import seed
 from random import randint
+
 
 seed(1)
 
