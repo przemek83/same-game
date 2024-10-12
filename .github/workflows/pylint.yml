@@ -1,0 +1,7 @@
+name: Pylint
+
+on: [push, pull_request]
+
+jobs:
+  analyze:
+    uses: przemek83/common/.github/workflows/pylint.yml@main
