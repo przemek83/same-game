@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include <ctime>
 #include <iostream>
 
@@ -13,7 +14,7 @@ int main()
     std::cin >> rowCount >> columnCount >> colorCount;
 
     if (!Board::isDescriptionValid(colorCount))
-        return 1;
+        return EXIT_FAILURE;
 
     Board board(columnCount, rowCount, std::cin);
     std::vector<Point> points{SameGame::playGame(std::move(board))};
@@ -21,5 +22,5 @@ int main()
     for (auto point : points)
         std::cout << point.row << " " << point.column << std::endl;
 
-    return 0;
+    return EXIT_SUCCESS;
 }
