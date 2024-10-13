@@ -1,6 +1,6 @@
 #pragma once
 
-#include <sstream>
+#include <string>
 #include <vector>
 
 #include "Point.h"
@@ -12,33 +12,31 @@ public:
 
     static constexpr unsigned int EMPTY{0};
 
-    [[nodiscard]] std::string print() const;
+    std::string print() const;
 
     static bool isDescriptionValid(unsigned int colorCount);
 
-    [[nodiscard]] inline unsigned int getRowCount() const { return rowsCount_; }
+    unsigned int getRowCount() const { return rowsCount_; }
 
-    [[nodiscard]] inline unsigned int getColumnCount() const
-    {
-        return columnsCount_;
-    }
+    unsigned int getColumnCount() const { return columnsCount_; }
 
-    [[nodiscard]] inline unsigned int getColor(Point point) const
+    unsigned int getColor(Point point) const
     {
         return data_[point.column][point.row];
     }
 
-    inline void setColor(Point point, unsigned int color)
+    void setColor(Point point, unsigned int color)
     {
         data_[point.column][point.row] = color;
     }
 
-    inline void setEmpty(Point point)
-    {
-        data_[point.column][point.row] = EMPTY;
-    }
+    void setEmpty(Point point) { data_[point.column][point.row] = EMPTY; }
 
-    bool operator==(const Board& that) const;
+    friend bool operator==(const Board& lhs, const Board& rhs)
+    {
+        return (lhs.columnsCount_ == rhs.columnsCount_) &&
+               (lhs.rowsCount_ == rhs.rowsCount_) && (lhs.data_ == rhs.data_);
+    }
 
     friend std::ostream& operator<<(std::ostream& os, const Board& board)
     {

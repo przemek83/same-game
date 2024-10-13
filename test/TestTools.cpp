@@ -1,6 +1,7 @@
 #include "TestTools.h"
 
 #include <fstream>
+#include <sstream>
 
 namespace TestTools
 {

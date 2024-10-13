@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <ostream>
+#include <sstream>
 
 Board::Board(unsigned int columnsCount, unsigned int rowsCount,
              std::istream& in)
@@ -26,12 +27,6 @@ std::string Board::print() const
 bool Board::isDescriptionValid(unsigned int colorCount)
 {
     return colorCount >= MIN_COLOR_COUNT;
-}
-
-bool Board::operator==(const Board& that) const
-{
-    return columnsCount_ == that.columnsCount_ &&
-           rowsCount_ == that.rowsCount_ && data_ == that.data_;
 }
 
 void Board::initData(unsigned int columnsCount, unsigned int rowsCount)
