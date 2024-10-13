@@ -8,29 +8,27 @@
 class Board
 {
 public:
-    Board(unsigned int columnsCount, unsigned int rowsCount, std::istream& in);
+    Board(int columnsCount, int rowsCount, std::istream& in);
 
-    static constexpr unsigned int EMPTY{0};
+    static constexpr int EMPTY{0};
 
     std::string print() const;
 
-    static bool isDescriptionValid(unsigned int colorCount);
+    static bool isDescriptionValid(int colorCount);
 
-    unsigned int getRowCount() const { return rowsCount_; }
+    int getRowCount() const { return rowsCount_; }
 
-    unsigned int getColumnCount() const { return columnsCount_; }
+    int getColumnCount() const { return columnsCount_; }
 
-    unsigned int getColor(Point point) const
+    int getColor(Point point) const
     {
-        return data_[point.column][point.row];
+        return data_[static_cast<std::size_t>(point.column)]
+                    [static_cast<std::size_t>(point.row)];
     }
 
-    void setColor(Point point, unsigned int color)
-    {
-        data_[point.column][point.row] = color;
-    }
+    void setColor(Point point, int color) { setElement(point, color); }
 
-    void setEmpty(Point point) { data_[point.column][point.row] = EMPTY; }
+    void setEmpty(Point point) { setElement(point, EMPTY); }
 
     friend bool operator==(const Board& lhs, const Board& rhs)
     {
@@ -44,15 +42,21 @@ public:
     }
 
 private:
-    void initData(unsigned int columnsCount, unsigned int rowsCount);
+    void setElement(Point point, int color)
+    {
+        data_[static_cast<std::size_t>(point.column)]
+             [static_cast<std::size_t>(point.row)] = color;
+    }
+
+    void initData();
 
     void loadData(std::istream& in);
 
-    const unsigned int columnsCount_;
+    const int columnsCount_;
 
-    const unsigned int rowsCount_;
+    const int rowsCount_;
 
-    std::vector<std::vector<unsigned int>> data_;
+    std::vector<std::vector<int>> data_;
 
-    static constexpr unsigned int MIN_COLOR_COUNT{1};
+    static constexpr int MIN_COLOR_COUNT{1};
 };  // namespace Board

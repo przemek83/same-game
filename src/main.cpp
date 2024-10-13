@@ -8,9 +8,9 @@ int main()
 {
     srand(static_cast<unsigned int>(time(nullptr)));
 
-    unsigned int rowCount{0};
-    unsigned int columnCount{0};
-    unsigned int colorCount{0};
+    int rowCount{0};
+    int columnCount{0};
+    int colorCount{0};
     std::cin >> rowCount >> columnCount >> colorCount;
 
     if (!Board::isDescriptionValid(colorCount))

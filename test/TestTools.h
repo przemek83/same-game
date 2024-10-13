@@ -4,8 +4,8 @@
 
 namespace TestTools
 {
-Board createBoard(const std::vector<std::vector<unsigned int> >& data);
+Board createBoard(const std::vector<std::vector<int> >& data);
 
-Board prepareBoard(unsigned int columnsCount, unsigned int rowsCount,
+Board prepareBoard(int columnsCount, int rowsCount,
                    const std::string& fileName);
 };  // namespace TestTools

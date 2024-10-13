@@ -8,8 +8,8 @@
 
 #include "TestTools.h"
 
-using BoardData = std::vector<std::vector<unsigned int>>;
-static unsigned int EMPTY{Board::EMPTY};
+using BoardData = std::vector<std::vector<int>>;
+static int EMPTY{Board::EMPTY};
 
 class ImpactGravityTests
     : public ::testing::TestWithParam<
@@ -23,7 +23,7 @@ TEST_P(ImpactGravityTests, impactGravity)
     const BoardData& expected{std::get<1>(GetParam())};
     const std::vector<Point>& impactedColumnsPoints{std::get<2>(GetParam())};
 
-    std::set<unsigned int> impactedColumns;
+    std::set<int> impactedColumns;
     for (const auto point : impactedColumnsPoints)
         impactedColumns.insert(point.column);
 
@@ -73,9 +73,9 @@ TEST(SameGameTest, makeMove6x5)
         {EMPTY, EMPTY, EMPTY, EMPTY, 1}, {EMPTY, EMPTY, 1, 1, 1}};
 
     Board board{TestTools::createBoard(boardData)};
-    std::set<unsigned int> impactedColumns{SameGame::makeMove(board, {2, 3})};
+    std::set<int> impactedColumns{SameGame::makeMove(board, {2, 3})};
     EXPECT_EQ(board, TestTools::createBoard(expected));
-    EXPECT_EQ(impactedColumns, std::set<unsigned int>({1, 2, 3}));
+    EXPECT_EQ(impactedColumns, std::set<int>({1, 2, 3}));
 }
 
 TEST(SameGameTest, makeMove4x4)
@@ -88,9 +88,9 @@ TEST(SameGameTest, makeMove4x4)
                              {1, 2, 3, 2}};
 
     Board board{TestTools::createBoard(boardData)};
-    std::set<unsigned int> impactedColumns{SameGame::makeMove(board, {2, 3})};
+    std::set<int> impactedColumns{SameGame::makeMove(board, {2, 3})};
     EXPECT_EQ(board, TestTools::createBoard(expected));
-    EXPECT_EQ(impactedColumns, std::set<unsigned int>({0, 1, 2}));
+    EXPECT_EQ(impactedColumns, std::set<int>({0, 1, 2}));
 }
 
 class GetClusterTests
@@ -108,8 +108,7 @@ TEST_P(GetClusterTests, GetCluster)
     std::vector<std::vector<bool>> checked(board.getColumnCount());
     for (auto& column : checked)
         column.resize(board.getRowCount(), false);
-    unsigned int currentClusterSize{
-        SameGame::getClusterSize(board, point, checked)};
+    int currentClusterSize{SameGame::getClusterSize(board, point, checked)};
     EXPECT_EQ(currentClusterSize, expectedClusterSize);
 }
 
@@ -159,6 +158,7 @@ INSTANTIATE_TEST_SUITE_P(SameGameTest, Benchmark,
 
 TEST_P(Benchmark, playGame)
 {
+    // GTEST_SKIP();
     const Board& board{std::get<0>(GetParam())};
     srand(1);
     SameGame::playGame(board);
