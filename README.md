@@ -1,3 +1,14 @@
+[![Build & test](https://github.com/przemek83/same-game/actions/workflows/buld-and-test.yml/badge.svg)](https://github.com/przemek83/same-game/actions/workflows/buld-and-test.yml)
+[![CodeQL](https://github.com/przemek83/same-game/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/przemek83/same-game/actions/workflows/github-code-scanning/codeql)
+[![Pylint](https://github.com/przemek83/same-game/actions/workflows/pylint.yml/badge.svg)](https://github.com/przemek83/same-game/actions/workflows/pylint.yml)
+[![codecov](https://codecov.io/gh/przemek83/same-game/graph/badge.svg?token=EK3FL63RYS)](https://codecov.io/gh/przemek83/same-game)
+
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=przemek83_same-game&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=przemek83_same-game)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=przemek83_same-game&metric=bugs)](https://sonarcloud.io/summary/new_code?id=przemek83_same-game)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=przemek83_same-game&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=przemek83_same-game)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=przemek83_same-game&metric=coverage)](https://sonarcloud.io/summary/new_code?id=przemek83_same-game)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=przemek83_same-game&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=przemek83_same-game)
+
 ## Same Game
 Simple board game based on rules of Same Game (also known as JawBreaker and few other names). Played by basic algorithm.
 
