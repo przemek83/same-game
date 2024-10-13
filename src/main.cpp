@@ -13,7 +13,8 @@ int main()
     int colorCount{0};
     std::cin >> rowCount >> columnCount >> colorCount;
 
-    if (!Board::isDescriptionValid(colorCount))
+    if ((rowCount > 0) && (columnCount > 0) &&
+        (!Board::isDescriptionValid(colorCount)))
         return EXIT_FAILURE;
 
     Board board(columnCount, rowCount, std::cin);
