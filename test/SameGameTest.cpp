@@ -105,7 +105,7 @@ TEST_P(GetClusterTests, GetCluster)
     const Point point{std::get<2>(GetParam())};
 
     const Board board{TestTools::createBoard(boardData)};
-    std::vector<std::vector<bool>> checked(board.getColumnCount());
+    std::vector<std::vector<char>> checked(board.getColumnCount());
     for (auto& column : checked)
         column.resize(board.getRowCount(), false);
     int currentClusterSize{SameGame::getClusterSize(board, point, checked)};

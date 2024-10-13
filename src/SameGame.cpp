@@ -61,7 +61,7 @@ static bool isFieldValid(const Board& board, int column, int row)
 }
 
 int getClusterSize(const Board& board, Point startPoint,
-                   std::vector<std::vector<bool>>& checked)
+                   std::vector<std::vector<char>>& checked)
 {
     if (checked[startPoint.column][startPoint.row])
         return 0;
@@ -102,10 +102,10 @@ inline int fastRandInt()
     g_seed = (214013 * g_seed + 2531011);
     return (g_seed >> 16) & 0x7FFF;
 }
-static std::vector<std::vector<bool>> createCheckedVector(int columnCount,
+static std::vector<std::vector<char>> createCheckedVector(int columnCount,
                                                           int rowCount)
 {
-    std::vector<std::vector<bool>> checked(columnCount);
+    std::vector<std::vector<char>> checked(columnCount);
     for (auto& column : checked)
         column.resize(rowCount, false);
     return checked;
@@ -113,7 +113,7 @@ static std::vector<std::vector<bool>> createCheckedVector(int columnCount,
 
 static Point findFirstCluster(const Board& board)
 {
-    std::vector<std::vector<bool>> checked{
+    std::vector<std::vector<char>> checked{
         createCheckedVector(board.getColumnCount(), board.getRowCount())};
     for (int row{board.getRowCount()}; row-- > 0;)
         for (int column{0}; column < board.getColumnCount(); ++column)
@@ -138,7 +138,7 @@ static int getRandomTries(const Board& board)
 
 static Point findBiggestCluster(const Board& board)
 {
-    std::vector<std::vector<bool>> checked{
+    std::vector<std::vector<char>> checked{
         createCheckedVector(board.getColumnCount(), board.getRowCount())};
     int bestScore{1};
     Point bestPoint{emptyPoint};
