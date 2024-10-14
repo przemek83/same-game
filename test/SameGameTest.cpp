@@ -143,11 +143,11 @@ class Benchmark : public ::testing::TestWithParam<std::tuple<Board>>
 };
 
 // Test Name             | Release (ms) | Debug (ms)
-// board50x50x3Colors    | 6            | 47
-// board50x50x11Colors   | 18           | 121
-// board200x200x3Colors  | 1011         | 6847
-// board200x200x20Colors | 3546         | 24081
-// board500x500x20Colors | 176365       | 1077859
+// board50x50x3Colors    | 3            | 20
+// board50x50x11Colors   | 10           | 52
+// board200x200x3Colors  | 648          | 3025
+// board200x200x20Colors | 2650         | 13076
+// board500x500x20Colors | 121887       | 523070
 
 INSTANTIATE_TEST_SUITE_P(SameGameTest, Benchmark,
                          ::testing::Values(board50x50x3Colors,
