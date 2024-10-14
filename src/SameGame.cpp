@@ -177,14 +177,14 @@ Point SameGame::findBiggestCluster()
     return bestScore > 0 ? bestPoint : emptyPoint;
 }
 
-bool SameGame::isFieldValid(const Board& board, int column, int row)
+bool SameGame::isFieldValid(const Board& board, int column, int row) const
 {
     return (column >= 0) && (column < board.getColumnCount()) && (row >= 0) &&
            (row < board.getRowCount());
 }
 
 std::vector<std::vector<char>> SameGame::createCheckedVector(int columnCount,
-                                                             int rowCount)
+                                                             int rowCount) const
 {
     std::vector<std::vector<char>> checked{
         static_cast<std::size_t>(columnCount)};
@@ -193,13 +193,13 @@ std::vector<std::vector<char>> SameGame::createCheckedVector(int columnCount,
     return checked;
 }
 
-Point SameGame::getRandomPoint(const Board& board, Generator& generator)
+Point SameGame::getRandomPoint(const Board& board, Generator& generator) const
 {
     return {generator.getInt(0, board.getColumnCount() - 1),
             generator.getInt(0, board.getRowCount()) - 1};
 }
 
-int SameGame::getRandomTries(const Board& board)
+int SameGame::getRandomTries(const Board& board) const
 {
     return static_cast<int>(board.getColumnCount() * board.getRowCount() * .4);
 }

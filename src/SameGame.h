@@ -34,14 +34,14 @@ private:
 
     Point findBiggestCluster();
 
-    bool isFieldValid(const Board& board, int column, int row);
+    bool isFieldValid(const Board& board, int column, int row) const;
 
     std::vector<std::vector<char>> createCheckedVector(int columnCount,
-                                                       int rowCount);
+                                                       int rowCount) const;
 
-    Point getRandomPoint(const Board& board, Generator& generator);
+    Point getRandomPoint(const Board& board, Generator& generator) const;
 
-    int getRandomTries(const Board& board);
+    int getRandomTries(const Board& board) const;
 
     char& getPosition(std::vector<std::vector<char>>& checked, Point point);
 
