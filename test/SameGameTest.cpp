@@ -143,7 +143,7 @@ TEST(SameGameTest, playWith4x4SymetricalBoard)
     EXPECT_EQ(points.size(), 3);
 }
 
-TEST(SameGameTest, playWith3x1AsymetricalBoard)
+TEST(SameGameTest, playWith3x1AsymmetricalBoard)
 {
     MockedGenerator generator;
     Board board{TestTools::createBoard(singleRowBoard)};
