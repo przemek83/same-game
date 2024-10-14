@@ -7,7 +7,7 @@
 class NumbersGenerator : public Generator
 {
 public:
-    explicit NumbersGenerator(long seed);
+    NumbersGenerator();
 
     int getInt(int low, int high) override;
 

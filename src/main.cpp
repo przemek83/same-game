@@ -17,8 +17,7 @@ int main()
         return EXIT_FAILURE;
 
     Board board(columnCount, rowCount, std::cin);
-    NumbersGenerator generator{
-        std::chrono::system_clock::now().time_since_epoch().count()};
+    NumbersGenerator generator;
     std::vector<Point> points{SameGame::playGame(std::move(board), generator)};
 
     for (auto point : points)

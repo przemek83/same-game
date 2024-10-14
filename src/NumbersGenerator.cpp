@@ -1,7 +1,10 @@
 #include "NumbersGenerator.h"
 
-NumbersGenerator::NumbersGenerator(long seed)
-    : engine_{static_cast<unsigned long>(seed)}
+#include <chrono>
+
+NumbersGenerator::NumbersGenerator()
+    : engine_{static_cast<unsigned long>(
+          std::chrono::system_clock::now().time_since_epoch().count())}
 {
 }
 
