@@ -25,12 +25,11 @@ int SameGame::getClusterSize(Point startPoint,
 
     int clusterSize{1};
     getPosition(checked, startPoint) = CHECKED;
-    static std::queue<Point> pointsToCheck;
-    pointsToCheck.push(startPoint);
-    while (!pointsToCheck.empty())
+    pointsToCheck_.push(startPoint);
+    while (!pointsToCheck_.empty())
     {
-        const Point point{pointsToCheck.front()};
-        pointsToCheck.pop();
+        const Point point{pointsToCheck_.front()};
+        pointsToCheck_.pop();
         for (std::size_t k{0}; k < 4; ++k)
         {
             const int col{point.column + cols.at(k)};
@@ -41,7 +40,7 @@ int SameGame::getClusterSize(Point startPoint,
             {
                 getPosition(checked, {col, row}) = CHECKED;
                 ++clusterSize;
-                pointsToCheck.emplace(Point{col, row});
+                pointsToCheck_.emplace(Point{col, row});
             }
         }
     }

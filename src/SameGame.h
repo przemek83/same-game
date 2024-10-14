@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <queue>
 #include <set>
 #include <vector>
 
@@ -55,4 +56,6 @@ private:
     constexpr static char NOT_CHECKED{0};
 
     constexpr static Point emptyPoint{Point::NOT_SET, Point::NOT_SET};
+
+    std::queue<Point> pointsToCheck_;
 };
