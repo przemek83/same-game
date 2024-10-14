@@ -9,14 +9,14 @@
 
 #include "Generator.h"
 
-namespace SameGame
+namespace
 {
 constexpr std::array<int, 4> cols{-1, 0, 0, 1};
 constexpr std::array<int, 4> rows{0, -1, 1, 0};
 
 constexpr Point emptyPoint{Point::NOT_SET, Point::NOT_SET};
 
-static void removeRows(Board& board, int column, int fromRow, int count)
+void removeRows(Board& board, int column, int fromRow, int count)
 {
     for (int row{fromRow + 1}; row-- > count;)
     {
@@ -26,7 +26,7 @@ static void removeRows(Board& board, int column, int fromRow, int count)
     }
 }
 
-static void impactColumn(Board& board, int column)
+void impactColumn(Board& board, int column)
 {
     const int NOT_SET{INT_MAX};
     int emptyStartIndex{NOT_SET};
@@ -52,18 +52,68 @@ static void impactColumn(Board& board, int column)
     }
 }
 
-void impactGravity(Board& board, const std::set<int>& impactedColumns)
-{
-    for (int column : impactedColumns)
-        impactColumn(board, column);
-}
-
-static bool isFieldValid(const Board& board, int column, int row)
+bool isFieldValid(const Board& board, int column, int row)
 {
     return column >= 0 && column < board.getColumnCount() && row >= 0 &&
            row < board.getRowCount();
 }
 
+std::vector<std::vector<char>> createCheckedVector(int columnCount,
+                                                   int rowCount)
+{
+    std::vector<std::vector<char>> checked(columnCount);
+    for (auto& column : checked)
+        column.resize(rowCount, false);
+    return checked;
+}
+
+Point findFirstCluster(const Board& board)
+{
+    std::vector<std::vector<char>> checked{
+        createCheckedVector(board.getColumnCount(), board.getRowCount())};
+    for (int row{board.getRowCount()}; row-- > 0;)
+        for (int column{0}; column < board.getColumnCount(); ++column)
+        {
+            Point point{column, row};
+            if (SameGame::getClusterSize(board, point, checked) > 1)
+                return point;
+        }
+    return emptyPoint;
+}
+
+Point getRandomPoint(const Board& board, Generator& generator)
+{
+    return {generator.getInt(0, board.getColumnCount() - 1),
+            generator.getInt(0, board.getRowCount()) - 1};
+}
+
+int getRandomTries(const Board& board)
+{
+    return static_cast<int>(board.getColumnCount() * board.getRowCount() * .4);
+}
+
+Point findBiggestCluster(const Board& board, Generator& generator)
+{
+    std::vector<std::vector<char>> checked{
+        createCheckedVector(board.getColumnCount(), board.getRowCount())};
+    int bestScore{1};
+    Point bestPoint{emptyPoint};
+    for (int i{0}; i < getRandomTries(board); ++i)
+    {
+        const Point currentPoint{getRandomPoint(board, generator)};
+        const int score{SameGame::getClusterSize(board, currentPoint, checked)};
+        if (score > bestScore)
+        {
+            bestScore = score;
+            bestPoint = currentPoint;
+        }
+    }
+    return bestScore > 0 ? bestPoint : emptyPoint;
+}
+}  // namespace
+
+namespace SameGame
+{
 int getClusterSize(const Board& board, Point startPoint,
                    std::vector<std::vector<char>>& checked)
 {
@@ -98,57 +148,10 @@ int getClusterSize(const Board& board, Point startPoint,
     return clusterSize;
 }
 
-static std::vector<std::vector<char>> createCheckedVector(int columnCount,
-                                                          int rowCount)
+void impactGravity(Board& board, const std::set<int>& impactedColumns)
 {
-    std::vector<std::vector<char>> checked(columnCount);
-    for (auto& column : checked)
-        column.resize(rowCount, false);
-    return checked;
-}
-
-static Point findFirstCluster(const Board& board)
-{
-    std::vector<std::vector<char>> checked{
-        createCheckedVector(board.getColumnCount(), board.getRowCount())};
-    for (int row{board.getRowCount()}; row-- > 0;)
-        for (int column{0}; column < board.getColumnCount(); ++column)
-        {
-            Point point{column, row};
-            if (getClusterSize(board, point, checked) > 1)
-                return point;
-        }
-    return emptyPoint;
-}
-
-static Point getRandomPoint(const Board& board, Generator& generator)
-{
-    return {generator.getInt(0, board.getColumnCount() - 1),
-            generator.getInt(0, board.getRowCount()) - 1};
-}
-
-static int getRandomTries(const Board& board)
-{
-    return static_cast<int>(board.getColumnCount() * board.getRowCount() * .4);
-}
-
-static Point findBiggestCluster(const Board& board, Generator& generator)
-{
-    std::vector<std::vector<char>> checked{
-        createCheckedVector(board.getColumnCount(), board.getRowCount())};
-    int bestScore{1};
-    Point bestPoint{emptyPoint};
-    for (int i{0}; i < getRandomTries(board); ++i)
-    {
-        const Point currentPoint{getRandomPoint(board, generator)};
-        const int score{getClusterSize(board, currentPoint, checked)};
-        if (score > bestScore)
-        {
-            bestScore = score;
-            bestPoint = currentPoint;
-        }
-    }
-    return bestScore > 0 ? bestPoint : emptyPoint;
+    for (int column : impactedColumns)
+        impactColumn(board, column);
 }
 
 Point getNextMove(const Board& board, Generator& generator)
