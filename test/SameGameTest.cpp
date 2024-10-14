@@ -10,7 +10,11 @@
 #include "TestTools.h"
 
 using BoardData = std::vector<std::vector<int>>;
-static int EMPTY{Board::EMPTY};
+
+namespace
+{
+constexpr int _{Board::EMPTY};
+};  // namespace
 
 class ImpactGravityTests
     : public ::testing::TestWithParam<
@@ -38,42 +42,35 @@ TEST_P(ImpactGravityTests, impactGravity)
 INSTANTIATE_TEST_SUITE_P(
     SameGameTest, ImpactGravityTests,
     ::testing::Values(
-        std::make_tuple(BoardData{{1, 3, 4, EMPTY, 5}},
-                        BoardData{{EMPTY, 1, 3, 4, 5}},
+        std::make_tuple(BoardData{{1, 3, 4, _, 5}}, BoardData{{_, 1, 3, 4, 5}},
                         std::vector<Point>{{0, 3}}),
-        std::make_tuple(BoardData{{1, 3, EMPTY, EMPTY, EMPTY}},
-                        BoardData{{EMPTY, EMPTY, EMPTY, 1, 3}},
+        std::make_tuple(BoardData{{1, 3, _, _, _}}, BoardData{{_, _, _, 1, 3}},
                         std::vector<Point>{{0, 4}}),
-        std::make_tuple(BoardData{{EMPTY, EMPTY, EMPTY, EMPTY, EMPTY}},
-                        BoardData{{EMPTY, EMPTY, EMPTY, EMPTY, EMPTY}},
+        std::make_tuple(BoardData{{_, _, _, _, _}}, BoardData{{_, _, _, _, _}},
                         std::vector<Point>{{0, Point::NOT_SET}}),
         std::make_tuple(BoardData{{1, 2, 3, 4, 5}}, BoardData{{1, 2, 3, 4, 5}},
                         std::vector<Point>{{0, Point::NOT_SET}}),
-        std::make_tuple(BoardData{{1, EMPTY, EMPTY, EMPTY, EMPTY},
-                                  {1, 2, EMPTY, EMPTY, EMPTY},
-                                  {1, EMPTY, EMPTY, 1, EMPTY},
-                                  {1, EMPTY, EMPTY, EMPTY, 2},
-                                  {EMPTY, EMPTY, EMPTY, 1, EMPTY},
-                                  {1, EMPTY, 1, EMPTY, 1}},
-                        BoardData{{EMPTY, EMPTY, EMPTY, EMPTY, 1},
-                                  {EMPTY, EMPTY, EMPTY, 1, 2},
-                                  {EMPTY, EMPTY, EMPTY, 1, 1},
-                                  {EMPTY, EMPTY, EMPTY, 1, 2},
-                                  {EMPTY, EMPTY, EMPTY, EMPTY, 1},
-                                  {EMPTY, EMPTY, 1, 1, 1}},
+        std::make_tuple(BoardData{{1, _, _, _, _},
+                                  {1, 2, _, _, _},
+                                  {1, _, _, 1, _},
+                                  {1, _, _, _, 2},
+                                  {_, _, _, 1, _},
+                                  {1, _, 1, _, 1}},
+                        BoardData{{_, _, _, _, 1},
+                                  {_, _, _, 1, 2},
+                                  {_, _, _, 1, 1},
+                                  {_, _, _, 1, 2},
+                                  {_, _, _, _, 1},
+                                  {_, _, 1, 1, 1}},
                         std::vector<Point>{
                             {0, 4}, {1, 4}, {2, 4}, {3, 3}, {4, 4}, {5, 3}})));
 
 TEST(SameGameTest, makeMove6x5)
 {
-    const BoardData expected{
-        {EMPTY, EMPTY, EMPTY, EMPTY, 1},     {EMPTY, EMPTY, EMPTY, EMPTY, 2},
-        {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY}, {EMPTY, EMPTY, EMPTY, EMPTY, 2},
-        {EMPTY, EMPTY, EMPTY, EMPTY, 1},     {EMPTY, EMPTY, 1, 1, 1}};
-    BoardData boardData{
-        {EMPTY, EMPTY, EMPTY, EMPTY, 1}, {EMPTY, EMPTY, EMPTY, 1, 2},
-        {EMPTY, EMPTY, EMPTY, 1, 1},     {EMPTY, EMPTY, EMPTY, 1, 2},
-        {EMPTY, EMPTY, EMPTY, EMPTY, 1}, {EMPTY, EMPTY, 1, 1, 1}};
+    const BoardData expected{{_, _, _, _, 1}, {_, _, _, _, 2}, {_, _, _, _, _},
+                             {_, _, _, _, 2}, {_, _, _, _, 1}, {_, _, 1, 1, 1}};
+    BoardData boardData{{_, _, _, _, 1}, {_, _, _, 1, 2}, {_, _, _, 1, 1},
+                        {_, _, _, 1, 2}, {_, _, _, _, 1}, {_, _, 1, 1, 1}};
 
     Board board{TestTools::createBoard(boardData)};
     MockedGenerator generator;
@@ -87,10 +84,8 @@ TEST(SameGameTest, makeMove4x4)
 {
     const BoardData boardData{
         {3, 1, 3, 3}, {3, 1, 1, 1}, {1, 2, 2, 1}, {1, 2, 3, 2}};
-    const BoardData expected{{3, EMPTY, 3, 3},
-                             {3, EMPTY, EMPTY, EMPTY},
-                             {1, 2, 2, EMPTY},
-                             {1, 2, 3, 2}};
+    const BoardData expected{
+        {3, _, 3, 3}, {3, _, _, _}, {1, 2, 2, _}, {1, 2, 3, 2}};
 
     Board board{TestTools::createBoard(boardData)};
     MockedGenerator generator;
@@ -122,9 +117,12 @@ TEST_P(GetClusterTests, GetCluster)
     EXPECT_EQ(currentClusterSize, expectedClusterSize);
 }
 
-static BoardData symmetricalBoard{
+namespace
+{
+BoardData symmetricalBoard{
     {3, 1, 3, 3}, {3, 1, 1, 1}, {1, 2, 2, 1}, {1, 2, 3, 2}};
-static BoardData singleRowBoard{{EMPTY, 1, 3, 3}};
+BoardData singleRowBoard{{_, 1, 3, 3}};
+};  // namespace
 
 INSTANTIATE_TEST_SUITE_P(
     SameGameTest, GetClusterTests,
@@ -136,16 +134,18 @@ INSTANTIATE_TEST_SUITE_P(
                       std::make_tuple(singleRowBoard, 1, Point{0, 1}),
                       std::make_tuple(singleRowBoard, 2, Point{0, 3})));
 
-static Board board50x50x3Colors{
-    TestTools::prepareBoard(50, 50, "50x50_3_colors.txt")};
-static Board board50x50x11Colors{
+namespace
+{
+Board board50x50x3Colors{TestTools::prepareBoard(50, 50, "50x50_3_colors.txt")};
+Board board50x50x11Colors{
     TestTools::prepareBoard(50, 50, "50x50_11_colors.txt")};
-static Board board200x200x3Colors{
+Board board200x200x3Colors{
     TestTools::prepareBoard(200, 200, "200x200_3_colors.txt")};
-static Board board200x200x20Colors{
+Board board200x200x20Colors{
     TestTools::prepareBoard(200, 200, "200x200_20_colors.txt")};
-static Board board500x500x20Colors{
+Board board500x500x20Colors{
     TestTools::prepareBoard(500, 500, "500x500_20_colors.txt")};
+};  // namespace
 
 class Benchmark : public ::testing::TestWithParam<std::tuple<Board>>
 {
@@ -168,7 +168,7 @@ INSTANTIATE_TEST_SUITE_P(SameGameTest, Benchmark,
 
 TEST_P(Benchmark, playGame)
 {
-    // GTEST_SKIP();
+    GTEST_SKIP();
     Board board{std::get<0>(GetParam())};
     MockedGenerator generator;
     SameGame game{board, generator};
