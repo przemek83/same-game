@@ -147,6 +147,22 @@ Board board500x500x20Colors{
     TestTools::prepareBoard(500, 500, "500x500_20_colors.txt")};
 };  // namespace
 
+TEST(SameGameTest, playWith50x50And3Colors)
+{
+    MockedGenerator generator;
+    SameGame game{board50x50x3Colors, generator};
+    std::vector<Point> points{game.playGame()};
+    EXPECT_EQ(points.size(), 199);
+}
+
+TEST(SameGameTest, playWith50x50And11Colors)
+{
+    MockedGenerator generator;
+    SameGame game{board50x50x11Colors, generator};
+    std::vector<Point> points{game.playGame()};
+    EXPECT_EQ(points.size(), 685);
+}
+
 class Benchmark : public ::testing::TestWithParam<std::tuple<Board>>
 {
 };
