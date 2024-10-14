@@ -134,39 +134,22 @@ INSTANTIATE_TEST_SUITE_P(
                       std::make_tuple(singleRowBoard, 1, Point{0, 1}),
                       std::make_tuple(singleRowBoard, 2, Point{0, 3})));
 
-TEST(SameGameTest, playWith50x50And3Colors)
+TEST(SameGameTest, playWith4x4SymetricalBoard)
 {
     MockedGenerator generator;
-    Board board{TestTools::prepareBoard(50, 50, "50x50_3_colors.txt")};
+    Board board{TestTools::createBoard(symmetricalBoard)};
     SameGame game{board, generator};
-    std::vector<Point> points;
-    try
-    {
-        points = game.playGame();
-    }
-    catch (std::exception const& e)
-    {
-        std::cout << e.what() << "\"n";
-    }
-
-    EXPECT_EQ(points.size(), 199);
+    std::vector<Point> points{game.playGame()};
+    EXPECT_EQ(points.size(), 3);
 }
 
-TEST(SameGameTest, playWith50x50And11Colors)
+TEST(SameGameTest, playWith3x1AsymetricalBoard)
 {
     MockedGenerator generator;
-    Board board{TestTools::prepareBoard(50, 50, "50x50_11_colors.txt")};
+    Board board{TestTools::createBoard(singleRowBoard)};
     SameGame game{board, generator};
-    std::vector<Point> points;
-    try
-    {
-        points = game.playGame();
-    }
-    catch (std::exception const& e)
-    {
-        std::cout << e.what() << "\"n";
-    }
-    EXPECT_EQ(points.size(), 685);
+    std::vector<Point> points{game.playGame()};
+    EXPECT_EQ(points.size(), 1);
 }
 
 namespace
