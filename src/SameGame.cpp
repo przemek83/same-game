@@ -64,9 +64,10 @@ bool isFieldValid(const Board& board, int column, int row)
 std::vector<std::vector<char>> createCheckedVector(int columnCount,
                                                    int rowCount)
 {
-    std::vector<std::vector<char>> checked(columnCount);
+    std::vector<std::vector<char>> checked{
+        static_cast<std::size_t>(columnCount)};
     for (auto& column : checked)
-        column.resize(rowCount, NOT_CHECKED);
+        column.resize(static_cast<std::size_t>(rowCount), NOT_CHECKED);
     return checked;
 }
 
