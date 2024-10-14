@@ -3,6 +3,7 @@
 #include <array>
 #include <cstdlib>
 #include <cstring>
+#include <iostream>
 #include <queue>
 
 #include "Generator.h"
