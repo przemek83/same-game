@@ -8,20 +8,31 @@
 
 class Generator;
 
-namespace SameGame
+class SameGame
 {
-int getClusterSize(const Board& board, Point startPoint,
-                   std::vector<std::vector<char>>& checked);
+public:
+    SameGame(Board& board, Generator& generator);
 
-Point getNextMove(const Board& board, Generator& generator);
+    int getClusterSize(Point startPoint,
+                       std::vector<std::vector<char>>& checked);
 
-std::set<int> makeMove(Board& board, Point point);
+    Point getNextMove();
 
-void impactGravity(Board& board, const std::set<int>& impactedColumns);
+    std::set<int> makeMove(Point point);
 
-int getClusterSize(const Board& board, Point startPoint,
-                   std::vector<std::vector<char>>& checked);
+    void impactGravity(const std::set<int>& impactedColumns);
 
-std::vector<Point> playGame(Board board, Generator& generator);
+    std::vector<Point> playGame();
 
-};  // namespace SameGame
+private:
+    void removeRows(int column, int fromRow, int count);
+
+    void impactColumn(int column);
+
+    Point findFirstCluster();
+
+    Point findBiggestCluster();
+
+    Board& board_;
+    Generator& generator_;
+};

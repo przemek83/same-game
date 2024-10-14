@@ -1,4 +1,3 @@
-#include <chrono>
 #include <cstdlib>
 #include <iostream>
 
@@ -18,7 +17,8 @@ int main()
 
     Board board(columnCount, rowCount, std::cin);
     NumbersGenerator generator;
-    std::vector<Point> points{SameGame::playGame(std::move(board), generator)};
+    SameGame game{board, generator};
+    std::vector<Point> points{game.playGame()};
 
     for (auto point : points)
         std::cout << point.row << " " << point.column << std::endl;

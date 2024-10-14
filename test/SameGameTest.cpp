@@ -29,7 +29,9 @@ TEST_P(ImpactGravityTests, impactGravity)
         impactedColumns.insert(point.column);
 
     Board board{TestTools::createBoard(boardData)};
-    SameGame::impactGravity(board, impactedColumns);
+    MockedGenerator generator;
+    SameGame game{board, generator};
+    game.impactGravity(impactedColumns);
     EXPECT_EQ(board, TestTools::createBoard(expected));
 }
 
@@ -74,7 +76,9 @@ TEST(SameGameTest, makeMove6x5)
         {EMPTY, EMPTY, EMPTY, EMPTY, 1}, {EMPTY, EMPTY, 1, 1, 1}};
 
     Board board{TestTools::createBoard(boardData)};
-    std::set<int> impactedColumns{SameGame::makeMove(board, {2, 3})};
+    MockedGenerator generator;
+    SameGame game{board, generator};
+    std::set<int> impactedColumns{game.makeMove({2, 3})};
     EXPECT_EQ(board, TestTools::createBoard(expected));
     EXPECT_EQ(impactedColumns, std::set<int>({1, 2, 3}));
 }
@@ -89,7 +93,9 @@ TEST(SameGameTest, makeMove4x4)
                              {1, 2, 3, 2}};
 
     Board board{TestTools::createBoard(boardData)};
-    std::set<int> impactedColumns{SameGame::makeMove(board, {2, 3})};
+    MockedGenerator generator;
+    SameGame game{board, generator};
+    std::set<int> impactedColumns{game.makeMove({2, 3})};
     EXPECT_EQ(board, TestTools::createBoard(expected));
     EXPECT_EQ(impactedColumns, std::set<int>({0, 1, 2}));
 }
@@ -105,11 +111,14 @@ TEST_P(GetClusterTests, GetCluster)
     const int expectedClusterSize{std::get<1>(GetParam())};
     const Point point{std::get<2>(GetParam())};
 
-    const Board board{TestTools::createBoard(boardData)};
+    Board board{TestTools::createBoard(boardData)};
     std::vector<std::vector<char>> checked(board.getColumnCount());
     for (auto& column : checked)
         column.resize(board.getRowCount(), false);
-    int currentClusterSize{SameGame::getClusterSize(board, point, checked)};
+
+    MockedGenerator generator;
+    SameGame game{board, generator};
+    int currentClusterSize{game.getClusterSize(point, checked)};
     EXPECT_EQ(currentClusterSize, expectedClusterSize);
 }
 
@@ -160,7 +169,8 @@ INSTANTIATE_TEST_SUITE_P(SameGameTest, Benchmark,
 TEST_P(Benchmark, playGame)
 {
     // GTEST_SKIP();
-    const Board& board{std::get<0>(GetParam())};
+    Board board{std::get<0>(GetParam())};
     MockedGenerator generator;
-    SameGame::playGame(board, generator);
+    SameGame game{board, generator};
+    game.playGame();
 }
