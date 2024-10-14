@@ -139,7 +139,16 @@ TEST(SameGameTest, playWith50x50And3Colors)
     MockedGenerator generator;
     Board board{TestTools::prepareBoard(50, 50, "50x50_3_colors.txt")};
     SameGame game{board, generator};
-    std::vector<Point> points{game.playGame()};
+    std::vector<Point> points;
+    try
+    {
+        points = game.playGame();
+    }
+    catch (std::exception const& e)
+    {
+        std::cout << e.what() << "\"n";
+    }
+
     EXPECT_EQ(points.size(), 199);
 }
 
@@ -148,7 +157,15 @@ TEST(SameGameTest, playWith50x50And11Colors)
     MockedGenerator generator;
     Board board{TestTools::prepareBoard(50, 50, "50x50_11_colors.txt")};
     SameGame game{board, generator};
-    std::vector<Point> points{game.playGame()};
+    std::vector<Point> points;
+    try
+    {
+        points = game.playGame();
+    }
+    catch (std::exception const& e)
+    {
+        std::cout << e.what() << "\"n";
+    }
     EXPECT_EQ(points.size(), 685);
 }
 
