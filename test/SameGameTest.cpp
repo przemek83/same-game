@@ -6,6 +6,7 @@
 #include <src/Point.h>
 #include <src/SameGame.h>
 
+#include "MockedGenerator.h"
 #include "TestTools.h"
 
 using BoardData = std::vector<std::vector<int>>;
@@ -160,6 +161,6 @@ TEST_P(Benchmark, playGame)
 {
     // GTEST_SKIP();
     const Board& board{std::get<0>(GetParam())};
-    srand(1);
-    SameGame::playGame(board);
+    MockedGenerator generator;
+    SameGame::playGame(board, generator);
 }

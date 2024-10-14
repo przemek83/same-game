@@ -1,13 +1,12 @@
+#include <chrono>
 #include <cstdlib>
-#include <ctime>
 #include <iostream>
 
+#include "NumbersGenerator.h"
 #include "SameGame.h"
 
 int main()
 {
-    srand(static_cast<unsigned int>(time(nullptr)));
-
     int rowCount{0};
     int columnCount{0};
     int colorCount{0};
@@ -18,7 +17,9 @@ int main()
         return EXIT_FAILURE;
 
     Board board(columnCount, rowCount, std::cin);
-    std::vector<Point> points{SameGame::playGame(std::move(board))};
+    NumbersGenerator generator{
+        std::chrono::system_clock::now().time_since_epoch().count()};
+    std::vector<Point> points{SameGame::playGame(std::move(board), generator)};
 
     for (auto point : points)
         std::cout << point.row << " " << point.column << std::endl;

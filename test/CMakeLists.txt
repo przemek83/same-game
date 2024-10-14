@@ -7,6 +7,8 @@ set(${PROJECT_TEST}_SOURCES
     BoardTest.cpp
     TestTools.h
     TestTools.cpp
+    MockedGenerator.h
+    MockedGenerator.cpp
 )
 
 file(GLOB TXT_FILES

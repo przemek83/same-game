@@ -5,6 +5,8 @@
 #include <cstring>
 #include <queue>
 
+#include "Generator.h"
+
 namespace SameGame
 {
 constexpr std::array<int, 4> cols{-1, 0, 0, 1};
@@ -94,14 +96,6 @@ int getClusterSize(const Board& board, Point startPoint,
     return clusterSize;
 }
 
-// Following
-// https://stackoverflow.com/questions/1640258/need-a-fast-random-generator-for-c
-inline int fastRandInt()
-{
-    static int g_seed{static_cast<int>(rand())};
-    g_seed = (214013 * g_seed + 2531011);
-    return (g_seed >> 16) & 0x7FFF;
-}
 static std::vector<std::vector<char>> createCheckedVector(int columnCount,
                                                           int rowCount)
 {
@@ -125,10 +119,10 @@ static Point findFirstCluster(const Board& board)
     return emptyPoint;
 }
 
-static Point getRandomPoint(const Board& board)
+static Point getRandomPoint(const Board& board, Generator& generator)
 {
-    return {fastRandInt() % board.getColumnCount(),
-            fastRandInt() % board.getRowCount()};
+    return {generator.getInt(0, board.getColumnCount() - 1),
+            generator.getInt(0, board.getRowCount()) - 1};
 }
 
 static int getRandomTries(const Board& board)
@@ -136,7 +130,7 @@ static int getRandomTries(const Board& board)
     return static_cast<int>(board.getColumnCount() * board.getRowCount() * .4);
 }
 
-static Point findBiggestCluster(const Board& board)
+static Point findBiggestCluster(const Board& board, Generator& generator)
 {
     std::vector<std::vector<char>> checked{
         createCheckedVector(board.getColumnCount(), board.getRowCount())};
@@ -144,7 +138,7 @@ static Point findBiggestCluster(const Board& board)
     Point bestPoint{emptyPoint};
     for (int i{0}; i < getRandomTries(board); ++i)
     {
-        const Point currentPoint{getRandomPoint(board)};
+        const Point currentPoint{getRandomPoint(board, generator)};
         const int score{getClusterSize(board, currentPoint, checked)};
         if (score > bestScore)
         {
@@ -155,9 +149,9 @@ static Point findBiggestCluster(const Board& board)
     return bestScore > 0 ? bestPoint : emptyPoint;
 }
 
-Point getNextMove(const Board& board)
+Point getNextMove(const Board& board, Generator& generator)
 {
-    Point nextPoint{findBiggestCluster(board)};
+    Point nextPoint{findBiggestCluster(board, generator)};
     if (nextPoint == emptyPoint)
         nextPoint = findFirstCluster(board);
     return nextPoint;
@@ -191,7 +185,7 @@ std::set<int> makeMove(Board& board, Point startPoint)
     return impactedColumns;
 }
 
-std::vector<Point> playGame(Board board)
+std::vector<Point> playGame(Board board, Generator& generator)
 {
     if (board.getColumnCount() == 0 || board.getRowCount() == 0)
         return {};
@@ -199,7 +193,7 @@ std::vector<Point> playGame(Board board)
     std::vector<Point> points;
     while (true)
     {
-        const Point nextPoint{getNextMove(board)};
+        const Point nextPoint{getNextMove(board, generator)};
         if (nextPoint == emptyPoint)
             break;
         points.push_back(nextPoint);
