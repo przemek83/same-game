@@ -195,7 +195,7 @@ std::vector<std::vector<char>> SameGame::createCheckedVector(int columnCount,
 Point SameGame::getRandomPoint(const Board& board, Generator& generator) const
 {
     return {generator.getInt(0, board.getColumnCount() - 1),
-            generator.getInt(0, board.getRowCount()) - 1};
+            generator.getInt(0, board.getRowCount() - 1)};
 }
 
 int SameGame::getRandomTries(const Board& board) const
