@@ -21,7 +21,7 @@ constexpr Point emptyPoint{Point::NOT_SET, Point::NOT_SET};
 
 void removeRows(Board& board, int column, int fromRow, int count)
 {
-    for (int row{fromRow + 1}; row-- > count;)
+    for (int row{fromRow}; row >= count; --row)
     {
         const int rowToChange{row - count};
         board.setColor({column, row}, board.getColor({column, rowToChange}));
@@ -34,7 +34,7 @@ void impactColumn(Board& board, int column)
     const int NOT_SET{INT_MAX};
     int emptyStartIndex{NOT_SET};
     int emptyCount{0};
-    for (int row{board.getRowCount()}; row-- > 0;)
+    for (int row{board.getRowCount() - 1}; row >= 0; --row)
     {
         if (board.getColor({column, row}) == Board::EMPTY)
         {
@@ -74,7 +74,7 @@ Point findFirstCluster(const Board& board)
 {
     std::vector<std::vector<char>> checked{
         createCheckedVector(board.getColumnCount(), board.getRowCount())};
-    for (int row{board.getRowCount()}; row-- > 0;)
+    for (int row{board.getRowCount() - 1}; row >= 0; --row)
         for (int column{0}; column < board.getColumnCount(); ++column)
         {
             Point point{column, row};
@@ -113,6 +113,12 @@ Point findBiggestCluster(const Board& board, Generator& generator)
     }
     return bestScore > 0 ? bestPoint : emptyPoint;
 }
+
+char& getPosition(std::vector<std::vector<char>>& checked, Point point)
+{
+    return checked[static_cast<std::size_t>(point.column)]
+                  [static_cast<std::size_t>(point.row)];
+}
 }  // namespace
 
 namespace SameGame
@@ -120,7 +126,7 @@ namespace SameGame
 int getClusterSize(const Board& board, Point startPoint,
                    std::vector<std::vector<char>>& checked)
 {
-    if (checked[startPoint.column][startPoint.row] == CHECKED)
+    if (getPosition(checked, startPoint) == CHECKED)
         return 0;
 
     const int color{board.getColor(startPoint)};
@@ -128,7 +134,7 @@ int getClusterSize(const Board& board, Point startPoint,
         return 0;
 
     int clusterSize{1};
-    checked[startPoint.column][startPoint.row] = CHECKED;
+    getPosition(checked, startPoint) = CHECKED;
     static std::queue<Point> pointsToCheck;
     pointsToCheck.push(startPoint);
     while (!pointsToCheck.empty())
@@ -141,9 +147,9 @@ int getClusterSize(const Board& board, Point startPoint,
             const int row{point.row + rows.at(k)};
             if (isFieldValid(board, col, row) &&
                 (board.getColor({col, row}) == color) &&
-                (checked[col][row] == NOT_CHECKED))
+                (getPosition(checked, {col, row}) == NOT_CHECKED))
             {
-                checked[col][row] = CHECKED;
+                getPosition(checked, {col, row}) = CHECKED;
                 ++clusterSize;
                 pointsToCheck.emplace(Point{col, row});
             }
@@ -196,7 +202,7 @@ std::set<int> makeMove(Board& board, Point point)
 
 std::vector<Point> playGame(Board board, Generator& generator)
 {
-    if (board.getColumnCount() == 0 || board.getRowCount() == 0)
+    if ((board.getColumnCount() == 0) || (board.getRowCount() == 0))
         return {};
 
     std::vector<Point> points;
