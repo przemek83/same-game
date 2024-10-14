@@ -1,5 +1,4 @@
 #include "NumbersGenerator.h"
-#include "Generator.h"
 
 NumbersGenerator::NumbersGenerator(long seed)
     : engine_{static_cast<unsigned long>(seed)}
