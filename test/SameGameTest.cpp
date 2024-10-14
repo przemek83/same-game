@@ -134,6 +134,24 @@ INSTANTIATE_TEST_SUITE_P(
                       std::make_tuple(singleRowBoard, 1, Point{0, 1}),
                       std::make_tuple(singleRowBoard, 2, Point{0, 3})));
 
+TEST(SameGameTest, playWith50x50And3Colors)
+{
+    MockedGenerator generator;
+    Board board{TestTools::prepareBoard(50, 50, "50x50_3_colors.txt")};
+    SameGame game{board, generator};
+    std::vector<Point> points{game.playGame()};
+    EXPECT_EQ(points.size(), 199);
+}
+
+TEST(SameGameTest, playWith50x50And11Colors)
+{
+    MockedGenerator generator;
+    Board board{TestTools::prepareBoard(50, 50, "50x50_11_colors.txt")};
+    SameGame game{board, generator};
+    std::vector<Point> points{game.playGame()};
+    EXPECT_EQ(points.size(), 685);
+}
+
 namespace
 {
 Board board50x50x3Colors{TestTools::prepareBoard(50, 50, "50x50_3_colors.txt")};
@@ -146,22 +164,6 @@ Board board200x200x20Colors{
 Board board500x500x20Colors{
     TestTools::prepareBoard(500, 500, "500x500_20_colors.txt")};
 };  // namespace
-
-TEST(SameGameTest, playWith50x50And3Colors)
-{
-    MockedGenerator generator;
-    SameGame game{board50x50x3Colors, generator};
-    std::vector<Point> points{game.playGame()};
-    EXPECT_EQ(points.size(), 199);
-}
-
-TEST(SameGameTest, playWith50x50And11Colors)
-{
-    MockedGenerator generator;
-    SameGame game{board50x50x11Colors, generator};
-    std::vector<Point> points{game.playGame()};
-    EXPECT_EQ(points.size(), 685);
-}
 
 class Benchmark : public ::testing::TestWithParam<std::tuple<Board>>
 {
@@ -184,7 +186,7 @@ INSTANTIATE_TEST_SUITE_P(SameGameTest, Benchmark,
 
 TEST_P(Benchmark, playGame)
 {
-    GTEST_SKIP();
+    // GTEST_SKIP();
     Board board{std::get<0>(GetParam())};
     MockedGenerator generator;
     SameGame game{board, generator};
