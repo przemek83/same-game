@@ -141,6 +141,10 @@ TEST(SameGameTest, playWith4x4SymetricalBoard)
     SameGame game{board, generator};
     std::vector<Point> points{game.playGame()};
     EXPECT_EQ(points.size(), 4);
+
+    std::vector<Point> expected{{1, 0}, {0, 3}, {0, 3}, {2, 3}};
+    for (std::size_t i{0}; i < points.size(); ++i)
+        EXPECT_EQ(points[i], expected[i]);
 }
 
 TEST(SameGameTest, playWith3x1AsymmetricalBoard)
@@ -150,6 +154,8 @@ TEST(SameGameTest, playWith3x1AsymmetricalBoard)
     SameGame game{board, generator};
     std::vector<Point> points{game.playGame()};
     EXPECT_EQ(points.size(), 1);
+    Point expected{0, 2};
+    EXPECT_EQ(points[0], expected);
 }
 
 namespace
