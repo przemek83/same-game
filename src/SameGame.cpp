@@ -1,6 +1,5 @@
 #include "SameGame.h"
 
-#include <array>
 #include <cstddef>
 #include <cstdlib>
 #include <cstring>
@@ -8,50 +7,6 @@
 #include <queue>
 
 #include "Generator.h"
-
-namespace
-{
-constexpr std::array<int, 4> cols{-1, 0, 0, 1};
-constexpr std::array<int, 4> rows{0, -1, 1, 0};
-
-constexpr char CHECKED{1};
-constexpr char NOT_CHECKED{0};
-
-constexpr Point emptyPoint{Point::NOT_SET, Point::NOT_SET};
-
-bool isFieldValid(const Board& board, int column, int row)
-{
-    return (column >= 0) && (column < board.getColumnCount()) && (row >= 0) &&
-           (row < board.getRowCount());
-}
-
-std::vector<std::vector<char>> createCheckedVector(int columnCount,
-                                                   int rowCount)
-{
-    std::vector<std::vector<char>> checked{
-        static_cast<std::size_t>(columnCount)};
-    for (auto& column : checked)
-        column.resize(static_cast<std::size_t>(rowCount), NOT_CHECKED);
-    return checked;
-}
-
-Point getRandomPoint(const Board& board, Generator& generator)
-{
-    return {generator.getInt(0, board.getColumnCount() - 1),
-            generator.getInt(0, board.getRowCount()) - 1};
-}
-
-int getRandomTries(const Board& board)
-{
-    return static_cast<int>(board.getColumnCount() * board.getRowCount() * .4);
-}
-
-char& getPosition(std::vector<std::vector<char>>& checked, Point point)
-{
-    return checked[static_cast<std::size_t>(point.column)]
-                  [static_cast<std::size_t>(point.row)];
-}
-}  // namespace
 
 SameGame::SameGame(Board& board, Generator& generator)
     : board_{board}, generator_{generator}
@@ -220,4 +175,38 @@ Point SameGame::findBiggestCluster()
         }
     }
     return bestScore > 0 ? bestPoint : emptyPoint;
+}
+
+bool SameGame::isFieldValid(const Board& board, int column, int row)
+{
+    return (column >= 0) && (column < board.getColumnCount()) && (row >= 0) &&
+           (row < board.getRowCount());
+}
+
+std::vector<std::vector<char>> SameGame::createCheckedVector(int columnCount,
+                                                             int rowCount)
+{
+    std::vector<std::vector<char>> checked{
+        static_cast<std::size_t>(columnCount)};
+    for (auto& column : checked)
+        column.resize(static_cast<std::size_t>(rowCount), NOT_CHECKED);
+    return checked;
+}
+
+Point SameGame::getRandomPoint(const Board& board, Generator& generator)
+{
+    return {generator.getInt(0, board.getColumnCount() - 1),
+            generator.getInt(0, board.getRowCount()) - 1};
+}
+
+int SameGame::getRandomTries(const Board& board)
+{
+    return static_cast<int>(board.getColumnCount() * board.getRowCount() * .4);
+}
+
+char& SameGame::getPosition(std::vector<std::vector<char>>& checked,
+                            Point point)
+{
+    return checked[static_cast<std::size_t>(point.column)]
+                  [static_cast<std::size_t>(point.row)];
 }

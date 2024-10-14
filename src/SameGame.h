@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <set>
 #include <vector>
 
@@ -33,6 +34,25 @@ private:
 
     Point findBiggestCluster();
 
+    bool isFieldValid(const Board& board, int column, int row);
+
+    std::vector<std::vector<char>> createCheckedVector(int columnCount,
+                                                       int rowCount);
+
+    Point getRandomPoint(const Board& board, Generator& generator);
+
+    int getRandomTries(const Board& board);
+
+    char& getPosition(std::vector<std::vector<char>>& checked, Point point);
+
     Board& board_;
     Generator& generator_;
+
+    constexpr static std::array<int, 4> cols{-1, 0, 0, 1};
+    constexpr static std::array<int, 4> rows{0, -1, 1, 0};
+
+    constexpr static char CHECKED{1};
+    constexpr static char NOT_CHECKED{0};
+
+    constexpr static Point emptyPoint{Point::NOT_SET, Point::NOT_SET};
 };
