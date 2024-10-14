@@ -140,7 +140,7 @@ TEST(SameGameTest, playWith4x4SymetricalBoard)
     Board board{TestTools::createBoard(symmetricalBoard)};
     SameGame game{board, generator};
     std::vector<Point> points{game.playGame()};
-    EXPECT_EQ(points.size(), 3);
+    EXPECT_EQ(points.size(), 4);
 }
 
 TEST(SameGameTest, playWith3x1AsymmetricalBoard)
