@@ -1,6 +1,7 @@
 #include "SameGame.h"
 
 #include <array>
+#include <cstddef>
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
@@ -81,7 +82,7 @@ int getClusterSize(const Board& board, Point startPoint,
     {
         const Point point{pointsToCheck.front()};
         pointsToCheck.pop();
-        for (int k{0}; k < 4; ++k)
+        for (std::size_t k{0}; k < 4; ++k)
         {
             const int col{point.column + cols.at(k)};
             const int row{point.row + rows.at(k)};
@@ -171,7 +172,7 @@ std::set<int> makeMove(Board& board, Point startPoint)
         const auto currentPoint{pointsToCheck.front()};
         pointsToCheck.pop();
         impactedColumns.insert(currentPoint.column);
-        for (int k{0}; k < 4; ++k)
+        for (std::size_t k{0}; k < 4; ++k)
         {
             const int col{currentPoint.column + cols.at(k)};
             const int row{currentPoint.row + rows.at(k)};
