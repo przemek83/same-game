@@ -172,7 +172,11 @@ Point SameGame::findBiggestCluster()
             bestPoint = currentPoint;
         }
     }
-    return bestScore > 0 ? bestPoint : emptyPoint;
+
+    if (bestScore > 0)
+        return bestPoint;
+
+    return emptyPoint;
 }
 
 bool SameGame::isFieldValid(const Board& board, int column, int row) const
