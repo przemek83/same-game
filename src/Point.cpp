@@ -2,7 +2,7 @@
 
 bool Point::operator==(Point that) const
 {
-    return column == that.column && row == that.row;
+    return (column == that.column) && (row == that.row);
 }
 
 bool Point::operator<(Point that) const

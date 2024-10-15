@@ -21,7 +21,7 @@ std::string Board::print() const
     {
         for (const auto& column : data_)
             outString << column[row] << "\t";
-        outString << std::endl;
+        outString << "\n";
     }
     return outString.str();
 }
