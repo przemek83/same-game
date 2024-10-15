@@ -22,8 +22,8 @@ public:
 
     int getColor(Point point) const
     {
-        return data_[static_cast<std::size_t>(point.column)]
-                    [static_cast<std::size_t>(point.row)];
+        return data_[static_cast<std::size_t>(point.column_)]
+                    [static_cast<std::size_t>(point.row_)];
     }
 
     void setColor(Point point, int color) { setElement(point, color); }
@@ -44,8 +44,8 @@ public:
 private:
     void setElement(Point point, int color)
     {
-        data_[static_cast<std::size_t>(point.column)]
-             [static_cast<std::size_t>(point.row)] = color;
+        data_[static_cast<std::size_t>(point.column_)]
+             [static_cast<std::size_t>(point.row_)] = color;
     }
 
     void initData();

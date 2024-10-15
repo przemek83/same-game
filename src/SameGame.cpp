@@ -32,8 +32,8 @@ int SameGame::getClusterSize(Point startPoint,
         pointsToCheck_.pop();
         for (std::size_t k{0}; k < 4; ++k)
         {
-            const int col{point.column + cols.at(k)};
-            const int row{point.row + rows.at(k)};
+            const int col{point.column_ + cols.at(k)};
+            const int row{point.row_ + rows.at(k)};
             if (isFieldValid(board_, col, row) &&
                 (board_.getColor({col, row}) == color) &&
                 (getPosition(checked, {col, row}) == NOT_CHECKED))
@@ -73,11 +73,11 @@ std::set<int> SameGame::makeMove(Point point)
     {
         const auto currentPoint{pointsToCheck.front()};
         pointsToCheck.pop();
-        impactedColumns.insert(currentPoint.column);
+        impactedColumns.insert(currentPoint.column_);
         for (std::size_t k{0}; k < 4; ++k)
         {
-            const int col{currentPoint.column + cols.at(k)};
-            const int row{currentPoint.row + rows.at(k)};
+            const int col{currentPoint.column_ + cols.at(k)};
+            const int row{currentPoint.row_ + rows.at(k)};
             if (isFieldValid(board_, col, row) &&
                 (board_.getColor({col, row}) == color))
             {
@@ -206,6 +206,6 @@ int SameGame::getRandomTries(const Board& board) const
 char& SameGame::getPosition(std::vector<std::vector<char>>& checked,
                             Point point)
 {
-    return checked[static_cast<std::size_t>(point.column)]
-                  [static_cast<std::size_t>(point.row)];
+    return checked[static_cast<std::size_t>(point.column_)]
+                  [static_cast<std::size_t>(point.row_)];
 }

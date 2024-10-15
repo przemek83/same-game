@@ -30,7 +30,7 @@ TEST_P(ImpactGravityTests, impactGravity)
 
     std::set<int> impactedColumns;
     for (const auto point : impactedColumnsPoints)
-        impactedColumns.insert(point.column);
+        impactedColumns.insert(point.column_);
 
     Board board{TestTools::createBoard(boardData)};
     MockedGenerator generator;

@@ -4,8 +4,8 @@
 
 struct Point
 {
-    int column{NOT_SET};
-    int row{NOT_SET};
+    int column_{NOT_SET};
+    int row_{NOT_SET};
 
     static constexpr int NOT_SET{INT_MAX};
 

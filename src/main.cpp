@@ -21,7 +21,7 @@ int main()
     std::vector<Point> points{game.playGame()};
 
     for (auto point : points)
-        std::cout << point.row << " " << point.column << "\n";
+        std::cout << point.row_ << " " << point.column_ << "\n";
 
     return EXIT_SUCCESS;
 }

@@ -2,12 +2,12 @@
 
 bool Point::operator==(Point that) const
 {
-    return (column == that.column) && (row == that.row);
+    return (column_ == that.column_) && (row_ == that.row_);
 }
 
 bool Point::operator<(Point that) const
 {
-    if (column < that.column)
+    if (column_ < that.column_)
         return false;
-    return row < that.row;
+    return row_ < that.row_;
 }
