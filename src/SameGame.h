@@ -15,8 +15,9 @@ class SameGame
 public:
     SameGame(Board& board, Generator& generator);
 
-    int getClusterSize(Point startPoint,
-                       std::vector<std::vector<char>>& checked);
+    using CheckedBoard = std::vector<std::vector<unsigned char>>;
+
+    int getClusterSize(Point startPoint, CheckedBoard& checked);
 
     Point getNextMove();
 
@@ -37,14 +38,13 @@ private:
 
     bool isFieldValid(const Board& board, int column, int row) const;
 
-    std::vector<std::vector<char>> createCheckedVector(int columnCount,
-                                                       int rowCount) const;
+    CheckedBoard createCheckedVector(int columnCount, int rowCount) const;
 
     Point getRandomPoint(const Board& board, Generator& generator) const;
 
     int getRandomTries(const Board& board) const;
 
-    char& getPosition(std::vector<std::vector<char>>& checked, Point point);
+    unsigned char& getPosition(CheckedBoard& checked, Point point);
 
     Board& board_;
     Generator& generator_;
@@ -52,8 +52,8 @@ private:
     constexpr static std::array<int, 4> cols{-1, 0, 0, 1};
     constexpr static std::array<int, 4> rows{0, -1, 1, 0};
 
-    constexpr static char CHECKED{1};
-    constexpr static char NOT_CHECKED{0};
+    constexpr static unsigned char CHECKED{1};
+    constexpr static unsigned char NOT_CHECKED{0};
 
     constexpr static Point emptyPoint{Point::NOT_SET, Point::NOT_SET};
 

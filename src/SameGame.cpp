@@ -13,8 +13,7 @@ SameGame::SameGame(Board& board, Generator& generator)
 {
 }
 
-int SameGame::getClusterSize(Point startPoint,
-                             std::vector<std::vector<char>>& checked)
+int SameGame::getClusterSize(Point startPoint, CheckedBoard& checked)
 {
     if (getPosition(checked, startPoint) == CHECKED)
         return 0;
@@ -145,7 +144,7 @@ void SameGame::impactColumn(int column)
 
 Point SameGame::findFirstCluster()
 {
-    std::vector<std::vector<char>> checked{
+    CheckedBoard checked{
         createCheckedVector(board_.getColumnCount(), board_.getRowCount())};
     for (int row{board_.getRowCount() - 1}; row >= 0; --row)
         for (int column{0}; column < board_.getColumnCount(); ++column)
@@ -159,7 +158,7 @@ Point SameGame::findFirstCluster()
 
 Point SameGame::findBiggestCluster()
 {
-    std::vector<std::vector<char>> checked{
+    CheckedBoard checked{
         createCheckedVector(board_.getColumnCount(), board_.getRowCount())};
     int bestScore{1};
     Point bestPoint{emptyPoint};
@@ -182,11 +181,10 @@ bool SameGame::isFieldValid(const Board& board, int column, int row) const
            (row < board.getRowCount());
 }
 
-std::vector<std::vector<char>> SameGame::createCheckedVector(int columnCount,
-                                                             int rowCount) const
+SameGame::CheckedBoard SameGame::createCheckedVector(int columnCount,
+                                                     int rowCount) const
 {
-    std::vector<std::vector<char>> checked{
-        static_cast<std::size_t>(columnCount)};
+    CheckedBoard checked{static_cast<std::size_t>(columnCount)};
     for (auto& column : checked)
         column.resize(static_cast<std::size_t>(rowCount), NOT_CHECKED);
     return checked;
@@ -203,8 +201,7 @@ int SameGame::getRandomTries(const Board& board) const
     return static_cast<int>(board.getColumnCount() * board.getRowCount() * .4);
 }
 
-char& SameGame::getPosition(std::vector<std::vector<char>>& checked,
-                            Point point)
+unsigned char& SameGame::getPosition(CheckedBoard& checked, Point point)
 {
     return checked[static_cast<std::size_t>(point.column_)]
                   [static_cast<std::size_t>(point.row_)];
