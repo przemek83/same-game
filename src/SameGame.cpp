@@ -29,7 +29,8 @@ int SameGame::getClusterSize(Point startPoint, CheckedBoard& checked)
     {
         const Point point{pointsToCheck_.front()};
         pointsToCheck_.pop();
-        for (std::size_t k{0}; k < 4; ++k)
+        const std::size_t caseCount{cols.size()};
+        for (std::size_t k{0}; k < caseCount; ++k)
         {
             const int col{point.column_ + cols.at(k)};
             const int row{point.row_ + rows.at(k)};
@@ -73,7 +74,8 @@ std::set<int> SameGame::makeMove(Point point)
         const auto currentPoint{pointsToCheck.front()};
         pointsToCheck.pop();
         impactedColumns.insert(currentPoint.column_);
-        for (std::size_t k{0}; k < 4; ++k)
+        const std::size_t caseCount{cols.size()};
+        for (std::size_t k{0}; k < caseCount; ++k)
         {
             const int col{currentPoint.column_ + cols.at(k)};
             const int row{currentPoint.row_ + rows.at(k)};
