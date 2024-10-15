@@ -9,7 +9,15 @@ struct Point
 
     static constexpr int NOT_SET{INT_MAX};
 
-    bool operator==(Point that) const;
+    friend bool operator==(const Point& lhs, const Point& rhs)
+    {
+        return (lhs.column_ == rhs.column_) && (lhs.row_ == rhs.row_);
+    }
 
-    bool operator<(Point that) const;
+    friend bool operator<(const Point& lhs, const Point& rhs)
+    {
+        if (lhs.column_ < rhs.column_)
+            return false;
+        return lhs.row_ < rhs.row_;
+    }
 };

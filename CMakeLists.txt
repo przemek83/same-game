@@ -24,7 +24,6 @@ set(${PROJECT_NAME}_SOURCES
     src/SameGame.h
     src/Board.cpp
     src/Board.h
-    src/Point.cpp
     src/Point.h
     src/Generator.h
     src/NumbersGenerator.cpp 
