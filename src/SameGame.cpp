@@ -92,9 +92,6 @@ std::set<int> SameGame::makeMove(Point point)
 
 std::vector<Point> SameGame::playGame()
 {
-    if ((board_.getColumnCount() == 0) || (board_.getRowCount() == 0))
-        return {};
-
     std::vector<Point> points;
     while (true)
     {
