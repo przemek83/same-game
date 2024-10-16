@@ -147,31 +147,33 @@ void SameGame::impactColumn(int column)
 Point SameGame::findFirstCluster()
 {
     CheckedBoard checked{
-        createCheckedVector(board_.getColumnCount(), board_.getRowCount())};
+        createCheckedBoard(board_.getColumnCount(), board_.getRowCount())};
     for (int row{board_.getRowCount() - 1}; row >= 0; --row)
+    {
         for (int column{0}; column < board_.getColumnCount(); ++column)
         {
             Point point{column, row};
             if (SameGame::getClusterSize(point, checked) > 1)
                 return point;
         }
+    }
     return emptyPoint;
 }
 
 Point SameGame::findBiggestCluster()
 {
     CheckedBoard checked{
-        createCheckedVector(board_.getColumnCount(), board_.getRowCount())};
+        createCheckedBoard(board_.getColumnCount(), board_.getRowCount())};
     int bestScore{1};
     Point bestPoint{emptyPoint};
-    for (int i{0}; i < getRandomTries(board_); ++i)
+    for (int i{0}; i < getTries(board_); ++i)
     {
-        const Point currentPoint{getRandomPoint(board_, generator_)};
-        const int score{getClusterSize(currentPoint, checked)};
+        const Point point{getRandomPoint(board_, generator_)};
+        const int score{getClusterSize(point, checked)};
         if (score > bestScore)
         {
             bestScore = score;
-            bestPoint = currentPoint;
+            bestPoint = point;
         }
     }
 
@@ -187,8 +189,8 @@ bool SameGame::isFieldValid(const Board& board, int column, int row) const
            (row < board.getRowCount());
 }
 
-SameGame::CheckedBoard SameGame::createCheckedVector(int columnCount,
-                                                     int rowCount) const
+SameGame::CheckedBoard SameGame::createCheckedBoard(int columnCount,
+                                                    int rowCount) const
 {
     CheckedBoard checked{static_cast<std::size_t>(columnCount)};
     for (auto& column : checked)
@@ -202,7 +204,7 @@ Point SameGame::getRandomPoint(const Board& board, Generator& generator) const
             generator.getInt(0, board.getRowCount() - 1)};
 }
 
-int SameGame::getRandomTries(const Board& board) const
+int SameGame::getTries(const Board& board) const
 {
     return static_cast<int>(board.getColumnCount() * board.getRowCount() * .4);
 }
