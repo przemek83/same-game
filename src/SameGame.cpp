@@ -147,7 +147,8 @@ Point SameGame::findFirstCluster()
         createCheckedBoard(board_.getColumnCount(), board_.getRowCount())};
     for (int row{board_.getRowCount() - 1}; row >= 0; --row)
     {
-        for (int column{0}; column < board_.getColumnCount(); ++column)
+        const int columnCount{board_.getColumnCount()};
+        for (int column{0}; column < columnCount; ++column)
         {
             Point point{column, row};
             if (SameGame::getClusterSize(point, checked) > 1)
@@ -163,7 +164,8 @@ Point SameGame::findBiggestCluster()
         createCheckedBoard(board_.getColumnCount(), board_.getRowCount())};
     int bestScore{1};
     Point bestPoint{emptyPoint};
-    for (int i{0}; i < getTries(board_); ++i)
+    const int tries{getTries(board_)};
+    for (int i{0}; i < tries; ++i)
     {
         const Point point{getRandomPoint(board_, generator_)};
         const int score{getClusterSize(point, checked)};

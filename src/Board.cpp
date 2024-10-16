@@ -17,7 +17,8 @@ Board::Board(int columnsCount, int rowsCount, std::istream& in)
 std::string Board::print() const
 {
     std::ostringstream outString;
-    for (std::size_t row{0}; row < data_[0].size(); ++row)
+    const std::size_t rowCount{data_[0].size()};
+    for (std::size_t row{0}; row < rowCount; ++row)
     {
         for (const auto& column : data_)
             outString << column[row] << "\t";
