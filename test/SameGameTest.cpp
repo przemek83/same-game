@@ -107,9 +107,10 @@ TEST_P(GetClusterTests, GetCluster)
     const Point point{std::get<2>(GetParam())};
 
     Board board{TestTools::createBoard(boardData)};
-    SameGame::CheckedBoard checked(board.getColumnCount());
+    SameGame::CheckedBoard checked(
+        static_cast<std::size_t>(board.getColumnCount()));
     for (auto& column : checked)
-        column.resize(board.getRowCount(), false);
+        column.resize(static_cast<std::size_t>(board.getRowCount()), false);
 
     MockedGenerator generator;
     SameGame game{board, generator};
@@ -119,9 +120,9 @@ TEST_P(GetClusterTests, GetCluster)
 
 namespace
 {
-BoardData symmetricalBoard{
+const BoardData symmetricalBoard{
     {3, 1, 3, 3}, {3, 1, 1, 1}, {1, 2, 2, 1}, {1, 2, 3, 2}};
-BoardData singleRowBoard{{_, 1, 3, 3}};
+const BoardData singleRowBoard{{_, 1, 3, 3}};
 };  // namespace
 
 INSTANTIATE_TEST_SUITE_P(
@@ -143,7 +144,8 @@ TEST(SameGameTest, playWith4x4SymetricalBoard)
     EXPECT_EQ(points.size(), 4);
 
     std::vector<Point> expected{{1, 0}, {0, 3}, {0, 3}, {2, 3}};
-    for (std::size_t i{0}; i < points.size(); ++i)
+    const std::size_t size{points.size()};
+    for (std::size_t i{0}; i < size; ++i)
         EXPECT_EQ(points[i], expected[i]);
 }
 
@@ -160,15 +162,30 @@ TEST(SameGameTest, playWith3x1AsymmetricalBoard)
 
 namespace
 {
-Board board50x50x3Colors{TestTools::prepareBoard(50, 50, "50x50_3_colors.txt")};
-Board board50x50x11Colors{
-    TestTools::prepareBoard(50, 50, "50x50_11_colors.txt")};
-Board board200x200x3Colors{
-    TestTools::prepareBoard(200, 200, "200x200_3_colors.txt")};
-Board board200x200x20Colors{
-    TestTools::prepareBoard(200, 200, "200x200_20_colors.txt")};
-Board board500x500x20Colors{
-    TestTools::prepareBoard(500, 500, "500x500_20_colors.txt")};
+Board getBoard50x50x3Colors()
+{
+    return TestTools::prepareBoard(50, 50, "50x50_3_colors.txt");
+}
+
+Board getBoard50x50x11Colors()
+{
+    return TestTools::prepareBoard(50, 50, "50x50_11_colors.txt");
+}
+
+Board getBoard200x200x3Colors()
+{
+    return TestTools::prepareBoard(200, 200, "200x200_3_colors.txt");
+}
+
+Board getBoard200x200x20Colors()
+{
+    return TestTools::prepareBoard(200, 200, "200x200_20_colors.txt");
+}
+
+Board getBoard500x500x20Colors()
+{
+    return TestTools::prepareBoard(500, 500, "500x500_20_colors.txt");
+}
 };  // namespace
 
 class Benchmark : public ::testing::TestWithParam<std::tuple<Board>>
@@ -176,18 +193,18 @@ class Benchmark : public ::testing::TestWithParam<std::tuple<Board>>
 };
 
 // Test Name             | Release (ms) | Debug (ms)
-// board50x50x3Colors    | 3            | 20
-// board50x50x11Colors   | 10           | 52
-// board200x200x3Colors  | 648          | 3025
-// board200x200x20Colors | 2650         | 13076
-// board500x500x20Colors | 121887       | 523070
+// board50x50x3Colors    | 3            | 21
+// board50x50x11Colors   | 10           | 51
+// board200x200x3Colors  | 433          | 1888
+// board200x200x20Colors | 1476         | 6157
+// board500x500x20Colors | 110270       | 352902
 
 INSTANTIATE_TEST_SUITE_P(SameGameTest, Benchmark,
-                         ::testing::Values(board50x50x3Colors,
-                                           board50x50x11Colors,
-                                           board200x200x3Colors,
-                                           board200x200x20Colors
-                                           //,board500x500x20Colors
+                         ::testing::Values(getBoard50x50x3Colors(),
+                                           getBoard50x50x11Colors(),
+                                           getBoard200x200x3Colors(),
+                                           getBoard200x200x20Colors()
+                                           //, getBoard500x500x20Colors()
                                            ));
 
 TEST_P(Benchmark, playGame)
