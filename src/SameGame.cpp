@@ -29,22 +29,9 @@ int SameGame::getClusterSize(Point startPoint, CheckedBoard& checked)
     {
         const Point point{pointsToCheck_.front()};
         pointsToCheck_.pop();
-
-        const std::size_t caseCount{cols.size()};
-        for (std::size_t k{0}; k < caseCount; ++k)
-        {
-            const int col{point.column_ + cols.at(k)};
-            const int row{point.row_ + rows.at(k)};
-            if (isFieldValid(col, row) &&
-                (board_.getColor({col, row}) == color) &&
-                (getPosition(checked, {col, row}) == NOT_CHECKED))
-            {
-                getPosition(checked, {col, row}) = CHECKED;
-                ++clusterSize;
-                pointsToCheck_.emplace(Point{col, row});
-            }
-        }
+        clusterSize += calculateSize(checked, color, point);
     }
+
     return clusterSize;
 }
 
@@ -72,22 +59,11 @@ std::set<int> SameGame::makeMove(Point point)
     board_.setEmpty(point);
     while (!pointsToCheck.empty())
     {
-        const auto currentPoint{pointsToCheck.front()};
+        const Point currentPoint{pointsToCheck.front()};
         pointsToCheck.pop();
         impactedColumns.insert(currentPoint.column_);
 
-        const std::size_t caseCount{cols.size()};
-        for (std::size_t k{0}; k < caseCount; ++k)
-        {
-            const int col{currentPoint.column_ + cols.at(k)};
-            const int row{currentPoint.row_ + rows.at(k)};
-            if (isFieldValid(col, row) &&
-                (board_.getColor({col, row}) == color))
-            {
-                board_.setEmpty({col, row});
-                pointsToCheck.emplace(Point{col, row});
-            }
-        }
+        addNewPointsToCheck(color, pointsToCheck, currentPoint);
     }
     return impactedColumns;
 }
@@ -215,4 +191,42 @@ unsigned char& SameGame::getPosition(CheckedBoard& checked, Point point)
 {
     return checked[static_cast<std::size_t>(point.column_)]
                   [static_cast<std::size_t>(point.row_)];
+}
+
+void SameGame::addNewPointsToCheck(const int& color,
+                                   std::queue<Point>& pointsToCheck,
+                                   const Point& currentPoint)
+{
+    const std::size_t caseCount{cols.size()};
+    for (std::size_t k{0}; k < caseCount; ++k)
+    {
+        const int col{currentPoint.column_ + cols.at(k)};
+        const int row{currentPoint.row_ + rows.at(k)};
+        if (isFieldValid(col, row) && (board_.getColor({col, row}) == color))
+        {
+            board_.setEmpty({col, row});
+            pointsToCheck.emplace(Point{col, row});
+        }
+    }
+}
+
+int SameGame::calculateSize(CheckedBoard& checked, const int& color,
+                            Point point)
+{
+    int size{0};
+    const std::size_t caseCount{cols.size()};
+    for (std::size_t k{0}; k < caseCount; ++k)
+    {
+        const int col{point.column_ + cols.at(k)};
+        const int row{point.row_ + rows.at(k)};
+        if (isFieldValid(col, row) && (board_.getColor({col, row}) == color) &&
+            (getPosition(checked, {col, row}) == NOT_CHECKED))
+        {
+            getPosition(checked, {col, row}) = CHECKED;
+            ++size;
+            pointsToCheck_.emplace(Point{col, row});
+        }
+    }
+
+    return size;
 }

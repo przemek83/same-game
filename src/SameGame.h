@@ -46,6 +46,11 @@ private:
 
     unsigned char& getPosition(CheckedBoard& checked, Point point);
 
+    void addNewPointsToCheck(const int& color, std::queue<Point>& pointsToCheck,
+                             const Point& currentPoint);
+
+    int calculateSize(CheckedBoard& checked, const int& color, Point point);
+
     Board& board_;
     Generator& generator_;
 
