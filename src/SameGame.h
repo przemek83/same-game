@@ -36,13 +36,13 @@ private:
 
     Point findBiggestCluster();
 
-    bool isFieldValid(const Board& board, int column, int row) const;
+    bool isFieldValid(int column, int row) const;
 
     CheckedBoard createCheckedBoard(int columnCount, int rowCount) const;
 
-    Point getRandomPoint(const Board& board, Generator& generator) const;
+    Point getRandomPoint() const;
 
-    int getTries(const Board& board) const;
+    int getTries() const;
 
     unsigned char& getPosition(CheckedBoard& checked, Point point);
 

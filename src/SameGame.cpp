@@ -34,7 +34,7 @@ int SameGame::getClusterSize(Point startPoint, CheckedBoard& checked)
         {
             const int col{point.column_ + cols.at(k)};
             const int row{point.row_ + rows.at(k)};
-            if (isFieldValid(board_, col, row) &&
+            if (isFieldValid(col, row) &&
                 (board_.getColor({col, row}) == color) &&
                 (getPosition(checked, {col, row}) == NOT_CHECKED))
             {
@@ -79,7 +79,7 @@ std::set<int> SameGame::makeMove(Point point)
         {
             const int col{currentPoint.column_ + cols.at(k)};
             const int row{currentPoint.row_ + rows.at(k)};
-            if (isFieldValid(board_, col, row) &&
+            if (isFieldValid(col, row) &&
                 (board_.getColor({col, row}) == color))
             {
                 board_.setEmpty({col, row});
@@ -164,10 +164,10 @@ Point SameGame::findBiggestCluster()
         createCheckedBoard(board_.getColumnCount(), board_.getRowCount())};
     int bestScore{1};
     Point bestPoint{emptyPoint};
-    const int tries{getTries(board_)};
+    const int tries{getTries()};
     for (int i{0}; i < tries; ++i)
     {
-        const Point point{getRandomPoint(board_, generator_)};
+        const Point point{getRandomPoint()};
         const int score{getClusterSize(point, checked)};
         if (score > bestScore)
         {
@@ -179,10 +179,10 @@ Point SameGame::findBiggestCluster()
     return bestPoint;
 }
 
-bool SameGame::isFieldValid(const Board& board, int column, int row) const
+bool SameGame::isFieldValid(int column, int row) const
 {
-    return (column >= 0) && (column < board.getColumnCount()) && (row >= 0) &&
-           (row < board.getRowCount());
+    return (column >= 0) && (column < board_.getColumnCount()) && (row >= 0) &&
+           (row < board_.getRowCount());
 }
 
 SameGame::CheckedBoard SameGame::createCheckedBoard(int columnCount,
@@ -194,15 +194,16 @@ SameGame::CheckedBoard SameGame::createCheckedBoard(int columnCount,
     return checked;
 }
 
-Point SameGame::getRandomPoint(const Board& board, Generator& generator) const
+Point SameGame::getRandomPoint() const
 {
-    return {generator.getInt(0, board.getColumnCount() - 1),
-            generator.getInt(0, board.getRowCount() - 1)};
+    return {generator_.getInt(0, board_.getColumnCount() - 1),
+            generator_.getInt(0, board_.getRowCount() - 1)};
 }
 
-int SameGame::getTries(const Board& board) const
+int SameGame::getTries() const
 {
-    return static_cast<int>(board.getColumnCount() * board.getRowCount() * .4);
+    return static_cast<int>(board_.getColumnCount() * board_.getRowCount() *
+                            .4);
 }
 
 unsigned char& SameGame::getPosition(CheckedBoard& checked, Point point)
