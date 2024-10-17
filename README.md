@@ -63,7 +63,7 @@ As a result of compilation, binary for simulations and binary for testing should
 
 ## Example run
 Application expects in the first line the number of rows, columns and colors. In the following lines, expect a board.
-Example input:
+### Example input:
 ```
 4 4 3
 3 3 1 1
@@ -72,7 +72,15 @@ Example input:
 3 1 1 2
 ```
 
-Steps:
+### Example output:
+```
+3 1
+2 0
+2 2
+```
+
+### Steps
+The starting board looks as follows:
 |   |   |   |   |
 |---|---|---|---|
 | 3 | 3 | 1 | 1 |   
@@ -80,7 +88,7 @@ Steps:
 | 3 | 1 | 2 | 3 |  
 | 3 | 1 | 1 | 2 |  
 
-Pick row 3, column 1 having color 1. Remove all neighbors of the same color.
+Algorithm picks row 3, column 1 having color 1. Remove all neighbors of the same color.
 |   |   |   |   |
 |---|---|---|---|
 | 3 | 3 | 1 | 1 |   
@@ -129,13 +137,6 @@ Use gravity:
 |   |   | 1 | 2 |  
 
 No more moves. Algorithm ends.
-
-Example output:
-```
-3 1
-2 0
-2 2
-```
 
 ## Usage:  
 1. Pass example file named `testFile.txt` from project repo:
