@@ -62,7 +62,7 @@ As a result of compilation, binary for simulations and binary for testing should
 | Python | - | 3.12.3 |
 
 ## Example run
-Application expects in first line number of rows, columns and colors. In following lines expects board.
+Application expects in the first line the number of rows, columns and colors. In the following lines, expect a board.
 Example input:
 ```
 4 4 3
@@ -80,7 +80,7 @@ Steps:
 | 3 | 1 | 2 | 3 |  
 | 3 | 1 | 1 | 2 |  
 
-Pick row 3, column 1 having color 1. Remove all neighbors having same color.
+Pick row 3, column 1 having color 1. Remove all neighbors of the same color.
 |   |   |   |   |
 |---|---|---|---|
 | 3 | 3 | 1 | 1 |   
@@ -96,7 +96,7 @@ Use gravity:
 | 3 |   | 2 | 3 |  
 | 3 | 3 | 2 | 2 |  
 
-Pick row 2, column 0 having color 3. Remove all neighbors having same color.
+Pick row 2, column 0 having color 3. Remove all neighbors of the same color.
 |   |   |   |   |
 |---|---|---|---|
 |   |   |   | 1 |   
@@ -112,7 +112,7 @@ Use gravity:
 |   |   | 2 | 3 |  
 |   |   | 2 | 2 |  
 
-Pick row 2, column 2 having color 2. Remove all neighbors having same color.
+Pick row 2, column 2 having color 2. Remove all neighbors of the same color.
 |   |   |   |   |
 |---|---|---|---|
 |   |   |   | 1 |   
@@ -165,7 +165,7 @@ Example output:
     2 2
     ```
 ## Testing
-or testing purposes, gtest framework is used. Build the project first. Make sure that the `same-game-test` target is built. Modern IDEs supporting CMake also support running tests with monitoring of failures. But in case you would like to run it manually, go to the `build/test` directory, where the⁣ binary `same-game-test` should be available. Launching it should produce the following output on Linux:
+For testing purposes, the gtest framework is used. Build the project first. Make sure that the `same-game-test` target is built. Modern IDEs supporting CMake also support running tests with monitoring of failures. But in case you would like to run it manually, go to the `build/test` directory, where the⁣ binary `same-game-test` should be available. Launching it should produce the following output on Linux:
 Example run:
 ```
 $ ./same-game-test
@@ -251,7 +251,7 @@ $ ./same-game-test
 [==========] 30 tests from 5 test suites ran. (1908 ms total)
 [  PASSED  ] 30 tests.
 ```
-As an alternative, CTest can be used to run tests from `build/test` directory:
+As an alternative, CTest can be used to run tests from the `build/test` directory:
 
     $ ctest
     Test project <some path>/same-game/build/test
