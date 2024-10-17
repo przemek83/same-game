@@ -15,10 +15,11 @@ Simple board game based on rules of Same Game (also known as JawBreaker and few 
 ## Table of content
 - [Problem description](#problem-description)
 - [Getting Started](#getting-started)
-  * [Prerequisites](#prerequisites)
-  * [Building](#building)
+   * [Prerequisites](#prerequisites)
+   * [Building](#building)
 - [Built with](#built-with)
-- [Usage](#usage)
+- [Example run](#example-run)
+- [Usage:  ](#usage)
 - [Testing](#testing)
 - [License](#license)
 
@@ -60,8 +61,8 @@ As a result of compilation, binary for simulations and binary for testing should
 | GoogleTest | 1.15.2 | 1.15.2 |
 | Python | - | 3.12.3 |
 
-## Usage
-Application expects in first line number of rows, columns and colors. In following lines, board.
+## Example run
+Application expects in first line number of rows, columns and colors. In following lines expects board.
 Example input:
 ```
 4 4 3
@@ -70,6 +71,65 @@ Example input:
 3 1 2 3
 3 1 1 2
 ```
+
+Steps:
+|   |   |   |   |
+|---|---|---|---|
+| 3 | 3 | 1 | 1 |   
+| 1 | 1 | 2 | 2 |  
+| 3 | 1 | 2 | 3 |  
+| 3 | 1 | 1 | 2 |  
+
+Pick row 3, column 1 having color 1. Remove all neighbors having same color.
+|   |   |   |   |
+|---|---|---|---|
+| 3 | 3 | 1 | 1 |   
+| x | x | 2 | 2 |  
+| 3 | x | 2 | 3 |  
+| 3 | x | x | 2 |  
+
+Use gravity:
+|   |   |   |   |
+|---|---|---|---|
+|   |   |   | 1 |   
+| 3 |   | 1 | 2 |  
+| 3 |   | 2 | 3 |  
+| 3 | 3 | 2 | 2 |  
+
+Pick row 2, column 0 having color 3. Remove all neighbors having same color.
+|   |   |   |   |
+|---|---|---|---|
+|   |   |   | 1 |   
+| x |   | 1 | 2 |  
+| x |   | 2 | 3 |  
+| x | x | 2 | 2 |  
+
+Use gravity:
+|   |   |   |   |
+|---|---|---|---|
+|   |   |   | 1 |   
+|   |   | 1 | 2 |  
+|   |   | 2 | 3 |  
+|   |   | 2 | 2 |  
+
+Pick row 2, column 2 having color 2. Remove all neighbors having same color.
+|   |   |   |   |
+|---|---|---|---|
+|   |   |   | 1 |   
+|   |   | 1 | 2 |  
+|   |   | x | 3 |  
+|   |   | x | 2 |  
+
+Use gravity:
+|   |   |   |   |
+|---|---|---|---|
+|   |   |   | 1 |   
+|   |   |   | 2 |  
+|   |   |   | 3 |  
+|   |   | 1 | 2 |  
+
+No more moves. Algorithm ends.
+
 Example output:
 ```
 3 1
@@ -77,7 +137,7 @@ Example output:
 2 2
 ```
 
-Examples of usage:  
+## Usage:  
 1. Pass example file named `testFile.txt` from project repo:
     ```shell
     $ ./same-game  < testFile.txt
