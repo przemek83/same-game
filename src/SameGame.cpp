@@ -120,6 +120,7 @@ void SameGame::impactColumn(int column)
     const int NOT_SET{INT_MAX};
     int emptyStartIndex{NOT_SET};
     int emptyCount{0};
+
     for (int row{board_.getRowCount() - 1}; row >= 0; --row)
     {
         if (board_.getColor({column, row}) == Board::EMPTY)
@@ -127,17 +128,18 @@ void SameGame::impactColumn(int column)
             if (emptyStartIndex == NOT_SET)
                 emptyStartIndex = row;
             ++emptyCount;
-            continue;
         }
+        else
+        {
+            if (emptyStartIndex != NOT_SET)
+            {
+                removeRows(column, emptyStartIndex, emptyCount);
 
-        if (emptyStartIndex == NOT_SET)
-            continue;
-
-        removeRows(column, emptyStartIndex, emptyCount);
-
-        emptyStartIndex = NOT_SET;
-        row += emptyCount;
-        emptyCount = 0;
+                emptyStartIndex = NOT_SET;
+                row += emptyCount;
+                emptyCount = 0;
+            }
+        }
     }
 }
 
