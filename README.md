@@ -23,14 +23,12 @@ Simple board game based on rules of Same Game (also known as JawBreaker and few 
 - [License](#license)
 
 ## Problem description
-Write application playing Same Game. Program gets H x W board on input with C different numbers as cells.  
-Assumption are:
-- H >= 0 – board rows count
-- W >= 0 – board columns count
-- C >= 1 – color count
+Write application playing Same Game. Program gets H x W board on input with C different numbers as cells. Assumption are:
+- H is board rows count and H > 0,
+- W is board columns count and W > 0,
+- C is color count and C >= 1.
 
-Program can remove cells if there are minimum 1 neighbors in same color
-(above, below, left or right). Gravity fills the gaps if needed.
+Program can in each step remove cells if there are minimum 1 neighbors in same color (up, down, left or right). Gravity fills the gaps if needed.
 The game ends when, on the board, there are no cells with neighbor in the same color.
 
 **Input**:  
@@ -43,26 +41,24 @@ Coordinates of cells to pick in form of lines with 2 numbers separated by space 
 This section describes briefly how to setup the environment and build the project.
 
 ### Prerequisites
-C++ compiler with C++17 support as a minimum and CMake 3.8+. Additionally, Git tool for downloading Google Test library as it is needed by test subproject.
+C++ compiler with C++17 support as a minimum and CMake 3.14+. Additionally, Git tool for downloading Google Test library as it is needed by test subproject.
 
 ### Building
-Recommended:  
-Use CMake directly or your favorite IDE supporting CMake projects.  
+Clone and use CMake directly or via any IDE supporting it. CMake should:
 
-Alternative:  
-Use bare compiler for building project binary:
-```shell
-$ g++ -Wall -std=c++17 -O3 -c *.cpp
-$ g++ -Wall -std=c++17 -O3 -o same-game *.o
-```
+- configure everything automatically,
+- compile and create binaries.
+
+As a result of compilation, binary for simulations and binary for testing should be created.
 
 ## Built with
-| Tool |  Windows 10 | Lubuntu 20.04 |
+| Tool |  Windows 10 | Ubuntu 24.04 |
 | --- | --- | --- |
-| GCC | 7.3.0 | 9.3.0 |
-| CMake | 3.14 | 3.17 |
-| Git | 2.20 | 2.25 |
-| Qt Creator | 4.12.0 | 4.13.0 |
+| GCC | 13.1.0 | 13.2.0 |
+| CMake | 3.30.2 | 3.28.3 |
+| Git | 2.46.0 | 2.43.0 |
+| GoogleTest | 1.15.2 | 1.15.2 |
+| Python | - | 3.12.3 |
 
 ## Usage
 Application expects in first line number of rows, columns and colors. In following lines, board.
@@ -193,4 +189,9 @@ $ ./same-game-test
 ```
 
 ## License
-The project is distributed under the MIT License. See `LICENSE` for more information.
+This project is licensed under the MIT License. See the LICENSE file for details.
+
+The project uses the following open-source software:
+| Name | License | Home | Description |
+| --- | --- | --- | --- |
+| GoogleTest | BSD-3-Clause | https://github.com/google/googletest | testing framework |
