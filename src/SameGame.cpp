@@ -223,8 +223,8 @@ int SameGame::calculateSize(CheckedBoard& checked, const int& color,
             (getPosition(checked, {col, row}) == NOT_CHECKED))
         {
             getPosition(checked, {col, row}) = CHECKED;
-            ++size;
             pointsToCheck_.emplace(Point{col, row});
+            ++size;
         }
     }
 
