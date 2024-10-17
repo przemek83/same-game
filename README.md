@@ -85,7 +85,7 @@ Examples of usage:
     2 0
     2 2
     ```
-2. Use binary directly:
+2. Use binary directly and type data:
     ```shell
     $ ./same-game
     4 4 3
@@ -105,13 +105,24 @@ Examples of usage:
     2 2
     ```
 ## Testing
-The project contains a test subproject based on Goggle Test framework. Compile testing subproject and launch tests via IDE or directly from console.  
+or testing purposes, gtest framework is used. Build the project first. Make sure that the `same-game-test` target is built. Modern IDEs supporting CMake also support running tests with monitoring of failures. But in case you would like to run it manually, go to the `build/test` directory, where the⁣ binary `same-game-test` should be available. Launching it should produce the following output on Linux:
 Example run:
 ```
 $ ./same-game-test
 (...)
-[==========] Running 28 tests from 5 test suites.
+[==========] Running 30 tests from 5 test suites.
 [----------] Global test environment set-up.
+[----------] 4 tests from SameGameTest
+[ RUN      ] SameGameTest.makeMove6x5
+[       OK ] SameGameTest.makeMove6x5 (0 ms)
+[ RUN      ] SameGameTest.makeMove4x4
+[       OK ] SameGameTest.makeMove4x4 (0 ms)
+[ RUN      ] SameGameTest.playWith4x4SymetricalBoard
+[       OK ] SameGameTest.playWith4x4SymetricalBoard (0 ms)
+[ RUN      ] SameGameTest.playWith3x1AsymmetricalBoard
+[       OK ] SameGameTest.playWith3x1AsymmetricalBoard (0 ms)
+[----------] 4 tests from SameGameTest (0 ms total)
+
 [----------] 10 tests from BoardTest
 [ RUN      ] BoardTest.createBoard
 [       OK ] BoardTest.createBoard (0 ms)
@@ -134,13 +145,6 @@ $ ./same-game-test
 [ RUN      ] BoardTest.setEmpty
 [       OK ] BoardTest.setEmpty (0 ms)
 [----------] 10 tests from BoardTest (0 ms total)
-
-[----------] 2 tests from SameGameTest
-[ RUN      ] SameGameTest.makeMove6x5
-[       OK ] SameGameTest.makeMove6x5 (0 ms)
-[ RUN      ] SameGameTest.makeMove4x4
-[       OK ] SameGameTest.makeMove4x4 (0 ms)
-[----------] 2 tests from SameGameTest (0 ms total)
 
 [----------] 5 tests from SameGameTest/ImpactGravityTests
 [ RUN      ] SameGameTest/ImpactGravityTests.impactGravity/0
@@ -170,23 +174,37 @@ $ ./same-game-test
 [       OK ] SameGameTest/GetClusterTests.GetCluster/5 (0 ms)
 [ RUN      ] SameGameTest/GetClusterTests.GetCluster/6
 [       OK ] SameGameTest/GetClusterTests.GetCluster/6 (0 ms)
-[----------] 7 tests from SameGameTest/GetClusterTests (1 ms total)
+[----------] 7 tests from SameGameTest/GetClusterTests (0 ms total)
 
-[----------] 4 tests from SameGameTest/PerformanceTests
-[ RUN      ] SameGameTest/PerformanceTests.playGame/0
-[       OK ] SameGameTest/PerformanceTests.playGame/0 (9 ms)
-[ RUN      ] SameGameTest/PerformanceTests.playGame/1
-[       OK ] SameGameTest/PerformanceTests.playGame/1 (25 ms)
-[ RUN      ] SameGameTest/PerformanceTests.playGame/2
-[       OK ] SameGameTest/PerformanceTests.playGame/2 (1283 ms)
-[ RUN      ] SameGameTest/PerformanceTests.playGame/3
-[       OK ] SameGameTest/PerformanceTests.playGame/3 (4448 ms)
-[----------] 4 tests from SameGameTest/PerformanceTests (5765 ms total)
+[----------] 4 tests from SameGameTest/Benchmark
+[ RUN      ] SameGameTest/Benchmark.playGame/0
+[       OK ] SameGameTest/Benchmark.playGame/0 (3 ms)
+[ RUN      ] SameGameTest/Benchmark.playGame/1
+[       OK ] SameGameTest/Benchmark.playGame/1 (10 ms)
+[ RUN      ] SameGameTest/Benchmark.playGame/2
+[       OK ] SameGameTest/Benchmark.playGame/2 (427 ms)
+[ RUN      ] SameGameTest/Benchmark.playGame/3
+[       OK ] SameGameTest/Benchmark.playGame/3 (1467 ms)
+[----------] 4 tests from SameGameTest/Benchmark (1908 ms total)
 
 [----------] Global test environment tear-down
-[==========] 28 tests from 5 test suites ran. (5766 ms total)
-[  PASSED  ] 28 tests.
+[==========] 30 tests from 5 test suites ran. (1908 ms total)
+[  PASSED  ] 30 tests.
 ```
+As an alternative, CTest can be used to run tests from `build/test` directory:
+
+    $ ctest
+    Test project <some path>/same-game/build/test
+        Start  1: SameGameTest.makeMove6x5
+    1/30 Test  #1: SameGameTest.makeMove6x5 ......................................................................................................................................................................................................................................................................................   Passed    0.01 sec
+
+    (...)
+
+    30/30 Test #30: SameGameTest/Benchmark.playGame/(200	200	20	5	19	3	9	4	16	15	16	13	7	4	16	1	13	14	20	1	15	9	8	19	411	1	1	1	18	1	13	7	14	1	17	8	15	16	18	8	12	8	8	15	10	1	14	18	4	6	10	4	11	17	14	17	7	10	10	19	16	17	13	19	216	8	13	14	6	12	18	12	3	15	17	4	6	17	13	12	16	1	16	2	10	20	19	19	13	6	6	17	8... .................   Passed    1.47 sec
+
+    100% tests passed, 0 tests failed out of 30
+
+    Total Test time (real) =   2.10 sec
 
 ## License
 This project is licensed under the MIT License. See the LICENSE file for details.
