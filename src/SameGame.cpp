@@ -29,6 +29,7 @@ int SameGame::getClusterSize(Point startPoint, CheckedBoard& checked)
     {
         const Point point{pointsToCheck_.front()};
         pointsToCheck_.pop();
+
         const std::size_t caseCount{cols.size()};
         for (std::size_t k{0}; k < caseCount; ++k)
         {
@@ -74,6 +75,7 @@ std::set<int> SameGame::makeMove(Point point)
         const auto currentPoint{pointsToCheck.front()};
         pointsToCheck.pop();
         impactedColumns.insert(currentPoint.column_);
+
         const std::size_t caseCount{cols.size()};
         for (std::size_t k{0}; k < caseCount; ++k)
         {
@@ -93,14 +95,13 @@ std::set<int> SameGame::makeMove(Point point)
 std::vector<Point> SameGame::playGame()
 {
     std::vector<Point> points;
-    while (true)
+    Point nextPoint{getNextMove()};
+    while (nextPoint != emptyPoint)
     {
-        const Point nextPoint{getNextMove()};
-        if (nextPoint == emptyPoint)
-            break;
         points.push_back(nextPoint);
         std::set<int> impactedColumns{makeMove(nextPoint)};
         impactGravity(impactedColumns);
+        nextPoint = getNextMove();
     }
     return points;
 }
