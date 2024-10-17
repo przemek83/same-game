@@ -121,7 +121,8 @@ void SameGame::impactColumn(int column)
     int emptyStartIndex{NOT_SET};
     int emptyCount{0};
 
-    for (int row{board_.getRowCount() - 1}; row >= 0; --row)
+    int row{board_.getRowCount() - 1};
+    while (row >= 0)
     {
         if (board_.getColor({column, row}) == Board::EMPTY)
         {
@@ -140,6 +141,7 @@ void SameGame::impactColumn(int column)
                 emptyCount = 0;
             }
         }
+        --row;
     }
 }
 
