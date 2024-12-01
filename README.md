@@ -166,10 +166,10 @@ No more moves. Algorithm ends.
     2 2
     ```
 ## Testing
-For testing purposes, the gtest framework is used. Build the project first. Make sure that the `same-game-test` target is built. Modern IDEs supporting CMake also support running tests with monitoring of failures. But in case you would like to run it manually, go to the `build/test` directory, where the⁣ binary `same-game-test` should be available. Launching it should produce the following output on Linux:
+For testing purposes, the gtest framework is used. Build the project first. Make sure that the `same-game-tests` target is built. Modern IDEs supporting CMake also support running tests with monitoring of failures. But in case you would like to run it manually, go to the `build/tests` directory, where the⁣ binary `same-game-tests` should be available. Launching it should produce the following output on Linux:
 Example run:
 ```
-$ ./same-game-test
+$ ./same-game-tests
 (...)
 [==========] Running 30 tests from 5 test suites.
 [----------] Global test environment set-up.
@@ -252,10 +252,10 @@ $ ./same-game-test
 [==========] 30 tests from 5 test suites ran. (1908 ms total)
 [  PASSED  ] 30 tests.
 ```
-As an alternative, CTest can be used to run tests from the `build/test` directory:
+As an alternative, CTest can be used to run tests from the `build/tests` directory:
 
     $ ctest
-    Test project <some path>/same-game/build/test
+    Test project <some path>/same-game/build/tests
         Start  1: SameGameTest.makeMove6x5
     1/30 Test  #1: SameGameTest.makeMove6x5 ......................................................................................................................................................................................................................................................................................   Passed    0.01 sec
 
