@@ -4,4 +4,4 @@ on: [push, pull_request]
 
 jobs:
   analyze:
-    uses: przemek83/common/.github/workflows/pylint.yml@main
+    uses: przemek83/workflows/.github/workflows/pylint.yml@main
